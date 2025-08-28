@@ -114,18 +114,19 @@ export default function SideMenu({
         {/* Links */}
         <nav style={{ padding: '10px 8px', overflowY: 'auto' }}>
           <Section title="Navigation">
-            <MenuItem icon={FaHome} label="Home" onClick={onHome} />
-            <MenuItem icon={FaCommentDots} label="Chat" onClick={onChat} />
+            <MenuItem icon={FaHome} iconColor="#007aff" label="Home" onClick={onHome} />
+            <MenuItem icon={FaCommentDots} iconColor="#f59e0b" label="Chat" onClick={onChat} />
             {/* ✅ New Wallet item (shown only if handler provided) */}
-            {onWallet && <MenuItem icon={FaWallet} label="Wallet" onClick={onWallet} />}
+            {onWallet && <MenuItem icon={FaWallet} iconColor="#22c55e" label="Wallet" onClick={onWallet} />}
           </Section>
 
           <Section title="Account">
             {signedIn ? (
               <>
-                <MenuItem icon={FaUser} label="Profile" onClick={onProfile} />
+                <MenuItem icon={FaUser} iconColor="#6366f1" label="Profile" onClick={onProfile} />
                 <MenuItem
                   icon={FaSignOutAlt}
+                  iconColor="#ef4444"
                   label="Log out"
                   onClick={async () => {
                     try { await onLogout?.(); } finally { onClose?.(); }
@@ -134,8 +135,8 @@ export default function SideMenu({
               </>
             ) : (
               <>
-                <MenuItem icon={FaSignInAlt} label="Sign in" onClick={onSignin} />
-                <MenuItem icon={FaUserPlus} label="Sign up" onClick={onSignup} />
+                <MenuItem icon={FaSignInAlt} iconColor="#0ea5e9" label="Sign in" onClick={onSignin} />
+                <MenuItem icon={FaUserPlus} iconColor="#ec4899" label="Sign up" onClick={onSignup} />
               </>
             )}
           </Section>
@@ -161,7 +162,7 @@ function Section({ title, children }) {
   );
 }
 
-function MenuItem({ icon: Icon, label, onClick }) {
+function MenuItem({ icon: Icon, label, onClick, iconColor }) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
 
@@ -183,7 +184,7 @@ function MenuItem({ icon: Icon, label, onClick }) {
       style={{ ...itemBtn, ...dynamicStyle }}
     >
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, color: '#111827', fontSize: '1.1rem', lineHeight: 1.2 }}>
-        {Icon ? <Icon size={20} /> : null}
+        {Icon ? <Icon size={20} color={iconColor} /> : null}
         <span style={{ fontSize: '1.06rem' }}>{label}</span>
       </span>
       <span aria-hidden style={{ opacity: 0.5, color: '#6b7280', display: 'inline-flex', fontSize: '1.1rem' }}>
