@@ -186,6 +186,10 @@ function ListingDetail() {
           setMenuOpen(false);
           navigate(appUser ? '/home' : '/');
         }}
+        onWallet={() => {
+          setMenuOpen(false);
+          navigate('/wallet');
+        }}
         onProfile={() => {
           setMenuOpen(false);
           // wire later

@@ -1,5 +1,16 @@
 // src/components/SideMenu.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  FaHome,
+  FaCommentDots,
+  FaWallet,
+  FaUser,
+  FaSignInAlt,
+  FaUserPlus,
+  FaSignOutAlt,
+  FaTimes,
+  FaChevronRight,
+} from 'react-icons/fa';
 
 /**
  * Props:
@@ -71,13 +82,14 @@ export default function SideMenu({
           bottom: 0,
           right: 0,
           width: 'min(88vw, 340px)',
-          background: '#121317',
-          borderLeft: '1px solid rgba(255,255,255,0.08)',
+          background: '#ffffff',
+          borderLeft: '1px solid rgba(0,0,0,0.06)',
           transform: open ? 'translateX(0)' : 'translateX(102%)',
-          transition: 'transform 200ms ease',
+          transition: 'transform 220ms ease',
           zIndex: 61,
           display: 'flex',
           flexDirection: 'column',
+          boxShadow: open ? '0 0 30px rgba(0,0,0,0.12)' : 'none',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -87,32 +99,33 @@ export default function SideMenu({
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '14px 16px',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          borderBottom: '1px solid rgba(0,0,0,0.06)',
         }}>
-          <strong style={{ color: '#fff' }}>Menu</strong>
+          <strong style={{ color: '#1f2937' }}>Menu</strong>
           <button
             onClick={onClose}
             aria-label="Close menu"
             style={iconBtn}
           >
-            ✕
+            <FaTimes />
           </button>
         </div>
 
         {/* Links */}
         <nav style={{ padding: '10px 8px', overflowY: 'auto' }}>
           <Section title="Navigation">
-            <MenuItem label="Home" onClick={onHome} />
-            <MenuItem label="Chat" onClick={onChat} />
+            <MenuItem icon={FaHome} label="Home" onClick={onHome} />
+            <MenuItem icon={FaCommentDots} label="Chat" onClick={onChat} />
             {/* ✅ New Wallet item (shown only if handler provided) */}
-            {onWallet && <MenuItem label="Wallet" onClick={onWallet} />}
+            {onWallet && <MenuItem icon={FaWallet} label="Wallet" onClick={onWallet} />}
           </Section>
 
           <Section title="Account">
             {signedIn ? (
               <>
-                <MenuItem label="Profile" onClick={onProfile} />
+                <MenuItem icon={FaUser} label="Profile" onClick={onProfile} />
                 <MenuItem
+                  icon={FaSignOutAlt}
                   label="Log out"
                   onClick={async () => {
                     try { await onLogout?.(); } finally { onClose?.(); }
@@ -121,15 +134,15 @@ export default function SideMenu({
               </>
             ) : (
               <>
-                <MenuItem label="Sign in" onClick={onSignin} />
-                <MenuItem label="Sign up" onClick={onSignup} />
+                <MenuItem icon={FaSignInAlt} label="Sign in" onClick={onSignin} />
+                <MenuItem icon={FaUserPlus} label="Sign up" onClick={onSignup} />
               </>
             )}
           </Section>
         </nav>
 
         {/* Footer */}
-        <div style={{ marginTop: 'auto', padding: '12px 16px', opacity: 0.7, fontSize: 12, color: '#cfd3dc' }}>
+        <div style={{ marginTop: 'auto', padding: '12px 16px', opacity: 0.8, fontSize: 12, color: '#6b7280' }}>
           <div>Showbat · v1</div>
         </div>
       </aside>
@@ -140,7 +153,7 @@ export default function SideMenu({
 function Section({ title, children }) {
   return (
     <section style={{ marginBottom: 14 }}>
-      <div style={{ padding: '8px 8px 6px', fontSize: 12, letterSpacing: 0.4, textTransform: 'uppercase', color: '#8f96a3' }}>
+      <div style={{ padding: '8px 8px 6px', fontSize: 12, letterSpacing: 0.4, textTransform: 'uppercase', color: '#9ca3af' }}>
         {title}
       </div>
       <div>{children}</div>
@@ -148,14 +161,34 @@ function Section({ title, children }) {
   );
 }
 
-function MenuItem({ label, onClick }) {
+function MenuItem({ icon: Icon, label, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const [pressed, setPressed] = useState(false);
+
+  const dynamicStyle = {
+    background: hovered ? '#f7f9fc' : 'transparent',
+    transform: pressed ? 'scale(0.98)' : hovered ? 'translateX(2px)' : 'none',
+    boxShadow: hovered ? '0 2px 10px rgba(0,0,0,0.06)' : 'none',
+  };
+
   return (
     <button
       onClick={onClick}
-      style={itemBtn}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => { setHovered(false); setPressed(false); }}
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onTouchStart={() => setPressed(true)}
+      onTouchEnd={() => setPressed(false)}
+      style={{ ...itemBtn, ...dynamicStyle }}
     >
-      <span>{label}</span>
-      <span aria-hidden style={{ opacity: 0.5 }}>›</span>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12, color: '#111827', fontSize: '1.1rem', lineHeight: 1.2 }}>
+        {Icon ? <Icon size={20} /> : null}
+        <span style={{ fontSize: '1.06rem' }}>{label}</span>
+      </span>
+      <span aria-hidden style={{ opacity: 0.5, color: '#6b7280', display: 'inline-flex', fontSize: '1.1rem' }}>
+        <FaChevronRight />
+      </span>
     </button>
   );
 }
@@ -165,20 +198,21 @@ const itemBtn = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '14px 12px',
+  padding: '16px 14px',
   background: 'transparent',
-  border: '1px solid rgba(255,255,255,0.08)',
+  border: 'none',
   borderRadius: 12,
-  color: '#e9ecf3',
+  color: '#111827',
   cursor: 'pointer',
   margin: '6px 8px',
+  transition: 'transform 160ms ease, box-shadow 160ms ease, background 160ms ease',
 };
 
 const iconBtn = {
   background: 'transparent',
-  border: '1px solid rgba(255,255,255,0.15)',
+  border: 'none',
   borderRadius: 8,
-  color: '#e9ecf3',
-  padding: '4px 8px',
+  color: '#374151',
+  padding: '6px 8px',
   cursor: 'pointer',
 };

@@ -34,7 +34,8 @@
   font-size: 1.25rem;
   text-align: center;
   color: #666;
-  font-weight: var(--font-weight-normal);
+  /* Slightly thicker than before */
+  font-weight: 500;
 }
 
 .auth-box input {
@@ -42,7 +43,8 @@
   border: 1px solid var(--input-border);
   border-radius: 8px;
   font-size: 1rem;
-  font-weight: var(--font-weight-light);
+  /* One step thicker for readability */
+  font-weight: 400;
   transition: border-color 0.2s;
 }
 
@@ -58,7 +60,8 @@
   border: none;
   border-radius: 8px;
   font-size: 1rem;
-  font-weight: var(--font-weight-normal);
+  /* Slightly thicker button text */
+  font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -73,7 +76,8 @@
   cursor: pointer;
   font-size: 0.9rem;
   text-decoration: underline;
-  font-weight: var(--font-weight-normal);
+  /* Slightly thicker link */
+  font-weight: 500;
 }
 
 .error {

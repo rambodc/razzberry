@@ -17,6 +17,11 @@ function generateUserId() {
 }
 
 function Signup() {
+  const isPortrait = typeof window !== 'undefined'
+    ? window.matchMedia('(orientation: portrait)').matches
+    : false;
+  const bgUrl = `${process.env.PUBLIC_URL}/assets/${isPortrait ? 'auth-portrait.png' : 'auth-landscape.png'}`;
+
   const [firstName, setFirstName] = useState('');
   const [lastName,  setLastName]  = useState('');
   const [email,     setEmail]     = useState('');
@@ -80,7 +85,15 @@ function Signup() {
   };
 
   return (
-    <div className="auth-container">
+    <div
+      className="auth-container"
+      style={{
+        backgroundImage: `url(${bgUrl})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <form className="auth-box" onSubmit={handleSignup}>
         <h1>Razzberry</h1>
         <h2>Create Account</h2>

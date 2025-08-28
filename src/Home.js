@@ -193,6 +193,10 @@ function Home() {
           setActiveTab('dashboard');
           navigate('/home');
         }}
+        onWallet={() => {
+          setMenuOpen(false);
+          navigate('/wallet');
+        }}
         onProfile={() => {
           setMenuOpen(false);
           // profile wiring later

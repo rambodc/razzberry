@@ -5,6 +5,11 @@ import { auth } from './firebase';
 import './Auth.css';
 
 function ForgotPassword() {
+  const isPortrait = typeof window !== 'undefined'
+    ? window.matchMedia('(orientation: portrait)').matches
+    : false;
+  const bgUrl = `${process.env.PUBLIC_URL}/assets/${isPortrait ? 'auth-portrait.png' : 'auth-landscape.png'}`;
+
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -24,7 +29,15 @@ function ForgotPassword() {
   };
 
   return (
-    <div className="auth-container">
+    <div
+      className="auth-container"
+      style={{
+        backgroundImage: `url(${bgUrl})`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
       <form className="auth-box" onSubmit={handleReset}>
         <h1>Razzberry</h1>
         <h2>Reset Password</h2>
