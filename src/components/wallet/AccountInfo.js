@@ -68,11 +68,11 @@ export default function AccountInfo({ account }) {
 const styles = {
   card: {
     width: 'min(720px, 96vw)',
-    background: 'var(--card, #141417)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: '#fff',
+    border: '1px solid #e6e6e6',
     borderRadius: 16,
     padding: 16,
-    color: 'var(--fg, #e9e9ee)',
+    color: '#111',
     margin: '0 auto 12px',
   },
   row: {
@@ -93,16 +93,16 @@ const styles = {
   refreshBtn: {
     padding: '8px 12px',
     borderRadius: 10,
-    border: '1px solid rgba(255,255,255,0.18)',
-    background: 'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
-    color: '#fff',
+    border: '1px solid #ddd',
+    background: 'linear-gradient(180deg, #ffffff, #f8f8f8)',
+    color: '#111',
     cursor: 'pointer',
   },
   balanceBox: {
     marginTop: 12,
     padding: 12,
     borderRadius: 12,
-    background: 'rgba(255,255,255,0.04)',
+    background: 'rgba(0,0,0,0.03)',
     display: 'flex',
     alignItems: 'baseline',
     gap: 10,
@@ -110,9 +110,5 @@ const styles = {
   },
   balanceLabel: { opacity: 0.85 },
   balanceValue: { fontSize: 22, fontWeight: 800, letterSpacing: 0.3 },
-  error: {
-    marginTop: 8,
-    color: '#ff9aa2',
-    fontSize: 13,
-  },
+  error: { marginTop: 8, color: '#b3261e', fontSize: 13 },
 };

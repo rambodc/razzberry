@@ -117,7 +117,7 @@ function Home() {
   const Dashboard = () => (
     <>
       {/* Welcome + Create (scrolls with content) */}
-      <div className="home-topbar" style={{ marginTop: 70 }}>
+      <div className="home-topbar" style={{ marginTop: 64 }}>
         <div className="home-topbar-left">
           <h1 className="home-welcome">
             Welcome, {appUser?.firstName || 'Friend'} {appUser?.lastName || ''} 👋

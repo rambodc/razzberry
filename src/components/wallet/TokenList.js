@@ -90,11 +90,11 @@ export default function TokenList({ account }) {
 const styles = {
   card: {
     width: 'min(720px, 96vw)',
-    background: 'var(--card, #141417)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: '#fff',
+    border: '1px solid #e6e6e6',
     borderRadius: 16,
     padding: 16,
-    color: 'var(--fg, #e9e9ee)',
+    color: '#111',
     margin: '12px auto',
   },
   header: {
@@ -108,12 +108,12 @@ const styles = {
   refreshBtn: {
     padding: '8px 12px',
     borderRadius: 10,
-    border: '1px solid rgba(255,255,255,0.18)',
-    background: 'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
-    color: '#fff',
+    border: '1px solid #ddd',
+    background: 'linear-gradient(180deg, #ffffff, #f8f8f8)',
+    color: '#111',
     cursor: 'pointer',
   },
-  error: { color: '#ff9aa2', fontSize: 13, marginBottom: 6 },
+  error: { color: '#b3261e', fontSize: 13, marginBottom: 6 },
   list: { display: 'grid', gap: 8 },
   item: {
     display: 'flex',
@@ -122,7 +122,7 @@ const styles = {
     gap: 12,
     padding: 12,
     borderRadius: 12,
-    background: 'rgba(255,255,255,0.04)',
+    background: 'rgba(0,0,0,0.03)',
   },
   currLine: { display: 'flex', alignItems: 'center', gap: 8 },
   currency: { fontWeight: 800, letterSpacing: 0.3 },
@@ -130,8 +130,8 @@ const styles = {
     fontSize: 11,
     padding: '2px 6px',
     borderRadius: 8,
-    border: '1px solid rgba(255,255,255,0.2)',
-    opacity: 0.9,
+    border: '1px solid rgba(0,0,0,0.2)',
+    opacity: 0.85,
   },
   issuer: {
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',

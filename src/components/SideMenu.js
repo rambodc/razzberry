@@ -177,7 +177,7 @@ export default function SideMenu({
         aria-label="Main menu"
         style={{
           position: 'fixed',
-          top: isLandscape ? 60 : 0,
+          top: 52,
           bottom: 0,
           left: 0,
           right: 'auto',
@@ -193,29 +193,9 @@ export default function SideMenu({
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '14px 16px',
-          borderBottom: '1px solid rgba(0,0,0,0.06)',
-        }}>
-          <strong style={{ color: '#1f2937' }}>Menu</strong>
-          {showOverlay ? (
-            <button
-              onClick={onClose}
-              aria-label="Close menu"
-              style={iconBtn}
-            >
-              <FaTimes />
-            </button>
-          ) : null}
-        </div>
-
         {/* Links */}
-        <nav style={{ padding: '10px 8px', overflowY: 'auto' }}>
-          <Section title="Navigation">
+        <nav style={{ padding: '8px 8px', overflowY: 'auto' }}>
+          <Section>
             <MenuItem icon={FaHome} iconColor="#007aff" label="Home" onClick={onHome} />
             <MenuItem icon={FaCommentDots} iconColor="#f59e0b" label="Chat" onClick={onChat} />
             {/* ✅ New Wallet item (shown only if handler provided) */}
@@ -256,9 +236,11 @@ export default function SideMenu({
 function Section({ title, children }) {
   return (
     <section style={{ marginBottom: 14 }}>
-      <div style={{ padding: '8px 8px 6px', fontSize: 12, letterSpacing: 0.4, textTransform: 'uppercase', color: '#9ca3af' }}>
-        {title}
-      </div>
+      {title ? (
+        <div style={{ padding: '8px 8px 6px', fontSize: 12, letterSpacing: 0.4, textTransform: 'uppercase', color: '#9ca3af' }}>
+          {title}
+        </div>
+      ) : null}
       <div>{children}</div>
     </section>
   );

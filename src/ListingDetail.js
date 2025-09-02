@@ -118,7 +118,7 @@ function ListingDetail() {
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       {/* Page content; offset for fixed TopBar */}
-      <div className="detail-content" style={{ marginTop: 70 }}>
+      <div className="detail-content" style={{ marginTop: 64 }}>
         {loading ? (
           <p>Loading…</p>
         ) : error ? (

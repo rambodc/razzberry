@@ -1,7 +1,10 @@
 // src/Chat.js
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import TopBar from './components/TopBar';
 
 function Chat() {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState([
     { id: 'm1', role: 'assistant', content: "Hi! I'm your Razzberry helper. Ask me anything." },
   ]);
@@ -89,18 +92,23 @@ function Chat() {
     }, 50);
   };
 
+  const handleBack = useCallback(() => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      navigate('/home');
+    }
+  }, [navigate]);
+
   return (
     <div style={styles.page}>
-      {/* Top bar */}
-      <header style={styles.header}>
-        <div style={styles.headerInner}>
-          <h1 style={styles.title}>Chat</h1>
-        </div>
-      </header>
+      {/* Fixed TopBar with Back */}
+      <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       {/* Messages list */}
       <main ref={listRef} style={styles.list}>
         <div style={styles.listInner}>
+          <h1 style={styles.title}>Chat</h1>
           {messages.map((m) => (
             <MessageBubble key={m.id} role={m.role} content={m.content} />
           ))}
@@ -186,19 +194,6 @@ const styles = {
     color: 'var(--text-color, #111)',
     fontFamily: 'var(--font-family, system-ui, -apple-system, Segoe UI, Roboto, Arial)',
   },
-  header: {
-    position: 'sticky',
-    top: 0,
-    zIndex: 2,
-    background: 'rgba(255,255,255,0.9)',
-    borderBottom: '1px solid #eee',
-    backdropFilter: 'blur(6px)',
-  },
-  headerInner: {
-    maxWidth: 920,
-    margin: '0 auto',
-    padding: '12px 16px',
-  },
   title: { fontSize: '1.1rem', fontWeight: 700 },
   list: {
     flex: 1,
@@ -208,7 +203,7 @@ const styles = {
   listInner: {
     maxWidth: 920,
     margin: '0 auto',
-    padding: '16px 12px 140px', // bottom space for composer
+    padding: '64px 12px 140px', // top offset under TopBar + bottom space for composer
     display: 'flex',
     flexDirection: 'column',
     gap: 12,

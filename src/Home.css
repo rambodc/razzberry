@@ -17,8 +17,8 @@
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
-    /* Leave space for fixed top nav (60px) + a bit of breathing room */
-    margin-top: 70px;
+    /* Leave space for fixed top nav (~52px) + a bit of breathing room */
+    margin-top: 64px;
   }
   
   .email-text { color: #444; margin-top: 6px; }
@@ -121,7 +121,7 @@
   /* Keep a little spacing under fixed TopBar on detail pages as well */
   .detail-content {
     max-width: 1200px; /* room for 500 + gap + 500 */
-    margin: 70px auto 0; /* top offset under TopBar */
+    margin: 64px auto 0; /* top offset under TopBar */
     width: 100%;
     padding: 0 12px 24px;
   }
@@ -258,7 +258,7 @@
     }
     .detail-left {
       position: sticky;
-      top: 76px; /* sits under 60px TopBar + a little breathing room */
+      top: 68px; /* sits under ~52px TopBar + a little breathing room */
       align-self: start;
     }
     /* Keep right content aligned to the top */
