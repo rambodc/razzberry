@@ -283,3 +283,13 @@
     }
   }
   
+  /* =========
+     LEFT SIDEBAR PINNED LAYOUT OFFSET
+     ========= */
+  :root.sidebar-pinned .home-container {
+    padding-left: var(--sidebar-width, 280px);
+  }
+  :root.sidebar-pinned .detail-page {
+    padding-left: var(--sidebar-width, 280px);
+  }
+  

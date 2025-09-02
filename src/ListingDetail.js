@@ -115,17 +115,7 @@ function ListingDetail() {
   return (
     <div className="detail-page">
       {/* Reusable top bar: public page, with Back on the left; optional center tabs */}
-      <TopBar
-        variant="back"
-        backLabel="Back"
-        onBack={handleBack}
-        showTabs
-        active={null}
-        onHome={() => navigate(appUser ? '/home' : '/')}
-        onChat={() => navigate('/chat')} // ProtectedRoute will redirect to /signin if needed
-        onCart={() => {}}
-        onOpenMenu={() => setMenuOpen(true)}
-      />
+      <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       {/* Page content; offset for fixed TopBar */}
       <div className="detail-content" style={{ marginTop: 70 }}>

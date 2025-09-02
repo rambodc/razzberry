@@ -21,6 +21,32 @@ function Home() {
 
   const navigate = useNavigate();
 
+  // Auto-open the menu in landscape; overlay in portrait. Allow manual toggle.
+  useEffect(() => {
+    const isLandscape = () => {
+      try {
+        if (window.matchMedia) return window.matchMedia('(orientation: landscape)').matches;
+      } catch {}
+      return (window.innerWidth || 0) > (window.innerHeight || 0);
+    };
+    const update = () => setMenuOpen(isLandscape());
+    let mql;
+    try {
+      mql = window.matchMedia('(orientation: landscape)');
+      if (mql && mql.addEventListener) mql.addEventListener('change', update);
+      else if (mql && mql.addListener) mql.addListener(update);
+    } catch {}
+    window.addEventListener('resize', update);
+    update();
+    return () => {
+      window.removeEventListener('resize', update);
+      try {
+        if (mql && mql.removeEventListener) mql.removeEventListener('change', update);
+        else if (mql && mql.removeListener) mql.removeListener(update);
+      } catch {}
+    };
+  }, []);
+
   const handleLogout = async () => {
     await signOut(auth);
     window.location.href = '/signin';
@@ -164,21 +190,7 @@ function Home() {
   return (
     <div className="home-container" style={{ paddingBottom: 0 }}>
       {/* Fixed, reusable Top Bar */}
-      <TopBar
-        variant="logo"
-        showTabs
-        active={activeTab === 'dashboard' ? 'home' : activeTab}
-        onHome={() => {
-          setActiveTab('dashboard');
-          navigate('/home');
-        }}
-        onChat={() => {
-          setActiveTab('chat');
-          navigate('/chat');
-        }}
-        onCart={() => setActiveTab('cart')}
-        onOpenMenu={() => setMenuOpen(true)}
-      />
+      <TopBar onOpenMenu={() => setMenuOpen((v) => !v)} />
 
       {/* Page content */}
       <div className="home-content">{renderTab()}</div>
@@ -224,3 +236,4 @@ function Home() {
 }
 
 export default Home;
+  

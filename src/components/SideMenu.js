@@ -1,5 +1,5 @@
 // src/components/SideMenu.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FaHome,
   FaCommentDots,
@@ -36,36 +36,134 @@ export default function SideMenu({
   onSignin,
   onSignup,
   onLogout,
+  /**
+   * When true (default), the menu pins open in landscape orientation.
+   * In portrait, it behaves as a modal drawer.
+   */
+  autoLandscape = true,
 }) {
-  // Close on ESC
+  const [isLandscape, setIsLandscape] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    try {
+      if (window.matchMedia) {
+        return window.matchMedia('(orientation: landscape)').matches;
+      }
+    } catch {}
+    return (window.innerWidth || 0) > (window.innerHeight || 0);
+  });
+
+  // Keep track of orientation changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const update = () => {
+      let landscape = false;
+      try {
+        if (window.matchMedia) {
+          landscape = window.matchMedia('(orientation: landscape)').matches;
+        } else {
+          landscape = window.innerWidth > window.innerHeight;
+        }
+      } catch {
+        landscape = window.innerWidth > window.innerHeight;
+      }
+      setIsLandscape(landscape);
+    };
+
+    let mql;
+    try {
+      mql = window.matchMedia('(orientation: landscape)');
+      if (mql && mql.addEventListener) mql.addEventListener('change', update);
+      else if (mql && mql.addListener) mql.addListener(update);
+    } catch {}
+
+    window.addEventListener('resize', update);
+    update();
+    return () => {
+      window.removeEventListener('resize', update);
+      try {
+        if (mql && mql.removeEventListener) mql.removeEventListener('change', update);
+        else if (mql && mql.removeListener) mql.removeListener(update);
+      } catch {}
+    };
+  }, []);
+
+  const pinned = autoLandscape && isLandscape; // orientation-based layout state
+  // Sidebar visibility now strictly follows `open`, regardless of orientation.
+  // We still use `pinned` to decide layout (offset content) but not to force open.
+  const computedOpen = open;
+  const showOverlay = open && !isLandscape;
+
+  // Width: in portrait overlay, keep it to 60% of viewport for an easy outside-click target.
+  // In landscape (pinned or not), keep previous behavior/cap.
+  const panelWidth = showOverlay ? 'min(60vw, 340px)' : 'min(88vw, 340px)';
+
+  // Manage a global class and CSS var to shift page content when pinned
+  const asideRef = useRef(null);
+  useEffect(() => {
+    const root = document.documentElement;
+    const className = 'sidebar-pinned';
+
+    const setWidthVar = () => {
+      if (!asideRef.current) return;
+      const w = Math.round(asideRef.current.getBoundingClientRect().width || 0);
+      if (w > 0) root.style.setProperty('--sidebar-width', `${w}px`);
+    };
+
+    if (isLandscape && computedOpen) {
+      root.classList.add(className);
+      // establish var
+      setWidthVar();
+      // Track changes in size
+      let ro;
+      try {
+        if (window.ResizeObserver) {
+          ro = new ResizeObserver(setWidthVar);
+          if (asideRef.current) ro.observe(asideRef.current);
+        }
+      } catch {}
+      window.addEventListener('resize', setWidthVar);
+
+      return () => {
+        window.removeEventListener('resize', setWidthVar);
+        try { ro && ro.disconnect && ro.disconnect(); } catch {}
+        root.classList.remove(className);
+        root.style.removeProperty('--sidebar-width');
+      };
+    } else {
+      // ensure cleanup when not pinned
+      root.classList.remove(className);
+      root.style.removeProperty('--sidebar-width');
+    }
+  }, [pinned, computedOpen]);
+  // Close on ESC when acting as a modal (portrait)
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'Escape' && open) onClose?.();
+      if (e.key === 'Escape' && showOverlay) onClose?.();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+  }, [showOverlay, onClose]);
 
-  // Prevent background scroll when open
+  // Prevent background scroll only when modal overlay is shown
   useEffect(() => {
-    if (!open) return;
+    if (!showOverlay) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = prev; };
-  }, [open]);
+  }, [showOverlay]);
 
   return (
     <>
       {/* Dim overlay */}
       <div
-        aria-hidden={!open}
-        onClick={onClose}
+        aria-hidden={!showOverlay}
+        onClick={showOverlay ? onClose : undefined}
         style={{
           position: 'fixed',
           inset: 0,
           background: 'rgba(0,0,0,0.5)',
-          opacity: open ? 1 : 0,
-          pointerEvents: open ? 'auto' : 'none',
+          opacity: showOverlay ? 1 : 0,
+          pointerEvents: showOverlay ? 'auto' : 'none',
           transition: 'opacity 160ms ease',
           zIndex: 60,
         }}
@@ -73,23 +171,25 @@ export default function SideMenu({
 
       {/* Panel */}
       <aside
-        role="dialog"
-        aria-modal="true"
+        ref={asideRef}
+        role={showOverlay ? 'dialog' : 'complementary'}
+        aria-modal={showOverlay ? 'true' : undefined}
         aria-label="Main menu"
         style={{
           position: 'fixed',
-          top: 0,
+          top: isLandscape ? 60 : 0,
           bottom: 0,
-          right: 0,
-          width: 'min(88vw, 340px)',
+          left: 0,
+          right: 'auto',
+          width: panelWidth,
           background: '#ffffff',
-          borderLeft: '1px solid rgba(0,0,0,0.06)',
-          transform: open ? 'translateX(0)' : 'translateX(102%)',
+          borderRight: '1px solid rgba(0,0,0,0.06)',
+          transform: computedOpen ? 'translateX(0)' : 'translateX(-102%)',
           transition: 'transform 220ms ease',
           zIndex: 61,
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: open ? '0 0 30px rgba(0,0,0,0.12)' : 'none',
+          boxShadow: showOverlay ? '0 0 30px rgba(0,0,0,0.12)' : 'none',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -102,13 +202,15 @@ export default function SideMenu({
           borderBottom: '1px solid rgba(0,0,0,0.06)',
         }}>
           <strong style={{ color: '#1f2937' }}>Menu</strong>
-          <button
-            onClick={onClose}
-            aria-label="Close menu"
-            style={iconBtn}
-          >
-            <FaTimes />
-          </button>
+          {showOverlay ? (
+            <button
+              onClick={onClose}
+              aria-label="Close menu"
+              style={iconBtn}
+            >
+              <FaTimes />
+            </button>
+          ) : null}
         </div>
 
         {/* Links */}
