@@ -7,11 +7,12 @@ email = "hello@razzberry.ai"
 [[ACCOUNTS]]
 address = "rUhwR4gM7KS2M6xLHMeL2hVCF86WhqocTj"
 network = "mainnet"
+icon    = "https://www.razzberry.ai/.well-known/raz.png"
 
 [[CURRENCIES]]
 code    = "RAZ"
 issuer  = "rUhwR4gM7KS2M6xLHMeL2hVCF86WhqocTj"
 name    = "Razzberry"
 desc    = "Value Your Art: RAZ token on the XRP Ledger."
-icon    = "https://www.razzberry.ai/assets/raz.png"
+icon    = "https://www.razzberry.ai/.well-known/raz.png"
 network = "mainnet"
