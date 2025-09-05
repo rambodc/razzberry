@@ -7,7 +7,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import TopBar from './components/TopBar';
 import SideMenu from './components/SideMenu';
 import AudioPlayer from './components/AudioPlayer';
-import { hideLoader } from './components/GlobalLoader';
 import { UserContext } from './App';
 import './Home.css';
 
@@ -72,8 +71,6 @@ function ListingDetail() {
       } finally {
         if (!alive) return;
         setLoading(false);
-        // Smoothly dismiss the global loader shown from Home
-        hideLoader();
       }
     })();
 

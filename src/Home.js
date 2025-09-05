@@ -8,7 +8,6 @@ import { UserContext } from './App';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TopBar from './components/TopBar';
 import SideMenu from './components/SideMenu';
-import { showLoader, hideLoader } from './components/GlobalLoader';
 import './Home.css';
 
 function Home() {
@@ -57,10 +56,8 @@ function Home() {
     return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
   };
 
-  // Show loader while Home mounts & we get the first snapshot
+  // Fetch initial artists snapshot
   useEffect(() => {
-    showLoader(500);
-
     const q = query(collection(db, 'artists'), orderBy('createdAt', 'desc'));
     const unsub = onSnapshot(
       q,
@@ -81,13 +78,11 @@ function Home() {
           });
         }
 
-        hideLoader(); // dismiss loader after content is ready
       },
       (err) => {
         console.error('artists snapshot error:', err);
         setArtists([]);
         setLoading(false);
-        hideLoader(); // ensure we hide even on error
       }
     );
     return () => unsub();
@@ -109,8 +104,6 @@ function Home() {
       // ignore if replaceState is blocked
     }
 
-    // Show loader while routing to /artist/:id
-    showLoader(500);
     navigate(`/artist/${artistUid}`);
   };
 
