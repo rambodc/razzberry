@@ -22,6 +22,7 @@ import Home from './Home';
 import CreateArtist from './CreateArtist';
 import Chat from './Chat';
 import Wallet from './Wallet';
+import Fund from './Fund';
 
 // Route guard
 import ProtectedRoute from './ProtectedRoute';
@@ -70,6 +71,15 @@ function AppRoutes({ user }) {
         element={
           <ProtectedRoute>
             <Wallet />
+          </ProtectedRoute>
+        }
+      />
+      {/* ✅ New protected Fund route */}
+      <Route
+        path="/fund"
+        element={
+          <ProtectedRoute>
+            <Fund />
           </ProtectedRoute>
         }
       />

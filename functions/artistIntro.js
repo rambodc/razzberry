@@ -21,10 +21,9 @@ setGlobalOptions({
 // ---------- Init Admin SDK (guarded for emulator/multiple loads) ----------
 try { admin.app(); } catch { admin.initializeApp(); }
 const db = admin.firestore();
-const storage = admin.storage();
 
-// ---------- Bind this trigger to your bucket ----------
-const BUCKET = 'showbat3.firebasestorage.app';
+// ---------- Bind trigger to default bucket (project default) ----------
+// Use default bucket to avoid cross-project bucket issues during analysis/deploy.
 
 // ---------- Config ----------
 const TARGET_W = 600;
@@ -88,7 +87,6 @@ function gsDownloadUrl(bucketName, objectPath, token) {
 
 // 🔁 NEW NAME HERE
 const transcodeArtistIntroV2 = onObjectFinalized(
-  { bucket: BUCKET }, // explicitly bind to your bucket
   async (event) => {
     const obj = event.data;
     if (!obj) return;
@@ -103,7 +101,7 @@ const transcodeArtistIntroV2 = onObjectFinalized(
     const { artistUid } = match;
     logger.info(`[transcode] start ${objectName} (${contentType}) artistUid=${artistUid}`);
 
-    const bucket = storage.bucket(bucketName);
+    const bucket = admin.storage().bucket(bucketName);
 
     // temp workspace
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'artist-'));
