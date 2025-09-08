@@ -8,7 +8,6 @@ on:
 
 jobs:
   deploy:
-    if: ${{ secrets.FIREBASE_TOKEN != '' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -16,6 +15,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Check FIREBASE_TOKEN
+        id: token
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          if [ -n "$FIREBASE_TOKEN" ]; then
+            echo "HAS_TOKEN=true" >> $GITHUB_OUTPUT
+          else
+            echo "HAS_TOKEN=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set environment mapping
         id: envmap
@@ -56,14 +66,14 @@ jobs:
         run: npm i -g firebase-tools
 
       - name: Deploy to Firebase Hosting (push)
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.token.outputs.HAS_TOKEN == 'true'
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
           firebase deploy --only hosting --project ${{ steps.envmap.outputs.ALIAS }}
 
       - name: Preview deploy to Hosting (PR)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.token.outputs.HAS_TOKEN == 'true'
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
