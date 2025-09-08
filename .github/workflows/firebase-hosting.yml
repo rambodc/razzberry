@@ -1,0 +1,72 @@
+name: Firebase Hosting Deploy
+
+on:
+  push:
+    branches: [ prod, dev ]
+  pull_request:
+    branches: [ prod, dev ]
+
+jobs:
+  deploy:
+    if: ${{ secrets.FIREBASE_TOKEN != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set environment mapping
+        id: envmap
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "prod" ]]; then
+            echo "ALIAS=prod" >> $GITHUB_OUTPUT
+            echo "ENVIRONMENT=Prod" >> $GITHUB_OUTPUT
+          elif [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
+            echo "ALIAS=dev" >> $GITHUB_OUTPUT
+            echo "ENVIRONMENT=Dev" >> $GITHUB_OUTPUT
+          else
+            echo "ALIAS=dev" >> $GITHUB_OUTPUT
+            echo "ENVIRONMENT=Dev" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install deps
+        if: hashFiles('package.json') != ''
+        run: |
+          npm ci
+
+      - name: Build
+        if: hashFiles('package.json') != ''
+        env:
+          NODE_ENV: production
+        run: |
+          if npm run | grep -qE "\bbuild\b"; then
+            npm run build
+          else
+            echo "No build script; skipping build"
+          fi
+
+      - name: Install Firebase CLI
+        run: npm i -g firebase-tools
+
+      - name: Deploy to Firebase Hosting (push)
+        if: github.event_name == 'push'
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase deploy --only hosting --project ${{ steps.envmap.outputs.ALIAS }}
+
+      - name: Preview deploy to Hosting (PR)
+        if: github.event_name == 'pull_request'
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          firebase hosting:channel:deploy ${{ github.head_ref }} \
+            --project ${{ steps.envmap.outputs.ALIAS }} \
+            --expires 7d

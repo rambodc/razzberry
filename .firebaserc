@@ -1,8 +1,7 @@
 {
   "projects": {
-    "default": "showbat3",
-    "prod": "production1-fbd5d"
-  },
-  "targets": {},
-  "etags": {}
+    "prod": "YOUR_FIREBASE_PROJECT_ID_PROD",
+    "dev": "YOUR_FIREBASE_PROJECT_ID_DEV"
+  }
 }
+
