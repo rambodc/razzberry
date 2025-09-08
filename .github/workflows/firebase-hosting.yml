@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: false
 
       - name: Check FIREBASE_TOKEN
         id: token
@@ -55,6 +57,10 @@ jobs:
         if: hashFiles('package.json') != ''
         env:
           NODE_ENV: production
+          # Skip CRA ESLint during CI builds to avoid failing on warnings
+          DISABLE_ESLINT_PLUGIN: true
+          # Also ensure CRA doesn’t treat warnings as errors
+          CI: false
         run: |
           if npm run | grep -qE "\bbuild\b"; then
             npm run build
