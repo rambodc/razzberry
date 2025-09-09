@@ -50,6 +50,19 @@ jobs:
         with:
           node-version: 18
 
+      - name: Set up Firebase service account (optional)
+        id: sa
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -n "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "$FIREBASE_SERVICE_ACCOUNT" | base64 -d > ${GITHUB_WORKSPACE}/gcp-creds.json || echo "$FIREBASE_SERVICE_ACCOUNT" > ${GITHUB_WORKSPACE}/gcp-creds.json
+            echo "GOOGLE_APPLICATION_CREDENTIALS=${GITHUB_WORKSPACE}/gcp-creds.json" >> $GITHUB_ENV
+            echo "HAS_SA=true" >> $GITHUB_OUTPUT
+          else
+            echo "HAS_SA=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install deps
         if: hashFiles('package.json') != ''
         run: |
@@ -82,14 +95,14 @@ jobs:
         run: npm i -g firebase-tools
 
       - name: Deploy to Firebase Hosting (push)
-        if: github.event_name == 'push' && steps.token.outputs.HAS_TOKEN == 'true'
+        if: github.event_name == 'push' && (steps.sa.outputs.HAS_SA == 'true' || steps.token.outputs.HAS_TOKEN == 'true')
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
           firebase deploy --only hosting --project ${{ steps.envmap.outputs.ALIAS }}
 
       - name: Preview deploy to Hosting (PR)
-        if: github.event_name == 'pull_request' && steps.token.outputs.HAS_TOKEN == 'true'
+        if: github.event_name == 'pull_request' && (steps.sa.outputs.HAS_SA == 'true' || steps.token.outputs.HAS_TOKEN == 'true')
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |

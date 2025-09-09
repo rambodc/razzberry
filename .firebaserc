@@ -3,6 +3,21 @@
     "dev": "razz6-92831",
     "prod": "production1-fbd5d"
   },
-  "targets": {},
+  "targets": {
+    "razz6-92831": {
+      "hosting": {
+        "web": [
+          "razz6-92831"
+        ]
+      }
+    },
+    "production1-fbd5d": {
+      "hosting": {
+        "web": [
+          "production1-fbd5d"
+        ]
+      }
+    }
+  },
   "etags": {}
 }
