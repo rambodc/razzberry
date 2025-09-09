@@ -1,4 +1,4 @@
-# Razzberry CI/CD with Firebase Hosting 7
+# Razzberry CI/CD with Firebase Hosting 71
 
 This repository is set up for branch-based environments with Firebase Hosting.
 
