@@ -1,0 +1,345 @@
+[debug] [2025-09-09T19:54:46.444Z] ----------------------------------------------------------------------
+[debug] [2025-09-09T19:54:46.450Z] Command:       /Users/rambodrad/.nvm/versions/node/v20.19.5/bin/node /Users/rambodrad/.nvm/versions/node/v18.20.5/bin/firebase deploy --only functions
+[debug] [2025-09-09T19:54:46.450Z] CLI Version:   14.15.2
+[debug] [2025-09-09T19:54:46.450Z] Platform:      darwin
+[debug] [2025-09-09T19:54:46.450Z] Node Version:  v20.19.5
+[debug] [2025-09-09T19:54:46.450Z] Time:          Tue Sep 09 2025 13:54:46 GMT-0600 (Mountain Daylight Time)
+[debug] [2025-09-09T19:54:46.450Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-09T19:54:46.555Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-09-09T19:54:46.555Z] > authorizing via signed-in user (admin@razzberry.ai)
+[debug] [2025-09-09T19:54:46.555Z] [iam] checking project production1-fbd5d for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2025-09-09T19:54:46.556Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:46.556Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:46.556Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d:testIamPermissions [none]
+[debug] [2025-09-09T19:54:46.556Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d:testIamPermissions x-goog-quota-user=projects/production1-fbd5d
+[debug] [2025-09-09T19:54:46.556Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-09-09T19:54:46.729Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d:testIamPermissions 200
+[debug] [2025-09-09T19:54:46.729Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-09-09T19:54:46.729Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:46.729Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:46.730Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/production1-fbd5d/serviceAccounts/production1-fbd5d@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2025-09-09T19:54:46.730Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/production1-fbd5d/serviceAccounts/production1-fbd5d@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2025-09-09T19:54:47.207Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/production1-fbd5d/serviceAccounts/production1-fbd5d@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2025-09-09T19:54:47.207Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/production1-fbd5d/serviceAccounts/production1-fbd5d@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'production1-fbd5d'...
+[info] 
+[info] i  deploying functions 
+[debug] [2025-09-09T19:54:47.212Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:47.212Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:47.212Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d [none]
+[debug] [2025-09-09T19:54:47.335Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d 200
+[debug] [2025-09-09T19:54:47.335Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d {"projectNumber":"276382853797","projectId":"production1-fbd5d","lifecycleState":"ACTIVE","name":"production1","labels":{"firebase":"enabled"},"createTime":"2024-06-13T00:45:05.950008Z","parent":{"type":"organization","id":"1129183310"}}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2025-09-09T19:54:47.339Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:47.339Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:47.339Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/production1-fbd5d/adminSdkConfig [none]
+[debug] [2025-09-09T19:54:47.829Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/production1-fbd5d/adminSdkConfig 200
+[debug] [2025-09-09T19:54:47.829Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/production1-fbd5d/adminSdkConfig {"projectId":"production1-fbd5d","storageBucket":"production1-fbd5d.appspot.com","locationId":"us-central"}
+[debug] [2025-09-09T19:54:47.830Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:47.830Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:47.830Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs [none]
+[debug] [2025-09-09T19:54:48.071Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs 200
+[debug] [2025-09-09T19:54:48.071Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs {"configs":[{"name":"projects/production1-fbd5d/configs/measurement"},{"name":"projects/production1-fbd5d/configs/pinata"},{"name":"projects/production1-fbd5d/configs/messaging"},{"name":"projects/production1-fbd5d/configs/database"},{"name":"projects/production1-fbd5d/configs/vertex"},{"name":"projects/production1-fbd5d/configs/api"},{"name":"projects/production1-fbd5d/configs/app"},{"name":"projects/production1-fbd5d/configs/cors"},{"name":"projects/production1-fbd5d/configs/hosting"},{"name":"projects/production1-fbd5d/configs/storage"},{"name":"projects/production1-fbd5d/configs/bucket"},{"name":"projects/production1-fbd5d/configs/auth"}]}
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.072Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/measurement/variables [none]
+[debug] [2025-09-09T19:54:48.073Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/pinata/variables [none]
+[debug] [2025-09-09T19:54:48.074Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/messaging/variables [none]
+[debug] [2025-09-09T19:54:48.075Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/database/variables [none]
+[debug] [2025-09-09T19:54:48.076Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables [none]
+[debug] [2025-09-09T19:54:48.077Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/api/variables [none]
+[debug] [2025-09-09T19:54:48.078Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/app/variables [none]
+[debug] [2025-09-09T19:54:48.079Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/cors/variables [none]
+[debug] [2025-09-09T19:54:48.080Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/hosting/variables [none]
+[debug] [2025-09-09T19:54:48.081Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/storage/variables [none]
+[debug] [2025-09-09T19:54:48.081Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/bucket/variables [none]
+[debug] [2025-09-09T19:54:48.082Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/auth/variables [none]
+[debug] [2025-09-09T19:54:48.203Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/measurement/variables 200
+[debug] [2025-09-09T19:54:48.203Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/measurement/variables {"variables":[{"name":"projects/production1-fbd5d/configs/measurement/variables/id","updateTime":"2024-06-13T01:41:56.048914612Z"}]}
+[debug] [2025-09-09T19:54:48.203Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.203Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.203Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/measurement/variables/id [none]
+[debug] [2025-09-09T19:54:48.225Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/app/variables 200
+[debug] [2025-09-09T19:54:48.225Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/app/variables {"variables":[{"name":"projects/production1-fbd5d/configs/app/variables/id","updateTime":"2024-06-13T01:41:56.069396348Z"}]}
+[debug] [2025-09-09T19:54:48.225Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.226Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.226Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/app/variables/id [none]
+[debug] [2025-09-09T19:54:48.228Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/messaging/variables 200
+[debug] [2025-09-09T19:54:48.228Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/messaging/variables {"variables":[{"name":"projects/production1-fbd5d/configs/messaging/variables/sender/id","updateTime":"2024-06-13T01:41:57.179566793Z"}]}
+[debug] [2025-09-09T19:54:48.229Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.229Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.229Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/messaging/variables/sender/id [none]
+[debug] [2025-09-09T19:54:48.241Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/hosting/variables 200
+[debug] [2025-09-09T19:54:48.242Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/hosting/variables {"variables":[{"name":"projects/production1-fbd5d/configs/hosting/variables/site","updateTime":"2025-01-07T23:10:47.683738683Z"}]}
+[debug] [2025-09-09T19:54:48.242Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.242Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.242Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/hosting/variables/site [none]
+[debug] [2025-09-09T19:54:48.257Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/pinata/variables 200
+[debug] [2025-09-09T19:54:48.257Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/pinata/variables {"variables":[{"name":"projects/production1-fbd5d/configs/pinata/variables/jwt","updateTime":"2024-07-26T03:51:04.310020341Z"}]}
+[debug] [2025-09-09T19:54:48.257Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.257Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.257Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/pinata/variables/jwt [none]
+[debug] [2025-09-09T19:54:48.257Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/api/variables 200
+[debug] [2025-09-09T19:54:48.257Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/api/variables {"variables":[{"name":"projects/production1-fbd5d/configs/api/variables/key","updateTime":"2024-06-13T01:41:56.202419401Z"}]}
+[debug] [2025-09-09T19:54:48.257Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.257Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.257Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/api/variables/key [none]
+[debug] [2025-09-09T19:54:48.274Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/database/variables 200
+[debug] [2025-09-09T19:54:48.274Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/database/variables {"variables":[{"name":"projects/production1-fbd5d/configs/database/variables/url","updateTime":"2024-06-13T01:41:57.309358459Z"}]}
+[debug] [2025-09-09T19:54:48.274Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.274Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.274Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/database/variables/url [none]
+[debug] [2025-09-09T19:54:48.276Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables 200
+[debug] [2025-09-09T19:54:48.276Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables {"variables":[{"name":"projects/production1-fbd5d/configs/vertex/variables/project","updateTime":"2024-07-26T17:28:03.060249011Z"},{"name":"projects/production1-fbd5d/configs/vertex/variables/location","updateTime":"2024-07-26T17:28:07.180217033Z"}]}
+[debug] [2025-09-09T19:54:48.276Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.276Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.276Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.276Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.276Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables/project [none]
+[debug] [2025-09-09T19:54:48.277Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables/location [none]
+[debug] [2025-09-09T19:54:48.278Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/cors/variables 200
+[debug] [2025-09-09T19:54:48.278Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/cors/variables {"variables":[{"name":"projects/production1-fbd5d/configs/cors/variables/origin","updateTime":"2025-01-03T00:07:49.335145080Z"}]}
+[debug] [2025-09-09T19:54:48.278Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.278Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.278Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/cors/variables/origin [none]
+[debug] [2025-09-09T19:54:48.279Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/auth/variables 200
+[debug] [2025-09-09T19:54:48.279Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/auth/variables {"variables":[{"name":"projects/production1-fbd5d/configs/auth/variables/domain","updateTime":"2024-06-13T01:41:56.202677171Z"}]}
+[debug] [2025-09-09T19:54:48.279Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.279Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.279Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/auth/variables/domain [none]
+[debug] [2025-09-09T19:54:48.320Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/measurement/variables/id 200
+[debug] [2025-09-09T19:54:48.320Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/measurement/variables/id {"name":"projects/production1-fbd5d/configs/measurement/variables/id","updateTime":"2024-06-13T01:41:56.048914612Z","text":"G-SM2D5V18L5"}
+[debug] [2025-09-09T19:54:48.321Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/bucket/variables 200
+[debug] [2025-09-09T19:54:48.322Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/bucket/variables {"variables":[{"name":"projects/production1-fbd5d/configs/bucket/variables/name","updateTime":"2024-07-26T17:33:03.130825033Z"}]}
+[debug] [2025-09-09T19:54:48.322Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.322Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.322Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/bucket/variables/name [none]
+[debug] [2025-09-09T19:54:48.324Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/app/variables/id 200
+[debug] [2025-09-09T19:54:48.324Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/app/variables/id {"name":"projects/production1-fbd5d/configs/app/variables/id","updateTime":"2024-06-13T01:41:56.069396348Z","text":"1:276382853797:web:ffb3a639ac6df5f7b3fb4c"}
+[debug] [2025-09-09T19:54:48.351Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/messaging/variables/sender/id 200
+[debug] [2025-09-09T19:54:48.351Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/messaging/variables/sender/id {"name":"projects/production1-fbd5d/configs/messaging/variables/sender/id","updateTime":"2024-06-13T01:41:57.179566793Z","text":"276382853797"}
+[debug] [2025-09-09T19:54:48.355Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/hosting/variables/site 200
+[debug] [2025-09-09T19:54:48.355Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/hosting/variables/site {"name":"projects/production1-fbd5d/configs/hosting/variables/site","updateTime":"2025-01-07T23:10:47.683738683Z","text":"www.razzberry.ai"}
+[debug] [2025-09-09T19:54:48.366Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/bucket/variables/name 200
+[debug] [2025-09-09T19:54:48.366Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/bucket/variables/name {"name":"projects/production1-fbd5d/configs/bucket/variables/name","updateTime":"2024-07-26T17:33:03.130825033Z","text":"production1-fbd5d"}
+[debug] [2025-09-09T19:54:48.374Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/pinata/variables/jwt 200
+[debug] [2025-09-09T19:54:48.374Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/pinata/variables/jwt {"name":"projects/production1-fbd5d/configs/pinata/variables/jwt","updateTime":"2024-07-26T03:51:04.310020341Z","text":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhMzVjNDU3Yy04ZGYxLTRkOGYtYjE4ZS01NDliYzQ2ZmZkNjMiLCJlbWFpbCI6InByb2R1Y3Rpb25AcmF6emJlcnJ5LmFpIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siaWQiOiJGUkExIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9LHsiaWQiOiJOWUMxIiwiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjF9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6ImU5NjIyYWY3NzZhZWVlODExYWQ4Iiwic2NvcGVkS2V5U2VjcmV0IjoiZTY3OGFjMDk1MGQzM2JhMDI3MzExMTg0NmI2NDc2ZjlhMjNmMjg2M2MyMDAyNDA3ZTg2NTFjODY0NWYwMTc0NSIsImlhdCI6MTcyMTk2NDU0NX0.nqgphBwRWcuu4H1H38kwqdq1tmOJAysAbixvw_pl1cc"}
+[debug] [2025-09-09T19:54:48.374Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables/location 200
+[debug] [2025-09-09T19:54:48.374Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables/location {"name":"projects/production1-fbd5d/configs/vertex/variables/location","updateTime":"2024-07-26T17:28:07.180217033Z","text":"us-central1"}
+[debug] [2025-09-09T19:54:48.375Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/database/variables/url 200
+[debug] [2025-09-09T19:54:48.375Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/database/variables/url {"name":"projects/production1-fbd5d/configs/database/variables/url","updateTime":"2024-06-13T01:41:57.309358459Z","text":"https://production1-fbd5d.firebaseio.com"}
+[debug] [2025-09-09T19:54:48.375Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/api/variables/key 200
+[debug] [2025-09-09T19:54:48.375Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/api/variables/key {"name":"projects/production1-fbd5d/configs/api/variables/key","updateTime":"2024-06-13T01:41:56.202419401Z","text":"AIzaSyCzhiKN966llk-7D3E6nkrFSmI3LdK8C6c"}
+[debug] [2025-09-09T19:54:48.386Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables/project 200
+[debug] [2025-09-09T19:54:48.386Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/vertex/variables/project {"name":"projects/production1-fbd5d/configs/vertex/variables/project","updateTime":"2024-07-26T17:28:03.060249011Z","text":"production1-fbd5d"}
+[debug] [2025-09-09T19:54:48.395Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/cors/variables/origin 200
+[debug] [2025-09-09T19:54:48.395Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/cors/variables/origin {"name":"projects/production1-fbd5d/configs/cors/variables/origin","updateTime":"2025-01-03T00:07:49.335145080Z","text":"*"}
+[debug] [2025-09-09T19:54:48.400Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/storage/variables 200
+[debug] [2025-09-09T19:54:48.400Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/storage/variables {"variables":[{"name":"projects/production1-fbd5d/configs/storage/variables/bucket","updateTime":"2024-06-13T01:41:57.070779098Z"}]}
+[debug] [2025-09-09T19:54:48.400Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.400Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:48.401Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/storage/variables/bucket [none]
+[debug] [2025-09-09T19:54:48.442Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/auth/variables/domain 200
+[debug] [2025-09-09T19:54:48.442Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/auth/variables/domain {"name":"projects/production1-fbd5d/configs/auth/variables/domain","updateTime":"2024-06-13T01:41:56.202677171Z","text":"production1-fbd5d.firebaseapp.com"}
+[debug] [2025-09-09T19:54:48.613Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/storage/variables/bucket 200
+[debug] [2025-09-09T19:54:48.614Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/production1-fbd5d/configs/storage/variables/bucket {"name":"projects/production1-fbd5d/configs/storage/variables/bucket","updateTime":"2024-06-13T01:41:57.070779098Z","text":"production1-fbd5d.appspot.com"}
+[debug] [2025-09-09T19:54:48.617Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] ⚠  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-09-09T19:54:49.137Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^4.9.0"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0"
+  },
+  "private": true,
+  "type": "commonjs"
+}
+[debug] [2025-09-09T19:54:49.137Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase default to determine what to deploy 
+[info] i  functions: You are using a version of firebase-functions SDK (4.9.0) that does not have support for the newest Firebase Extensions features. Please update firebase-functions SDK to >=5.1.0 to use them correctly 
+[debug] [2025-09-09T19:54:49.138Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-09-09T19:54:49.145Z] Found firebase-functions binary at '/Users/rambodrad/showbat3/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8998
+
+[debug] [2025-09-09T19:54:49.434Z] Got response from /__/functions.yaml {"endpoints":{"createTransakSession":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","secretEnvironmentVariables":[{"key":"TRANSAK_API_KEY"},{"key":"TRANSAK_API_SECRET"},{"key":"TRANSAK_ENV"},{"key":"TRANSAK_ALLOWED_ORIGINS"}],"labels":{},"httpsTrigger":{},"entryPoint":"createTransakSession"}},"specVersion":"v1alpha1","requiredAPIs":[],"params":[{"type":"secret","name":"TRANSAK_API_KEY"},{"type":"secret","name":"TRANSAK_API_SECRET"},{"type":"secret","name":"TRANSAK_ENV"},{"type":"secret","name":"TRANSAK_ALLOWED_ORIGINS"}]}
+[debug] [2025-09-09T19:54:53.453Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.453Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.453Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY [none]
+[debug] [2025-09-09T19:54:53.674Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY 200
+[debug] [2025-09-09T19:54:53.674Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY {"name":"projects/276382853797/secrets/TRANSAK_API_KEY","replication":{"automatic":{}},"createTime":"2025-09-06T02:09:43.414871Z","labels":{"firebase-managed":"functions"},"etag":"\"163e1872a474f4\""}
+[debug] [2025-09-09T19:54:53.675Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.675Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.675Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY/versions/latest [none]
+[debug] [2025-09-09T19:54:53.783Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY/versions/latest 200
+[debug] [2025-09-09T19:54:53.784Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_API_KEY/versions/4","createTime":"2025-09-06T21:01:51.346453Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e284370d715\""}
+[debug] [2025-09-09T19:54:53.784Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.784Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.784Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET [none]
+[debug] [2025-09-09T19:54:53.911Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET 200
+[debug] [2025-09-09T19:54:53.911Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET {"name":"projects/276382853797/secrets/TRANSAK_API_SECRET","replication":{"automatic":{}},"createTime":"2025-09-06T02:14:42.061725Z","labels":{"firebase-managed":"functions"},"etag":"\"163e1884713e3a\""}
+[debug] [2025-09-09T19:54:53.912Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.912Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:53.912Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET/versions/latest [none]
+[debug] [2025-09-09T19:54:54.006Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET/versions/latest 200
+[debug] [2025-09-09T19:54:54.006Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_API_SECRET/versions/4","createTime":"2025-09-06T21:02:37.307682Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e28462e2722\""}
+[debug] [2025-09-09T19:54:54.006Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.006Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.006Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV [none]
+[debug] [2025-09-09T19:54:54.106Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV 200
+[debug] [2025-09-09T19:54:54.107Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV {"name":"projects/276382853797/secrets/TRANSAK_ENV","replication":{"automatic":{}},"createTime":"2025-09-06T01:46:15.890490Z","labels":{"firebase-managed":"functions"},"etag":"\"163e181ebd93da\""}
+[debug] [2025-09-09T19:54:54.107Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.107Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.107Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV/versions/latest [none]
+[debug] [2025-09-09T19:54:54.217Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV/versions/latest 200
+[debug] [2025-09-09T19:54:54.217Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_ENV/versions/4","createTime":"2025-09-06T21:03:28.982821Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e284942a725\""}
+[debug] [2025-09-09T19:54:54.217Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.217Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.218Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS [none]
+[debug] [2025-09-09T19:54:54.341Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS 200
+[debug] [2025-09-09T19:54:54.341Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS {"name":"projects/276382853797/secrets/TRANSAK_ALLOWED_ORIGINS","replication":{"automatic":{}},"createTime":"2025-09-06T01:50:22.990477Z","labels":{"firebase-managed":"functions"},"etag":"\"163e182d79f80b\""}
+[debug] [2025-09-09T19:54:54.341Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.341Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.341Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS/versions/latest [none]
+[debug] [2025-09-09T19:54:54.440Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS/versions/latest 200
+[debug] [2025-09-09T19:54:54.440Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_ALLOWED_ORIGINS/versions/2","createTime":"2025-09-06T20:21:32.129684Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e27b33e8594\""}
+[info] i  functions: preparing functions directory for uploading... 
+[info] i  functions: packaged /Users/rambodrad/showbat3/functions (71.3 KB) for uploading 
+[debug] [2025-09-09T19:54:54.475Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.475Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:54.475Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/production1-fbd5d/locations/-/functions [none]
+[debug] [2025-09-09T19:54:55.163Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/production1-fbd5d/locations/-/functions 200
+[debug] [2025-09-09T19:54:55.163Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/production1-fbd5d/locations/-/functions {"functions":[{"name":"projects/production1-fbd5d/locations/us-central1/functions/ext-firestore-send-email-processQueue","description":"Processes document changes in the specified Cloud Firestore collection, delivers emails, and updates the document with delivery status information.","sourceArchiveUrl":"gs://firebase-mod-sources-prod/1de3fa6b4a1f4e5a93acfebf45015fdf3e00618b1bb3dbf1f69b37b3540872cd","eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.write","resource":"projects/production1-fbd5d/databases/(default)/documents/mail/{id}","service":"firestore.googleapis.com","failurePolicy":{}},"status":"ACTIVE","entryPoint":"processQueue","timeout":"60s","availableMemoryMb":256,"serviceAccountEmail":"ext-firestore-send-email@production1-fbd5d.iam.gserviceaccount.com","updateTime":"2025-03-01T20:17:54.009261961Z","versionId":"2","labels":{"firebase-extensions-ar":"enabled","goog-dm":"firebase-ext-firestore-send-email","goog-firebase-ext":"firestore-send-email","deployment-tool":"firebase-extensions","goog-firebase-ext-iid":"firestore-send-email"},"environmentVariables":{"DATABASE_INSTANCE":"","DATABASE_URL":"","DEFAULT_FROM":"Razzberry <mail@razzberry.ai>","EXT_INSTANCE_ID":"firestore-send-email","FIREBASE_CONFIG":"{\"projectId\":\"production1-fbd5d\",\"databaseURL\":\"\",\"storageBucket\":\"production1-fbd5d.appspot.com\"}","GCLOUD_PROJECT":"production1-fbd5d","LOCATION":"us-central1","MAIL_COLLECTION":"mail","PROJECT_ID":"production1-fbd5d","SMTP_CONNECTION_URI":"smtp://apikey@smtp.sendgrid.net:587","STORAGE_BUCKET":"production1-fbd5d.appspot.com","TTL_EXPIRE_TYPE":"never","TTL_EXPIRE_VALUE":"1"},"runtime":"nodejs18","maxInstances":3000,"ingressSettings":"ALLOW_INTERNAL_ONLY","buildId":"6e151973-3968-48f8-92b2-9ea959abfee6","buildEnvironmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"secretEnvironmentVariables":[{"key":"SMTP_PASSWORD","projectId":"276382853797","secret":"firestore-send-email-SMTP_PASSWORD","version":"1"}],"buildName":"projects/276382853797/locations/us-central1/builds/6e151973-3968-48f8-92b2-9ea959abfee6","dockerRegistry":"ARTIFACT_REGISTRY","automaticUpdatePolicy":{},"satisfiesPzi":true}]}
+[debug] [2025-09-09T19:54:55.165Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:55.165Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:55.166Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/production1-fbd5d/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2025-09-09T19:54:55.860Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/production1-fbd5d/locations/-/functions 200
+[debug] [2025-09-09T19:54:55.861Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/production1-fbd5d/locations/-/functions {"functions":[{"name":"projects/production1-fbd5d/locations/us-central1/functions/transcodeArtistIntroV2","buildConfig":{"build":"projects/276382853797/locations/us-central1/builds/16f09749-664d-4cf4-a79e-06f496759c99","runtime":"nodejs20","entryPoint":"transcodeArtistIntroV2","source":{"storageSource":{"bucket":"gcf-v2-sources-276382853797-us-central1","object":"transcodeArtistIntroV2/function-source.zip","generation":"1757124890161113"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/production1-fbd5d/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-276382853797-us-central1","object":"transcodeArtistIntroV2/function-source.zip","generation":"1757124890161113"}},"dockerRegistry":"ARTIFACT_REGISTRY","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/production1-fbd5d/locations/us-central1/services/transcodeartistintrov2","timeoutSeconds":540,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"production1-fbd5d\",\"storageBucket\":\"production1-fbd5d.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"production1-fbd5d","EVENTARC_CLOUD_EVENT_SOURCE":"projects/production1-fbd5d/locations/us-central1/services/transcodeArtistIntroV2","FUNCTION_SIGNATURE_TYPE":"cloudevent","FUNCTION_TARGET":"transcodeArtistIntroV2","LOG_EXECUTION_ID":"true"},"maxInstanceCount":2,"ingressSettings":"ALLOW_ALL","uri":"https://transcodeartistintrov2-zcd5rx7xoq-uc.a.run.app","serviceAccountEmail":"276382853797-compute@developer.gserviceaccount.com","availableMemory":"2Gi","allTrafficOnLatestRevision":true,"revision":"transcodeartistintrov2-00001-tek","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"eventTrigger":{"trigger":"projects/production1-fbd5d/locations/us/triggers/transcodeartistintrov2-196462","triggerRegion":"us","eventType":"google.cloud.storage.object.v1.finalized","eventFilters":[{"attribute":"bucket","value":"production1-fbd5d.appspot.com"}],"pubsubTopic":"projects/production1-fbd5d/topics/eventarc-us-transcodeartistintrov2-196462-599","serviceAccountEmail":"276382853797-compute@developer.gserviceaccount.com","retryPolicy":"RETRY_POLICY_DO_NOT_RETRY"},"state":"ACTIVE","updateTime":"2025-09-06T02:16:19.471593430Z","labels":{"deployment-tool":"cli-firebase","firebase-functions-hash":"b2e998cdf21074168bd0db68d2644799d270ef8d"},"environment":"GEN_2","url":"https://us-central1-production1-fbd5d.cloudfunctions.net/transcodeArtistIntroV2","createTime":"2025-09-06T02:14:51.016364062Z","satisfiesPzi":true},{"name":"projects/production1-fbd5d/locations/us-central1/functions/createTransakSession","buildConfig":{"build":"projects/276382853797/locations/us-central1/builds/89845da5-f703-4643-8f92-52f1a96e3af0","runtime":"nodejs20","entryPoint":"createTransakSession","source":{"storageSource":{"bucket":"gcf-v2-sources-276382853797-us-central1","object":"createTransakSession/function-source.zip","generation":"1757278631585310"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/production1-fbd5d/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-276382853797-us-central1","object":"createTransakSession/function-source.zip","generation":"1757278631585310"}},"dockerRegistry":"ARTIFACT_REGISTRY","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/production1-fbd5d/locations/us-central1/services/createtransaksession","timeoutSeconds":540,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"production1-fbd5d\",\"storageBucket\":\"production1-fbd5d.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"production1-fbd5d","EVENTARC_CLOUD_EVENT_SOURCE":"projects/production1-fbd5d/locations/us-central1/services/createTransakSession","FUNCTION_TARGET":"createTransakSession","LOG_EXECUTION_ID":"true","FUNCTION_SIGNATURE_TYPE":"http"},"maxInstanceCount":2,"ingressSettings":"ALLOW_ALL","uri":"https://createtransaksession-zcd5rx7xoq-uc.a.run.app","serviceAccountEmail":"276382853797-compute@developer.gserviceaccount.com","availableMemory":"2Gi","allTrafficOnLatestRevision":true,"secretEnvironmentVariables":[{"key":"TRANSAK_API_KEY","projectId":"production1-fbd5d","secret":"TRANSAK_API_KEY","version":"4"},{"key":"TRANSAK_API_SECRET","projectId":"production1-fbd5d","secret":"TRANSAK_API_SECRET","version":"4"},{"key":"TRANSAK_ENV","projectId":"production1-fbd5d","secret":"TRANSAK_ENV","version":"4"},{"key":"TRANSAK_ALLOWED_ORIGINS","projectId":"production1-fbd5d","secret":"TRANSAK_ALLOWED_ORIGINS","version":"2"},{"key":"TRANSAK_ACCESS_TOKEN","projectId":"production1-fbd5d","secret":"TRANSAK_ACCESS_TOKEN","version":"2"}],"revision":"createtransaksession-00012-leb","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2025-09-07T20:58:36.007077630Z","labels":{"firebase-functions-hash":"110ef849167fbf07fbdabbf2f05cf2ec28665e67","deployment-tool":"cli-firebase"},"environment":"GEN_2","url":"https://us-central1-production1-fbd5d.cloudfunctions.net/createTransakSession","createTime":"2025-09-06T02:16:00.909241370Z","satisfiesPzi":true},{"name":"projects/production1-fbd5d/locations/us-central1/functions/transakWebhook","buildConfig":{"build":"projects/276382853797/locations/us-central1/builds/bd09885a-6344-4dea-89de-e93508ace93d","runtime":"nodejs20","entryPoint":"transakWebhook","source":{"storageSource":{"bucket":"gcf-v2-sources-276382853797-us-central1","object":"transakWebhook/function-source.zip","generation":"1757186541262061"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/production1-fbd5d/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-276382853797-us-central1","object":"transakWebhook/function-source.zip","generation":"1757186541262061"}},"dockerRegistry":"ARTIFACT_REGISTRY","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/production1-fbd5d/locations/us-central1/services/transakwebhook","timeoutSeconds":540,"environmentVariables":{"FIREBASE_CONFIG":"{\"projectId\":\"production1-fbd5d\",\"storageBucket\":\"production1-fbd5d.appspot.com\",\"locationId\":\"us-central\"}","GCLOUD_PROJECT":"production1-fbd5d","EVENTARC_CLOUD_EVENT_SOURCE":"projects/production1-fbd5d/locations/us-central1/services/transakWebhook","FUNCTION_TARGET":"transakWebhook","LOG_EXECUTION_ID":"true","FUNCTION_SIGNATURE_TYPE":"http"},"maxInstanceCount":2,"ingressSettings":"ALLOW_ALL","uri":"https://transakwebhook-zcd5rx7xoq-uc.a.run.app","serviceAccountEmail":"276382853797-compute@developer.gserviceaccount.com","availableMemory":"2Gi","allTrafficOnLatestRevision":true,"secretEnvironmentVariables":[{"key":"TRANSAK_SECRET","projectId":"production1-fbd5d","secret":"TRANSAK_SECRET","version":"1"}],"revision":"transakwebhook-00004-guv","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2025-09-06T19:23:34.514188410Z","labels":{"firebase-functions-hash":"d9f9fd5507995b1e8f80ba7122ef720708413d8c","deployment-tool":"cli-firebase"},"environment":"GEN_2","url":"https://us-central1-production1-fbd5d.cloudfunctions.net/transakWebhook","createTime":"2025-09-05T21:38:30.650874356Z","satisfiesPzi":true}]}
+[info] i  functions: ensuring required API run.googleapis.com is enabled... 
+[info] i  functions: ensuring required API eventarc.googleapis.com is enabled... 
+[info] i  functions: ensuring required API pubsub.googleapis.com is enabled... 
+[info] i  functions: ensuring required API storage.googleapis.com is enabled... 
+[info] i  functions: generating the service identity for pubsub.googleapis.com... 
+[debug] [2025-09-09T19:54:55.867Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:55.867Z] Checked if tokens are valid: true, expires at: 1757451152697
+[info] i  functions: generating the service identity for eventarc.googleapis.com... 
+[debug] [2025-09-09T19:54:55.867Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:55.867Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:55.867Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/pubsub.googleapis.com:generateServiceIdentity [none]
+[debug] [2025-09-09T19:54:55.867Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/pubsub.googleapis.com:generateServiceIdentity x-goog-quota-user=projects/276382853797
+[debug] [2025-09-09T19:54:55.867Z] >>> [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/pubsub.googleapis.com:generateServiceIdentity {}
+[debug] [2025-09-09T19:54:55.869Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/eventarc.googleapis.com:generateServiceIdentity [none]
+[debug] [2025-09-09T19:54:55.869Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/eventarc.googleapis.com:generateServiceIdentity x-goog-quota-user=projects/276382853797
+[debug] [2025-09-09T19:54:55.869Z] >>> [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/eventarc.googleapis.com:generateServiceIdentity {}
+[debug] [2025-09-09T19:54:56.285Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/pubsub.googleapis.com:generateServiceIdentity 200
+[debug] [2025-09-09T19:54:56.286Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/pubsub.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-276382853797@gcp-sa-pubsub.iam.gserviceaccount.com","uniqueId":"106349506391928835510"}}
+[debug] [2025-09-09T19:54:56.477Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/eventarc.googleapis.com:generateServiceIdentity 200
+[debug] [2025-09-09T19:54:56.477Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/276382853797/services/eventarc.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-276382853797@gcp-sa-eventarc.iam.gserviceaccount.com","uniqueId":"111189691703062999003"}}
+[info] i  functions: ensuring required API secretmanager.googleapis.com is enabled... 
+[debug] [2025-09-09T19:54:56.479Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.479Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.479Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.479Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.479Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.479Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.479Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.480Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.480Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY/versions/latest [none]
+[debug] [2025-09-09T19:54:56.480Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET/versions/latest [none]
+[debug] [2025-09-09T19:54:56.482Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV/versions/latest [none]
+[debug] [2025-09-09T19:54:56.484Z] >>> [apiv2][query] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS/versions/latest [none]
+[debug] [2025-09-09T19:54:56.587Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY/versions/latest 200
+[debug] [2025-09-09T19:54:56.587Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_KEY/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_API_KEY/versions/4","createTime":"2025-09-06T21:01:51.346453Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e284370d715\""}
+[debug] [2025-09-09T19:54:56.588Z] Resolved secret version of TRANSAK_API_KEY to 4.
+[debug] [2025-09-09T19:54:56.641Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS/versions/latest 200
+[debug] [2025-09-09T19:54:56.641Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ALLOWED_ORIGINS/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_ALLOWED_ORIGINS/versions/2","createTime":"2025-09-06T20:21:32.129684Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e27b33e8594\""}
+[debug] [2025-09-09T19:54:56.641Z] Resolved secret version of TRANSAK_ALLOWED_ORIGINS to 2.
+[debug] [2025-09-09T19:54:56.669Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET/versions/latest 200
+[debug] [2025-09-09T19:54:56.669Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_API_SECRET/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_API_SECRET/versions/4","createTime":"2025-09-06T21:02:37.307682Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e28462e2722\""}
+[debug] [2025-09-09T19:54:56.669Z] Resolved secret version of TRANSAK_API_SECRET to 4.
+[debug] [2025-09-09T19:54:56.705Z] <<< [apiv2][status] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV/versions/latest 200
+[debug] [2025-09-09T19:54:56.705Z] <<< [apiv2][body] GET https://secretmanager.googleapis.com/v1/projects/production1-fbd5d/secrets/TRANSAK_ENV/versions/latest {"name":"projects/276382853797/secrets/TRANSAK_ENV/versions/4","createTime":"2025-09-06T21:03:28.982821Z","state":"ENABLED","replicationStatus":{"automatic":{}},"etag":"\"163e284942a725\""}
+[debug] [2025-09-09T19:54:56.706Z] Resolved secret version of TRANSAK_ENV to 4.
+[debug] [2025-09-09T19:54:56.707Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.707Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.708Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d [none]
+[debug] [2025-09-09T19:54:56.889Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d 200
+[debug] [2025-09-09T19:54:56.889Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/production1-fbd5d {"projectNumber":"276382853797","projectId":"production1-fbd5d","lifecycleState":"ACTIVE","name":"production1","labels":{"firebase":"enabled"},"createTime":"2024-06-13T00:45:05.950008Z","parent":{"type":"organization","id":"1129183310"}}
+[debug] [2025-09-09T19:54:56.890Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.890Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:56.890Z] >>> [apiv2][query] GET https://compute.googleapis.com/compute/v1/projects/276382853797 [none]
+[debug] [2025-09-09T19:54:57.097Z] <<< [apiv2][status] GET https://compute.googleapis.com/compute/v1/projects/276382853797 403
+[debug] [2025-09-09T19:54:57.098Z] <<< [apiv2][body] GET https://compute.googleapis.com/compute/v1/projects/276382853797 {"error":{"code":403,"message":"Compute Engine API has not been used in project 276382853797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","errors":[{"message":"Compute Engine API has not been used in project 276382853797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","domain":"usageLimits","reason":"accessNotConfigured","extendedHelp":"https://console.developers.google.com"}],"status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"SERVICE_DISABLED","domain":"googleapis.com","metadata":{"activationUrl":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797","service":"compute.googleapis.com","consumer":"projects/276382853797","serviceTitle":"Compute Engine API","containerInfo":"276382853797"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Compute Engine API has not been used in project 276382853797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developers console API activation","url":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797"}]}]}}
+[debug] [2025-09-09T19:54:57.099Z] unable to look up default compute service account. Falling back to 276382853797-compute@developer.gserviceaccount.com. Error: {"name":"FirebaseError","children":[],"context":{"body":{"error":{"code":403,"message":"Compute Engine API has not been used in project 276382853797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","errors":[{"message":"Compute Engine API has not been used in project 276382853797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","domain":"usageLimits","reason":"accessNotConfigured","extendedHelp":"https://console.developers.google.com"}],"status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"SERVICE_DISABLED","domain":"googleapis.com","metadata":{"activationUrl":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797","service":"compute.googleapis.com","consumer":"projects/276382853797","serviceTitle":"Compute Engine API","containerInfo":"276382853797"}},{"@type":"type.googleapis.com/google.rpc.LocalizedMessage","locale":"en-US","message":"Compute Engine API has not been used in project 276382853797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."},{"@type":"type.googleapis.com/google.rpc.Help","links":[{"description":"Google developers console API activation","url":"https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797"}]}]}},"response":{"statusCode":403}},"exit":1,"message":"Request to https://compute.googleapis.com/compute/v1/projects/276382853797 had HTTP Error: 403, Compute Engine API has not been used in project 276382853797 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/compute.googleapis.com/overview?project=276382853797 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.","status":403}
+[debug] [2025-09-09T19:54:57.101Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:57.101Z] Checked if tokens are valid: true, expires at: 1757451152697
+[debug] [2025-09-09T19:54:57.101Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v2/projects/production1-fbd5d/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2025-09-09T19:54:57.474Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v2/projects/production1-fbd5d/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2025-09-09T19:54:57.475Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/production1-fbd5d/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/gcf-v2-uploads-276382853797.us-central1.cloudfunctions.appspot.com/0e40fe25-5871-41d3-bce9-eec65e44092f.zip?GoogleAccessId=service-276382853797@gcf-admin-robot.iam.gserviceaccount.com&Expires=1757449497&Signature=fFlzm%2BRUFBk3SA0rKLU52K13KV9fqm0asJO0yaGLUHcmXHh6Ro1aIwsCkDODYsfSbJZZxbNA%2BrdKT%2B6unDYO1J6O5LqdKaIh%2FgVvXdRsDsBnGj57OBcujQEK%2F1t3XSnZ3nkwlEdlEfYrl1BGWnROSlFaesjAQVEzK5%2Fi%2F3JDXoxnaY8US5tKvqXPJ%2BUBoyrj3mHUDawqBJdGjiDQoLVzF9sHIDwu7OWzDPzL3k31vw989p6vOHNrwuQZVNxZvbGGz8G2UwZCzIccCuAPutkkz%2BFiPjrCjB8H1rs4bsDz6Mc3An2QMN2ejZvdV3JCFTeIVcomHnaKqYkKcMB5O8wyww%3D%3D","storageSource":{"bucket":"gcf-v2-uploads-276382853797.us-central1.cloudfunctions.appspot.com","object":"0e40fe25-5871-41d3-bce9-eec65e44092f.zip"}}
+[debug] [2025-09-09T19:54:57.478Z] >>> [apiv2][query] PUT https://storage.googleapis.com/gcf-v2-uploads-276382853797.us-central1.cloudfunctions.appspot.com/0e40fe25-5871-41d3-bce9-eec65e44092f.zip GoogleAccessId=service-276382853797%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1757449497&Signature=fFlzm%2BRUFBk3SA0rKLU52K13KV9fqm0asJO0yaGLUHcmXHh6Ro1aIwsCkDODYsfSbJZZxbNA%2BrdKT%2B6unDYO1J6O5LqdKaIh%2FgVvXdRsDsBnGj57OBcujQEK%2F1t3XSnZ3nkwlEdlEfYrl1BGWnROSlFaesjAQVEzK5%2Fi%2F3JDXoxnaY8US5tKvqXPJ%2BUBoyrj3mHUDawqBJdGjiDQoLVzF9sHIDwu7OWzDPzL3k31vw989p6vOHNrwuQZVNxZvbGGz8G2UwZCzIccCuAPutkkz%2BFiPjrCjB8H1rs4bsDz6Mc3An2QMN2ejZvdV3JCFTeIVcomHnaKqYkKcMB5O8wyww%3D%3D
+[debug] [2025-09-09T19:54:57.478Z] >>> [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-276382853797.us-central1.cloudfunctions.appspot.com/0e40fe25-5871-41d3-bce9-eec65e44092f.zip [stream]
+[debug] [2025-09-09T19:54:57.855Z] <<< [apiv2][status] PUT https://storage.googleapis.com/gcf-v2-uploads-276382853797.us-central1.cloudfunctions.appspot.com/0e40fe25-5871-41d3-bce9-eec65e44092f.zip 200
+[debug] [2025-09-09T19:54:57.856Z] <<< [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-276382853797.us-central1.cloudfunctions.appspot.com/0e40fe25-5871-41d3-bce9-eec65e44092f.zip [omitted]
+[info] ✔  functions: functions folder uploaded successfully 
+[info] 
+The following functions are found in your project but do not exist in your local source code:
+	transakWebhook(us-central1)
+	transcodeArtistIntroV2(us-central1)
+
+If you are renaming a function or changing its region, it is recommended that you create the new function first before deleting the old one to prevent event loss. For more info, visit https://firebase.google.com/docs/functions/manage-functions#modify
+
+[debug] [2025-09-09T19:55:30.673Z] ExitPromptError: User force closed the prompt with SIGINT
+    at Interface.sigint (/Users/rambodrad/.nvm/versions/node/v18.20.5/lib/node_modules/firebase-tools/node_modules/@inquirer/core/dist/commonjs/lib/create-prompt.js:101:37)
+    at Interface.emit (node:events:524:28)
+    at Interface.emit (node:domain:489:12)
+    at [_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1128:18)
+    at ReadStream.onkeypress (node:internal/readline/interface:267:20)
+    at ReadStream.emit (node:events:536:35)
+    at ReadStream.emit (node:domain:489:12)
+    at emitKeys (node:internal/readline/utils:371:14)
+    at emitKeys.next (<anonymous>)
+    at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+[error] 
+[error] Error: An unexpected error has occurred.
