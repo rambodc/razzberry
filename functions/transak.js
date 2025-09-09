@@ -8,7 +8,6 @@
 const { onRequest } = require('firebase-functions/v2/https');
 const { logger } = require('firebase-functions/v2');
 const { defineSecret } = require('firebase-functions/params');
-const crypto = require('node:crypto');
 const admin = require('firebase-admin');
 
 // -------- Secrets --------
@@ -16,8 +15,7 @@ const TRANSAK_API_KEY = defineSecret('TRANSAK_API_KEY');              // partner
 const TRANSAK_API_SECRET = defineSecret('TRANSAK_API_SECRET');        // partner API secret
 const TRANSAK_ENV = defineSecret('TRANSAK_ENV');                      // STAGING | PRODUCTION
 const TRANSAK_ALLOWED_ORIGINS = defineSecret('TRANSAK_ALLOWED_ORIGINS'); // CSV of allowed origins (optional)
-const TRANSAK_SECRET = defineSecret('TRANSAK_SECRET');                // optional legacy webhook HMAC secret
-const TRANSAK_ACCESS_TOKEN = defineSecret('TRANSAK_ACCESS_TOKEN');    // optional fallback token
+// (webhook secret removed; access-token fallback removed)
 
 // -------- Admin init --------
 try { admin.app(); } catch { admin.initializeApp(); }
@@ -136,13 +134,6 @@ async function getPartnerAccessToken(requiredEnv) {
   const fresh = await refreshPartnerAccessTokenOnce(envWanted);
   if (fresh?.token) return fresh;
 
-  // 3) fallback (not recommended)
-  const fallback = process.env.TRANSAK_ACCESS_TOKEN;
-  if (fallback) {
-    logger.warn('[transak] using fallback TRANSAK_ACCESS_TOKEN (no cache)');
-    return { token: fallback, envUsed: envWanted };
-  }
-
   throw new Error('Unable to obtain Transak access token');
 }
 
@@ -154,65 +145,12 @@ async function verifyFirebaseIdToken(req) {
   try { return await admin.auth().verifyIdToken(m[1]); } catch { return null; }
 }
 
-// -------- Webhook (legacy-compatible stub; upgrade later to JWT decode) --------
-function timingsafeEqual(a, b) {
-  const ab = Buffer.from(String(a || ''), 'utf8');
-  const bb = Buffer.from(String(b || ''), 'utf8');
-  if (ab.length !== bb.length) return false;
-  return crypto.timingSafeEqual(ab, bb);
-}
-function computeHmacs(secret, raw) {
-  const key = Buffer.from(String(secret || ''), 'utf8');
-  const data = Buffer.isBuffer(raw) ? raw : Buffer.from(String(raw || ''), 'utf8');
-  const h = crypto.createHmac('sha256', key).update(data);
-  const hex = h.digest('hex');
-  const b64 = Buffer.from(hex, 'hex').toString('base64');
-  return { hex, b64 };
-}
-function verifySignature(req) {
-  const secret = process.env.TRANSAK_SECRET || process.env.TRANSAK_WEBHOOK_SECRET || '';
-  if (!secret) return true; // dev/staging
-  const heads = [req.get('x-transak-signature'), req.get('transak-signature'), req.get('x-signature')].filter(Boolean);
-  if (!heads.length) return false;
-  const { hex, b64 } = computeHmacs(secret, req.rawBody || '');
-  return heads.some(h => timingsafeEqual(h, hex) || timingsafeEqual(h, b64));
-}
-
-const transakWebhook = onRequest({ cors: true, secrets: [TRANSAK_SECRET] }, async (req, res) => {
-  try {
-    if (req.method === 'GET') return res.status(200).send('OK');
-    if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
-
-    const verified = verifySignature(req);
-    const body = (() => { try { return JSON.parse(req.rawBody?.toString('utf8') || '{}'); } catch { return {}; }})();
-    const orderId = String(body.orderId || body.id || body?.data?.id || crypto.randomUUID());
-    const status = body.status || body?.event || body?.data?.status || 'UNKNOWN';
-    const userId = String(body.partnerCustomerId || body?.userId || body?.customerId || '');
-
-    try {
-      await db.doc(`transakOrders/${orderId}`).set({
-        userId: userId || null,
-        environment: normEnv(process.env.TRANSAK_ENV || 'STAGING'),
-        status,
-        verified,
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        rawPayload: body,
-      }, { merge: true });
-    } catch (e) {
-      logger.warn('[transakWebhook] Firestore write skipped:', e.message);
-    }
-    return res.json({ ok: true, orderId });
-  } catch (err) {
-    logger.error('[transakWebhook] error', err);
-    return res.status(500).json({ ok: false, error: 'internal_error' });
-  }
-});
+// (transakWebhook removed as requested)
 
 // -------- Create Session (prefills email, locks XRP to your wallet, $100 USD) --------
 const createTransakSession = onRequest({
   cors: true,
-  secrets: [TRANSAK_API_KEY, TRANSAK_API_SECRET, TRANSAK_ENV, TRANSAK_ALLOWED_ORIGINS, TRANSAK_ACCESS_TOKEN],
+  secrets: [TRANSAK_API_KEY, TRANSAK_API_SECRET, TRANSAK_ENV, TRANSAK_ALLOWED_ORIGINS],
 }, async (req, res) => {
   try {
     if (req.method === 'GET') return res.status(200).json({ ok: true });
@@ -297,4 +235,4 @@ const createTransakSession = onRequest({
   }
 });
 
-module.exports = { transakWebhook, createTransakSession };
+module.exports = { createTransakSession };
