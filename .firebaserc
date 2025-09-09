@@ -1,7 +1,8 @@
 {
   "projects": {
     "dev": "razz6-92831",
-    "prod": "production1-fbd5d"
+    "prod": "production1-fbd5d",
+    "default": "production1-fbd5d"
   },
   "targets": {},
   "etags": {}
