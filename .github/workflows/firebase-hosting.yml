@@ -63,6 +63,27 @@ jobs:
             echo "HAS_SA=false" >> $GITHUB_OUTPUT
           fi
 
+      - name: Decide auth method
+        id: auth
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          if [[ "${{ steps.sa.outputs.HAS_SA }}" == "true" ]]; then
+            echo "METHOD=service_account" >> $GITHUB_OUTPUT
+          elif [ -n "$FIREBASE_TOKEN" ]; then
+            echo "METHOD=token" >> $GITHUB_OUTPUT
+            # Only export FIREBASE_TOKEN if we actually plan to use it
+            echo "FIREBASE_TOKEN=$FIREBASE_TOKEN" >> $GITHUB_ENV
+          else
+            echo "METHOD=none" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate auth setup
+        if: steps.auth.outputs.METHOD == 'none'
+        run: |
+          echo "No auth configured. Provide FIREBASE_SERVICE_ACCOUNT (preferred) or FIREBASE_TOKEN secret." 1>&2
+          exit 1
+
       - name: Install deps
         if: hashFiles('package.json') != ''
         run: |
@@ -95,17 +116,14 @@ jobs:
         run: npm i -g firebase-tools
 
       - name: Deploy to Firebase Hosting (push)
-        if: github.event_name == 'push' && (steps.sa.outputs.HAS_SA == 'true' || steps.token.outputs.HAS_TOKEN == 'true')
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        if: github.event_name == 'push' && steps.auth.outputs.METHOD != 'none'
         run: |
-          firebase deploy --only hosting --project ${{ steps.envmap.outputs.ALIAS }}
+          firebase --version
+          firebase deploy --non-interactive --only hosting --project ${{ steps.envmap.outputs.ALIAS }} --debug
 
       - name: Preview deploy to Hosting (PR)
-        if: github.event_name == 'pull_request' && (steps.sa.outputs.HAS_SA == 'true' || steps.token.outputs.HAS_TOKEN == 'true')
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        if: github.event_name == 'pull_request' && steps.auth.outputs.METHOD != 'none'
         run: |
-          firebase hosting:channel:deploy ${{ github.head_ref }} \
+          firebase hosting:channel:deploy ${{ github.head_ref }} --non-interactive --debug \
             --project ${{ steps.envmap.outputs.ALIAS }} \
             --expires 7d
