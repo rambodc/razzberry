@@ -1,7 +1,8 @@
 {
   "projects": {
-    "prod": "YOUR_FIREBASE_PROJECT_ID_PROD",
-    "dev": "YOUR_FIREBASE_PROJECT_ID_DEV"
-  }
+    "dev": "razz6-92831",
+    "prod": "production1-fbd5d"
+  },
+  "targets": {},
+  "etags": {}
 }
-

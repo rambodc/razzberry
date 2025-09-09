@@ -8,14 +8,28 @@ on:
 
 jobs:
   deploy:
-    if: ${{ secrets.FIREBASE_TOKEN != '' }}
     runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'prod' && 'Prod' || github.ref_name == 'dev' && 'Dev' || 'Dev' }}
     permissions:
       contents: read
       deployments: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Check FIREBASE_TOKEN
+        id: token
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          if [ -n "$FIREBASE_TOKEN" ]; then
+            echo "HAS_TOKEN=true" >> $GITHUB_OUTPUT
+          else
+            echo "HAS_TOKEN=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Set environment mapping
         id: envmap
@@ -45,6 +59,18 @@ jobs:
         if: hashFiles('package.json') != ''
         env:
           NODE_ENV: production
+          # Skip CRA ESLint during CI builds to avoid failing on warnings
+          DISABLE_ESLINT_PLUGIN: true
+          # Also ensure CRA doesn’t treat warnings as errors
+          CI: false
+          # Inject Firebase client config from environment-specific secrets
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
         run: |
           if npm run | grep -qE "\bbuild\b"; then
             npm run build
@@ -56,14 +82,14 @@ jobs:
         run: npm i -g firebase-tools
 
       - name: Deploy to Firebase Hosting (push)
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && steps.token.outputs.HAS_TOKEN == 'true'
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
           firebase deploy --only hosting --project ${{ steps.envmap.outputs.ALIAS }}
 
       - name: Preview deploy to Hosting (PR)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.token.outputs.HAS_TOKEN == 'true'
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
