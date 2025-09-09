@@ -5,11 +5,11 @@ name: Deploy to Firebase Hosting on merge
 on:
   push:
     branches:
-      - dev
+      - prod
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    environment: Dev
+    environment: Prod
     steps:
       - uses: actions/checkout@v4
       - name: Create .env for React build
@@ -25,14 +25,12 @@ jobs:
           EOF
       - name: Build
         env:
-          # Avoid CRA treating warnings as errors in CI
           CI: false
-          # Optionally skip CRA's ESLint during CI builds
           DISABLE_ESLINT_PLUGIN: true
         run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RAZZ6_92831 }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION1_FBD5D }}
           channelId: live
-          projectId: razz6-92831
+          projectId: production1-fbd5d

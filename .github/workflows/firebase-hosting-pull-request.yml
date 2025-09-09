@@ -11,7 +11,7 @@ jobs:
   build_and_preview:
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
-    environment: Dev
+    environment: Prod
     steps:
       - uses: actions/checkout@v4
       - name: Create .env for React build
@@ -33,5 +33,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RAZZ6_92831 }}
-          projectId: razz6-92831
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION1_FBD5D }}
+          projectId: production1-fbd5d

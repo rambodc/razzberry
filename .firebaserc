@@ -2,23 +2,8 @@
   "projects": {
     "dev": "razz6-92831",
     "prod": "production1-fbd5d",
-    "default": "razz6-92831"
+    "default": "production1-fbd5d"
   },
-  "targets": {
-    "razz6-92831": {
-      "hosting": {
-        "web": [
-          "razz6-92831"
-        ]
-      }
-    },
-    "production1-fbd5d": {
-      "hosting": {
-        "web": [
-          "production1-fbd5d"
-        ]
-      }
-    }
-  },
+  "targets": {},
   "etags": {}
 }
