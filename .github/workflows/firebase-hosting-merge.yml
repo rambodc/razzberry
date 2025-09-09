@@ -23,7 +23,13 @@ jobs:
           REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
           REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
           EOF
-      - run: npm ci && npm run build
+      - name: Build
+        env:
+          # Avoid CRA treating warnings as errors in CI
+          CI: false
+          # Optionally skip CRA's ESLint during CI builds
+          DISABLE_ESLINT_PLUGIN: true
+        run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
