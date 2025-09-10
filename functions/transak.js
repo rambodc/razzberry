@@ -1,14 +1,14 @@
-// functions/transak.js
-// Transak session + webhook handlers (Node 20, Firebase Functions v2)
-// - ENV-aware access-token cache (optional; won't crash if Firestore perms are missing)
+// functions/transak.js (ESM)
+// Transak session handler (Node 20, Firebase Functions v2)
+// - ENV-aware access-token cache (optional; tolerant to missing Firestore perms)
 // - Prefills user email from Firebase ID token
 // - Locks to XRP at your XRPL address, starts at $100 USD
 // - Current environment set via secret TRANSAK_ENV (STAGING|PRODUCTION)
 
-const { onRequest } = require('firebase-functions/v2/https');
-const { logger } = require('firebase-functions/v2');
-const { defineSecret } = require('firebase-functions/params');
-const admin = require('firebase-admin');
+import { onRequest } from 'firebase-functions/v2/https';
+import { logger } from 'firebase-functions/v2';
+import { defineSecret } from 'firebase-functions/params';
+import admin from 'firebase-admin';
 
 // -------- Secrets --------
 const TRANSAK_API_KEY = defineSecret('TRANSAK_API_KEY');              // partner API key
@@ -148,7 +148,7 @@ async function verifyFirebaseIdToken(req) {
 // (transakWebhook removed as requested)
 
 // -------- Create Session (prefills email, locks XRP to your wallet, $100 USD) --------
-const createTransakSession = onRequest({
+export const createTransakSession = onRequest({
   cors: true,
   secrets: [TRANSAK_API_KEY, TRANSAK_API_SECRET, TRANSAK_ENV, TRANSAK_ALLOWED_ORIGINS],
 }, async (req, res) => {
@@ -234,5 +234,3 @@ const createTransakSession = onRequest({
     return res.status(500).json({ ok: false, error: 'internal_error' });
   }
 });
-
-module.exports = { createTransakSession };

@@ -1,8 +1,11 @@
-// functions/index.js
+// functions/index.js (ESM)
 // Keep this file tiny: just import and re-export each function.
 
-const { createTransakSession } = require('./transak');
+import { onRequest } from 'firebase-functions/v2/https';
 
-exports.createTransakSession = createTransakSession;
+// Minimal test function only (to isolate build/deploy)
+export const testFunction = onRequest((req, res) => {
+  res.status(200).send('ok');
+});
 
 // Later, you can add more
