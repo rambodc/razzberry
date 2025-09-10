@@ -9,6 +9,7 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TopBar from './components/TopBar';
 import SideMenu from './components/SideMenu';
 import './Home.css';
+import { UI_BUILD_TAG } from './version';
 
 function Home() {
   const appUser = useContext(UserContext);
@@ -184,6 +185,9 @@ function Home() {
     <div className="home-container" style={{ paddingBottom: 0 }}>
       {/* Fixed, reusable Top Bar */}
       <TopBar onOpenMenu={() => setMenuOpen((v) => !v)} />
+
+      {/* Small build/version badge so you can spot new deploys */}
+      <div className="build-badge" aria-label="Build tag">{UI_BUILD_TAG}</div>
 
       {/* Page content */}
       <div className="home-content">{renderTab()}</div>
