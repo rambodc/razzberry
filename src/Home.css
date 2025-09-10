@@ -20,6 +20,23 @@
     /* Leave space for fixed top nav (~52px) + a bit of breathing room */
     margin-top: 64px;
   }
+
+  /* Build/version badge shown at top so you can confirm new deploys */
+  .build-badge {
+    position: fixed;
+    top: 56px; /* just under the fixed TopBar */
+    right: 10px;
+    z-index: 1000;
+    background: #111;
+    color: #fff;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+    opacity: 0.9;
+  }
   
   .email-text { color: #444; margin-top: 6px; }
   
