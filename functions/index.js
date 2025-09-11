@@ -1,8 +1,7 @@
-// functions/index.js
-// Keep this file tiny: just import and re-export each function.
+// functions/index.js (ESM)
+// Export production functions
 
-const { createTransakSession } = require('./transak');
+import { createTransakSession } from './transak.js';
 
-exports.createTransakSession = createTransakSession;
-
-// Later, you can add more
+// Activate main Transak function under name `transak`
+export const transak = createTransakSession;

@@ -7,7 +7,7 @@ import { UserContext } from './App';
 
 const CREATE_SESSION_URL =
   process.env.REACT_APP_CREATE_TRANSAK_SESSION_URL ||
-  'https://createtransaksession-zcd5rx7xoq-uc.a.run.app'; // your v2 HTTPS function
+  'https://us-central1-razz6-92831.cloudfunctions.net/transak'; // Cloud Functions HTTPS endpoint
 
 const ENVIRONMENT =
   (process.env.REACT_APP_TRANSAK_ENV || 'STAGING').toUpperCase() === 'PRODUCTION'

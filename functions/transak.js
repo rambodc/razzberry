@@ -1,14 +1,14 @@
-// functions/transak.js
-// Transak session + webhook handlers (Node 20, Firebase Functions v2)
-// - ENV-aware access-token cache (optional; won't crash if Firestore perms are missing)
+// functions/transak.js (ESM)
+// Transak session handler (Node 20, Firebase Functions v2)
+// - ENV-aware access-token cache (optional; tolerant to missing Firestore perms)
 // - Prefills user email from Firebase ID token
 // - Locks to XRP at your XRPL address, starts at $100 USD
 // - Current environment set via secret TRANSAK_ENV (STAGING|PRODUCTION)
 
-const { onRequest } = require('firebase-functions/v2/https');
-const { logger } = require('firebase-functions/v2');
-const { defineSecret } = require('firebase-functions/params');
-const admin = require('firebase-admin');
+import { onRequest } from 'firebase-functions/v2/https';
+import { logger } from 'firebase-functions/v2';
+import { defineSecret } from 'firebase-functions/params';
+import admin from 'firebase-admin';
 
 // -------- Secrets --------
 const TRANSAK_API_KEY = defineSecret('TRANSAK_API_KEY');              // partner API key
@@ -148,12 +148,24 @@ async function verifyFirebaseIdToken(req) {
 // (transakWebhook removed as requested)
 
 // -------- Create Session (prefills email, locks XRP to your wallet, $100 USD) --------
-const createTransakSession = onRequest({
+export const createTransakSession = onRequest({
   cors: true,
   secrets: [TRANSAK_API_KEY, TRANSAK_API_SECRET, TRANSAK_ENV, TRANSAK_ALLOWED_ORIGINS],
 }, async (req, res) => {
   try {
-    if (req.method === 'GET') return res.status(200).json({ ok: true });
+    if (req.method === 'GET') {
+      // Non-sensitive diagnostics to verify deployment configuration
+      const envName = normEnv(process.env.TRANSAK_ENV || 'STAGING');
+      return res.status(200).json({
+        ok: true,
+        environment: envName,
+        secretsPresent: {
+          TRANSAK_API_KEY: Boolean(process.env.TRANSAK_API_KEY),
+          TRANSAK_API_SECRET: Boolean(process.env.TRANSAK_API_SECRET),
+          TRANSAK_ALLOWED_ORIGINS: typeof process.env.TRANSAK_ALLOWED_ORIGINS === 'string' && process.env.TRANSAK_ALLOWED_ORIGINS.length > 0,
+        },
+      });
+    }
     if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
     const allowed = parseAllowedOrigins(process.env.TRANSAK_ALLOWED_ORIGINS || '');
@@ -234,5 +246,3 @@ const createTransakSession = onRequest({
     return res.status(500).json({ ok: false, error: 'internal_error' });
   }
 });
-
-module.exports = { createTransakSession };
