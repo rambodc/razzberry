@@ -153,7 +153,19 @@ export const createTransakSession = onRequest({
   secrets: [TRANSAK_API_KEY, TRANSAK_API_SECRET, TRANSAK_ENV, TRANSAK_ALLOWED_ORIGINS],
 }, async (req, res) => {
   try {
-    if (req.method === 'GET') return res.status(200).json({ ok: true });
+    if (req.method === 'GET') {
+      // Non-sensitive diagnostics to verify deployment configuration
+      const envName = normEnv(process.env.TRANSAK_ENV || 'STAGING');
+      return res.status(200).json({
+        ok: true,
+        environment: envName,
+        secretsPresent: {
+          TRANSAK_API_KEY: Boolean(process.env.TRANSAK_API_KEY),
+          TRANSAK_API_SECRET: Boolean(process.env.TRANSAK_API_SECRET),
+          TRANSAK_ALLOWED_ORIGINS: typeof process.env.TRANSAK_ALLOWED_ORIGINS === 'string' && process.env.TRANSAK_ALLOWED_ORIGINS.length > 0,
+        },
+      });
+    }
     if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
 
     const allowed = parseAllowedOrigins(process.env.TRANSAK_ALLOWED_ORIGINS || '');
