@@ -177,6 +177,10 @@ function ListingDetail() {
           setMenuOpen(false);
           navigate('/wallet');
         }}
+        onFund={() => {
+          setMenuOpen(false);
+          navigate('/fund');
+        }}
         onProfile={() => {
           setMenuOpen(false);
           // wire later

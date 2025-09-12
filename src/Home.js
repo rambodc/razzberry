@@ -206,6 +206,10 @@ function Home() {
           setMenuOpen(false);
           navigate('/wallet');
         }}
+        onFund={() => {
+          setMenuOpen(false);
+          navigate('/fund');
+        }}
         onProfile={() => {
           setMenuOpen(false);
           // profile wiring later

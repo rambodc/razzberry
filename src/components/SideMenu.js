@@ -4,6 +4,7 @@ import {
   FaHome,
   FaCommentDots,
   FaWallet,
+  FaCreditCard,
   FaUser,
   FaSignInAlt,
   FaUserPlus,
@@ -20,6 +21,7 @@ import {
  * - onHome(): void
  * - onChat(): void
  * - onWallet?(): void   // ✅ NEW (optional)
+ * - onFund?(): void     // ✅ NEW (optional)
  * - onProfile?(): void
  * - onSignin?(): void
  * - onSignup?(): void
@@ -32,6 +34,7 @@ export default function SideMenu({
   onHome,
   onChat,
   onWallet,      // ✅ NEW
+  onFund,        // ✅ NEW
   onProfile,
   onSignin,
   onSignup,
@@ -200,6 +203,8 @@ export default function SideMenu({
             <MenuItem icon={FaCommentDots} iconColor="#f59e0b" label="Chat" onClick={onChat} />
             {/* ✅ New Wallet item (shown only if handler provided) */}
             {onWallet && <MenuItem icon={FaWallet} iconColor="#22c55e" label="Wallet" onClick={onWallet} />}
+            {/* ✅ New Fund item, placed directly under Wallet */}
+            {onFund && <MenuItem icon={FaCreditCard} iconColor="#0ea5e9" label="Fund" onClick={onFund} />}
           </Section>
 
           <Section title="Account">
