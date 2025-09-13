@@ -2,7 +2,7 @@
 // Transak session handler (Node 20, Firebase Functions v2 hello)
 // - ENV-aware access-token cache (optional; tolerant to missing Firestore perms)
 // - Prefills user email from Firebase ID token
-// - Locks to XRP at your XRPL address, starts at $100 USD
+// - Locks to XRP at your XRPL address, starts at $100 US
 // - Current environment set via secret TRANSAK_ENV (STAGING|PRODUCTION)
 
 import { onRequest } from 'firebase-functions/v2/https';
@@ -26,6 +26,9 @@ const TOKEN_DOC = db.doc('system/transak_access_token'); // token cache doc (opt
 const normEnv = (v) => String(v || 'STAGING').toUpperCase();
 const baseApi = (envName) => normEnv(envName) === 'PRODUCTION'
   ? 'https://api.transak.com' : 'https://api-stg.transak.com';
+// New API gateway base for session creation
+const baseGateway = (envName) => normEnv(envName) === 'PRODUCTION'
+  ? 'https://api-gateway.transak.com' : 'https://api-gateway-stg.transak.com';
 
 function parseAllowedOrigins(v) {
   const raw = String(v || '').trim();
@@ -222,7 +225,8 @@ export const createTransakSession = onRequest({
       // }
     };
 
-    const url = `${baseApi(envUsed)}/auth/public/v2/session`;
+    // Use the new API Gateway endpoint for session creation
+    const url = `${baseGateway(envUsed)}/api/v2/auth/session`;
     const resp = await fetch(url, {
       method: 'POST',
       headers: {
@@ -230,17 +234,31 @@ export const createTransakSession = onRequest({
         'content-type': 'application/json',
         'access-token': accessToken,
       },
-      body: JSON.stringify({ widgetParams }),
+      // Transak requires apiKey inside widgetParams at the gateway endpoint
+      body: JSON.stringify({ widgetParams: { apiKey, ...widgetParams } }),
     });
 
     const text = await resp.text();
     let json = null; try { json = JSON.parse(text); } catch {}
-    if (!resp.ok || !json?.session_id) {
+
+    // Transak response variants:
+    // - Old: { session_id }
+    // - New (gateway): { data: { widgetUrl, sessionId? } }
+    let sessionId = json?.session_id || json?.data?.sessionId || null;
+    let widgetUrl = json?.widgetUrl || json?.data?.widgetUrl || null;
+    if (!sessionId && typeof widgetUrl === 'string') {
+      try {
+        const u = new URL(widgetUrl);
+        sessionId = u.searchParams.get('sessionId') || null;
+      } catch {}
+    }
+
+    if (!resp.ok || (!sessionId && !widgetUrl)) {
       logger.error('[createTransakSession] create session failed', resp.status, String(text).slice(0, 400));
       return res.status(500).json({ ok: false, error: 'create_session_failed' });
     }
 
-    return res.json({ ok: true, sessionId: json.session_id, apiKey, environment: envUsed });
+    return res.json({ ok: true, sessionId, widgetUrl, apiKey, environment: envUsed });
   } catch (err) {
     logger.error('[createTransakSession] error', err);
     return res.status(500).json({ ok: false, error: 'internal_error' });
