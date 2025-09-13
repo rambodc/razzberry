@@ -26,6 +26,9 @@ const TOKEN_DOC = db.doc('system/transak_access_token'); // token cache doc (opt
 const normEnv = (v) => String(v || 'STAGING').toUpperCase();
 const baseApi = (envName) => normEnv(envName) === 'PRODUCTION'
   ? 'https://api.transak.com' : 'https://api-stg.transak.com';
+// New API gateway base for session creation
+const baseGateway = (envName) => normEnv(envName) === 'PRODUCTION'
+  ? 'https://api-gateway.transak.com' : 'https://api-gateway-stg.transak.com';
 
 function parseAllowedOrigins(v) {
   const raw = String(v || '').trim();
@@ -222,7 +225,8 @@ export const createTransakSession = onRequest({
       // }
     };
 
-    const url = `${baseApi(envUsed)}/auth/public/v2/session`;
+    // Use the new API Gateway endpoint for session creation
+    const url = `${baseGateway(envUsed)}/api/v2/auth/session`;
     const resp = await fetch(url, {
       method: 'POST',
       headers: {
@@ -230,7 +234,8 @@ export const createTransakSession = onRequest({
         'content-type': 'application/json',
         'access-token': accessToken,
       },
-      body: JSON.stringify({ widgetParams }),
+      // Transak requires apiKey inside widgetParams at the gateway endpoint
+      body: JSON.stringify({ widgetParams: { apiKey, ...widgetParams } }),
     });
 
     const text = await resp.text();
