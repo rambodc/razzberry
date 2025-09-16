@@ -1,9 +1,9 @@
-// functions/transak.js (ESM)
+// functions/transak.js (ESM) 1
 // Transak session handler (Node 20, Firebase Functions v2 hello)
 // - ENV-aware access-token cache (optional; tolerant to missing Firestore perms)
 // - Prefills user email from Firebase ID token
 // - Locks to XRP at your XRPL address, starts at $100 US
-// - Current environment set via secret TRANSAK_ENV (STAGING|PRODUCTION)
+// - Current environment set via secret TRANSAK_ENV (STAGING|PRODUCTION) 
 
 import { onRequest } from 'firebase-functions/v2/https';
 import { logger } from 'firebase-functions/v2';
