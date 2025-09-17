@@ -76,8 +76,8 @@ export default function RazTrustlineCard({ account, jwt, onChanged }) {
           options: {
             submit: true, // let Xaman submit after signing (OK for TrustSet)
             return_url: {
-              app: `${origin}/wallet?trustset=1`,
-              web: `${origin}/wallet?payload={id}`,
+              app: `${origin}/xaman?trustset=1`,
+              web: `${origin}/xaman?payload={id}`,
             },
           },
           custom_meta: {

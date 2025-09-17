@@ -175,7 +175,7 @@ function ListingDetail() {
         }}
         onWallet={() => {
           setMenuOpen(false);
-          navigate('/wallet');
+          navigate('/xaman');
         }}
         onFund={() => {
           setMenuOpen(false);

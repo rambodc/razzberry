@@ -1,11 +1,11 @@
-// src/Wallet.js
+// src/Xaman.js
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { XummPkce } from 'xumm-oauth2-pkce'; // requires: npm i xumm-oauth2-pkce
 import './App.css';
 import './Home.css';
 
-// Wallet feature components (all inside src/components/wallet/)
+// Xaman feature components (all inside src/components/wallet/)
 import AccountInfo from './components/wallet/AccountInfo';
 import TokenList from './components/wallet/TokenList';
 import RazTrustlineCard from './components/wallet/RazTrustlineCard';
@@ -14,7 +14,7 @@ import TopBar from './components/TopBar';
 // ✅ Public identifier only (do NOT put your API secret in frontend code)
 const XAMAN_API_KEY = '287dd619-0e34-46e6-8a59-2303135fa082';
 
-export default function Wallet() {
+export default function Xaman() {
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('Not connected');
@@ -28,7 +28,7 @@ export default function Wallet() {
   const xumm = useMemo(
     () =>
       new XummPkce(XAMAN_API_KEY, {
-        redirectUrl: `${window.location.origin}/wallet`,
+        redirectUrl: `${window.location.origin}/xaman`,
         rememberJwt: true, // keeps session across reloads
       }),
     []
@@ -89,7 +89,7 @@ export default function Wallet() {
   const handleRazChanged = () => setBump((n) => n + 1);
 
   return (
-    <div className="wallet-page" style={styles.page}>
+    <div className="xaman-page" style={styles.page}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       {/* Content wrapper under fixed TopBar */}
@@ -101,7 +101,7 @@ export default function Wallet() {
             </svg>
           </div>
 
-          <h1 style={styles.title}>Wallet</h1>
+          <h1 style={styles.title}>Xaman</h1>
           <p style={styles.subtitle}>
             Connect your <strong>Xaman</strong> wallet to view balances and manage trustlines.
           </p>
@@ -163,3 +163,4 @@ const styles = {
   buttonDisabled: { opacity: 0.6, cursor: 'default' },
   status: { marginTop: 10, fontSize: 13, opacity: 0.75 },
 };
+

@@ -201,9 +201,9 @@ export default function SideMenu({
           <Section>
             <MenuItem icon={FaHome} iconColor="#007aff" label="Home" onClick={onHome} />
             <MenuItem icon={FaCommentDots} iconColor="#f59e0b" label="Chat" onClick={onChat} />
-            {/* ✅ New Wallet item (shown only if handler provided) */}
-            {onWallet && <MenuItem icon={FaWallet} iconColor="#22c55e" label="Wallet" onClick={onWallet} />}
-            {/* ✅ New Fund item, placed directly under Wallet */}
+            {/* ✅ New Xaman item (shown only if handler provided) */}
+            {onWallet && <MenuItem icon={FaWallet} iconColor="#22c55e" label="Xaman" onClick={onWallet} />}
+            {/* ✅ New Fund item, placed directly under Xaman */}
             {onFund && <MenuItem icon={FaCreditCard} iconColor="#0ea5e9" label="Fund" onClick={onFund} />}
           </Section>
 

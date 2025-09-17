@@ -32,7 +32,7 @@ export default function AccountInfo({ account }) {
   if (!account) {
     return (
       <div style={styles.card}>
-        <div style={styles.title}>Wallet</div>
+        <div style={styles.title}>Xaman</div>
         <div style={styles.sub}>Connect Xaman to view balances.</div>
       </div>
     );
@@ -42,7 +42,7 @@ export default function AccountInfo({ account }) {
     <div style={styles.card}>
       <div style={styles.row}>
         <div>
-          <div style={styles.title}>Wallet</div>
+          <div style={styles.title}>Xaman</div>
           <div style={styles.addr} title={account}>{account}</div>
           {seq !== null && (
             <div style={styles.meta}>Sequence: {seq}</div>

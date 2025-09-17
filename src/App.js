@@ -21,7 +21,7 @@ import ListingDetail from './ListingDetail';
 import Home from './Home';
 import CreateArtist from './CreateArtist';
 import Chat from './Chat';
-import Wallet from './Wallet';
+import Xaman from './Xaman';
 import Fund from './Fund';
 
 // Route guard
@@ -65,12 +65,12 @@ function AppRoutes({ user }) {
           </ProtectedRoute>
         }
       />
-      {/* ✅ New protected Wallet route */}
+      {/* ✅ New protected Xaman route */}
       <Route
-        path="/wallet"
+        path="/xaman"
         element={
           <ProtectedRoute>
-            <Wallet />
+            <Xaman />
           </ProtectedRoute>
         }
       />
