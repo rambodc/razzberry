@@ -1,4 +1,4 @@
-// functions/fireblocks.js
+// functions/fireblocks.js 2
 // Node 20, ESM, Firebase Functions v2
 // Endpoint: fireblocksPing → sanity check for Fireblocks auth/connectivity
 
@@ -45,6 +45,26 @@ function buildFireblocksClient({ apiKey, privateKeyPem, baseUrl }) {
   // FireblocksSDK(privateKey: string, apiKey: string, apiBaseUrl?: string)
   const url = baseUrl || 'https://api.fireblocks.io';
   return new FireblocksSDK(privateKeyPem, apiKey, url);
+}
+
+// ---- Helpers: vault listing ----
+async function listAllVaultAccounts(fb) {
+  const out = [];
+  let before = undefined;
+  for (let i = 0; i < 5; i++) {
+    try {
+      const page = await fb.getVaultAccounts?.({ limit: 200, orderBy: 'ASC', before });
+      const accounts = page?.accounts ?? page ?? [];
+      if (!Array.isArray(accounts) || accounts.length === 0) break;
+      out.push(...accounts);
+      if (!page?.paging?.before) break;
+      before = page.paging.before;
+    } catch (e) {
+      logger.warn('[listAllVaultAccounts] page fetch failed:', e?.message || e);
+      break;
+    }
+  }
+  return out;
 }
 
 // ---- HTTPS Function: Ping Fireblocks ----
@@ -120,3 +140,57 @@ export const fireblocksPing = onRequest({
   }
 });
 
+// ----------------------------------------
+// Test 2: Create / Get named XRPL vaults
+// ----------------------------------------
+export const fireblocksCreateOrGetVaults = onRequest({
+  cors: true,
+  secrets: [FIREBLOCKS_API_KEY, FIREBLOCKS_API_PRIVATE_KEY, FIREBLOCKS_BASE_URL],
+  region: 'us-central1',
+  maxInstances: 5,
+}, async (req, res) => {
+  try {
+    corsify(res);
+    if (req.method === 'OPTIONS') return res.status(204).end();
+    if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Use POST' });
+
+    const user = await verifyIdToken(req);
+
+    const apiKey = FIREBLOCKS_API_KEY.value();
+    const privateKeyPem = FIREBLOCKS_API_PRIVATE_KEY.value();
+    const baseUrl = FIREBLOCKS_BASE_URL.value() || 'https://api.fireblocks.io';
+    if (!apiKey || !privateKeyPem) {
+      throw Object.assign(new Error('Fireblocks secrets are not set'), { code: 500 });
+    }
+
+    const fb = buildFireblocksClient({ apiKey, privateKeyPem, baseUrl });
+
+    const desired = ['Treasury_XRP', 'Marketplace_Settlement', 'NFT_Minter'];
+
+    const all = await listAllVaultAccounts(fb);
+    const byName = new Map(Array.isArray(all) ? all.map((v) => [v.name, v]) : []);
+
+    const results = {};
+    for (const name of desired) {
+      if (byName.has(name)) {
+        const v = byName.get(name);
+        results[name] = { id: v.id, existed: true };
+        continue;
+      }
+      // Create if missing
+      const created = await fb.createVaultAccount?.(name, false);
+      if (!created?.id) throw new Error(`Failed to create vault "${name}"`);
+      results[name] = { id: created.id, existed: false };
+    }
+
+    return res.status(200).json({
+      ok: true,
+      user: { uid: user.uid, email: user.email || null },
+      vaults: results,
+    });
+  } catch (err) {
+    logger.error('fireblocksCreateOrGetVaults error', err);
+    const status = err?.code && Number.isInteger(err.code) ? err.code : 500;
+    return res.status(status).json({ ok: false, error: err?.message || 'Unknown error' });
+  }
+});

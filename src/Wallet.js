@@ -7,6 +7,7 @@ export default function Wallet() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [creating, setCreating] = useState(false);
 
   const pingFireblocks = async () => {
     setLoading(true);
@@ -35,6 +36,31 @@ export default function Wallet() {
     }
   };
 
+  const createOrGetVaults = async () => {
+    setCreating(true);
+    setError(null);
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error('Sign in required');
+      const idToken = await getIdToken(user, true);
+      const resp = await fetch('/api/fireblocks/createOrGetVaults', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      const json = await resp.json().catch(() => ({}));
+      if (!resp.ok || !json?.ok) throw new Error(json?.error || `Request failed (${resp.status})`);
+      setResult(json);
+    } catch (e) {
+      setError(e?.message || String(e));
+    } finally {
+      setCreating(false);
+    }
+  };
+
   return (
     <div style={{ maxWidth: 880, margin: '28px auto', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Wallet</h1>
@@ -42,21 +68,39 @@ export default function Wallet() {
         Test 1: Ping Fireblocks to verify credentials and connectivity.
       </p>
 
-      <button
-        onClick={pingFireblocks}
-        disabled={loading}
-        style={{
-          padding: '10px 14px',
-          background: '#111827',
-          color: 'white',
-          border: 'none',
-          borderRadius: 8,
-          cursor: loading ? 'default' : 'pointer',
-          minWidth: 180,
-        }}
-      >
-        {loading ? 'Pinging…' : 'Ping Fireblocks'}
-      </button>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <button
+          onClick={pingFireblocks}
+          disabled={loading}
+          style={{
+            padding: '10px 14px',
+            background: '#111827',
+            color: 'white',
+            border: 'none',
+            borderRadius: 8,
+            cursor: loading ? 'default' : 'pointer',
+            minWidth: 180,
+          }}
+        >
+          {loading ? 'Pinging…' : 'Ping Fireblocks'}
+        </button>
+
+        <button
+          onClick={createOrGetVaults}
+          disabled={creating}
+          style={{
+            padding: '10px 14px',
+            background: '#0ea5e9',
+            color: 'white',
+            border: 'none',
+            borderRadius: 8,
+            cursor: creating ? 'default' : 'pointer',
+            minWidth: 220,
+          }}
+        >
+          {creating ? 'Creating…' : 'Create/Get Vaults'}
+        </button>
+      </div>
 
       {error && (
         <div style={{ marginTop: 16, color: '#b91c1c' }}>Error: {error}</div>
@@ -78,4 +122,3 @@ export default function Wallet() {
     </div>
   );
 }
-
