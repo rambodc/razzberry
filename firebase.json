@@ -15,6 +15,13 @@
         }
       },
       {
+        "source": "/api/fireblocks/ping",
+        "function": {
+          "functionId": "fireblocksPing",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }

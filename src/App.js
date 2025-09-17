@@ -23,6 +23,7 @@ import CreateArtist from './CreateArtist';
 import Chat from './Chat';
 import Xaman from './Xaman';
 import Fund from './Fund';
+import Wallet from './Wallet';
 
 // Route guard
 import ProtectedRoute from './ProtectedRoute';
@@ -80,6 +81,15 @@ function AppRoutes({ user }) {
         element={
           <ProtectedRoute>
             <Fund />
+          </ProtectedRoute>
+        }
+      />
+      {/* ✅ New protected Wallet route */}
+      <Route
+        path="/wallet"
+        element={
+          <ProtectedRoute>
+            <Wallet />
           </ProtectedRoute>
         }
       />

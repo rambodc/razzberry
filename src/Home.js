@@ -204,7 +204,7 @@ function Home() {
         }}
         onWallet={() => {
           setMenuOpen(false);
-          navigate('/xaman');
+          navigate('/wallet');
         }}
         onFund={() => {
           setMenuOpen(false);
