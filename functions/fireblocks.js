@@ -51,15 +51,15 @@ function buildFireblocksClient({ apiKey, privateKeyPem, baseUrl }) {
 // ---- Helpers: vault listing ----
 async function listAllVaultAccounts(fb) {
   const out = [];
-  let before = undefined;
-  for (let i = 0; i < 5; i++) {
+  let after = undefined;
+  for (let i = 0; i < 10; i++) {
     try {
-      const page = await fb.getVaultAccounts?.({ limit: 200, orderBy: 'ASC', before });
-      const accounts = page?.accounts ?? page ?? [];
+      const page = await fb.getVaultAccountsWithPageInfo?.({ limit: 200, orderBy: 'ASC', ...(after ? { after } : {}) });
+      const accounts = page?.accounts ?? [];
       if (!Array.isArray(accounts) || accounts.length === 0) break;
       out.push(...accounts);
-      if (!page?.paging?.before) break;
-      before = page.paging.before;
+      after = page?.paging?.after;
+      if (!after) break;
     } catch (e) {
       logger.warn('[listAllVaultAccounts] page fetch failed:', e?.message || e);
       break;
@@ -105,9 +105,8 @@ export const fireblocksPing = onRequest({
       logger.warn('[fireblocksPing] getSupportedAssets failed:', e?.message || e);
     }
     try {
-      const vaults = await fb.getVaultAccounts?.({ limit: 1, orderBy: 'ASC' });
+      const vaults = await fb.getVaultAccountsWithPageInfo?.({ limit: 1, orderBy: 'ASC' });
       if (Array.isArray(vaults?.accounts)) firstVault = vaults.accounts[0] || null;
-      else if (Array.isArray(vaults)) firstVault = vaults[0] || null;
     } catch (e) {
       logger.warn('[fireblocksPing] getVaultAccounts failed:', e?.message || e);
     }
@@ -238,10 +237,18 @@ export const fireblocksCreateDepositHandle = onRequest({
     const vaultId = String(treasury.id);
     const assetId = 'XRP';
 
+    // Ensure XRP asset exists on the vault (idempotent)
+    try {
+      await fb.createVaultAsset?.(vaultId, assetId);
+    } catch (e) {
+      // ignore if already exists
+      logger.warn('[fireblocksCreateDepositHandle] createVaultAsset XRP ignored:', e?.response?.status || e?.message || e);
+    }
+
     // 3) Generate a new XRP deposit address (address + destination tag)
     let created = null;
     try {
-      created = await fb.generateNewAddress?.(vaultId, assetId, { description: `user:${uid}` });
+      created = await fb.generateNewAddress?.(vaultId, assetId, `user:${uid}`);
     } catch (e) {
       logger.error('[fireblocksCreateDepositHandle] generateNewAddress failed:', e?.message || e);
       throw new Error('generate_address_failed');
