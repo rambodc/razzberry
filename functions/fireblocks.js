@@ -7,7 +7,7 @@ import { logger } from 'firebase-functions/v2';
 import { defineSecret } from 'firebase-functions/params';
 import admin from 'firebase-admin';
 import { FireblocksSDK } from 'fireblocks-sdk';
-import * as xrpl from 'xrpl';
+// Note: xrpl is not required for regular Fireblocks-signed transfers
 
 // ---- Secrets (set these via Firebase Functions Secrets) ----
 //   firebase functions:secrets:set FIREBLOCKS_API_KEY
@@ -297,9 +297,9 @@ export const fireblocksCreateDepositHandle = onRequest({
 });
 
 // -----------------------------------------------------------
-// Test 4: XRPL signing dry-run (no broadcast)
+// Test 4: Regular XRPL transfer (Fireblocks builds/signs)
 // -----------------------------------------------------------
-export const fireblocksXrplSignDryRun = onRequest({
+export const fireblocksXrplTransferTest = onRequest({
   cors: true,
   secrets: [FIREBLOCKS_API_KEY, FIREBLOCKS_API_PRIVATE_KEY, FIREBLOCKS_BASE_URL],
   region: 'us-central1',
@@ -310,7 +310,8 @@ export const fireblocksXrplSignDryRun = onRequest({
     if (req.method === 'OPTIONS') return res.status(204).end();
     if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Use POST' });
 
-    await verifyIdToken(req);
+    const user = await verifyIdToken(req);
+    const uid = user.uid;
 
     const apiKey = FIREBLOCKS_API_KEY.value();
     const privateKeyPem = FIREBLOCKS_API_PRIVATE_KEY.value();
@@ -321,112 +322,80 @@ export const fireblocksXrplSignDryRun = onRequest({
 
     const fb = buildFireblocksClient({ apiKey, privateKeyPem, baseUrl });
 
-    // Locate Treasury_XRP vault
+    // Optional customizations from body
+    const body = (req.body && typeof req.body === 'object') ? req.body : {};
+    const requestedAmount = typeof body.amount === 'string' || typeof body.amount === 'number'
+      ? String(body.amount)
+      : null;
+    const requestedAssetId = typeof body.assetId === 'string' && body.assetId.trim() ? body.assetId.trim() : null;
+    const overrideDestAddress = typeof body.destAddress === 'string' && body.destAddress.trim() ? body.destAddress.trim() : null;
+    const overrideDestTag = (body.destTag !== undefined && body.destTag !== null) ? String(body.destTag) : undefined;
+    const sourceVaultName = typeof body.sourceVaultName === 'string' && body.sourceVaultName.trim() ? body.sourceVaultName.trim() : 'Treasury_XRP';
+
+    // 1) Find source vault (default: Treasury_XRP)
     const all = await listAllVaultAccounts(fb);
-    const treasury = Array.isArray(all) ? all.find((v) => v.name === 'Treasury_XRP') : null;
-    if (!treasury?.id) throw new Error('Treasury_XRP vault not found. Run Test 2 first.');
-    const vaultId = String(treasury.id);
+    const sourceVault = Array.isArray(all) ? all.find((v) => v.name === sourceVaultName) : null;
+    if (!sourceVault?.id) throw new Error(`${sourceVaultName} vault not found. Run Test 2 first.`);
+    const vaultId = String(sourceVault.id);
 
-    // Asset candidates depending on env
-    const isSandbox = /sandbox/i.test(baseUrl);
-    const candidates = isSandbox ? ['XRP_TEST', 'XRP'] : ['XRP', 'XRP_TEST'];
-    let assetId = null;
+    // 2) Determine destination: default to user's deposit handle
+    let assetId = requestedAssetId || 'XRP_TEST';
+    let address = overrideDestAddress || null;
+    let tag = overrideDestTag;
 
-    // Ensure an address exists; if not, generate one
-    let accountAddress = null;
-    for (const aid of candidates) {
-      try {
-        const addrs = await fb.getDepositAddresses?.(vaultId, aid);
-        const first = Array.isArray(addrs) && addrs.length ? addrs[0] : null;
-        if (first?.address) {
-          assetId = aid;
-          accountAddress = first.address;
-          break;
-        }
-      } catch {}
+    if (!address) {
+      const depDoc = await db.doc(`users/${uid}/xrpl/deposit`).get();
+      if (!depDoc.exists) throw new Error('No deposit handle yet. Run Test 3 first.');
+      const dep = depDoc.data() || {};
+      assetId = requestedAssetId || dep.assetId || 'XRP_TEST';
+      address = dep.address;
+      tag = dep.tag ? String(dep.tag) : undefined;
     }
-    if (!accountAddress) {
-      for (const aid of candidates) {
-        try {
-          try { await fb.createVaultAsset?.(vaultId, aid); } catch {}
-          const created = await fb.generateNewAddress?.(vaultId, aid, 'treasury-self');
-          if (created?.address) {
-            assetId = aid;
-            accountAddress = created.address;
-            break;
-          }
-        } catch {}
-      }
-    }
-    if (!accountAddress || !assetId) throw new Error('No XRP address on Treasury_XRP; run Test 3 first.');
+    if (!address) throw new Error('Destination address is missing.');
 
-    // Build a tiny self-payment tx (not broadcast)
-    const tx = {
-      TransactionType: 'Payment',
-      Account: accountAddress,
-      Destination: accountAddress,
-      Amount: '1',
-      Fee: '12',
-      Sequence: 1,
-      LastLedgerSequence: 99999999,
-      SigningPubKey: ''
-    };
-    const txHex = xrpl.encodeForSigning(tx);
+    // 3) Build a tiny transfer (self-transfer by default)
+    const amount = requestedAmount || '0.000001'; // 1 drop
 
-    // Derivation path example for XRPL Ed25519
-    const derivationPath = [44, 144, 0, 0, 0];
-
-    // Create RAW signing transaction
     const created = await fb.createTransaction({
-      operation: 'RAW',
+      operation: 'TRANSFER',
       source: { type: 'VAULT_ACCOUNT', id: vaultId },
+      destination: {
+        type: 'ONE_TIME_ADDRESS',
+        oneTimeAddress: {
+          address,
+          tag,
+        },
+      },
       assetId,
-      extraParameters: {
-        rawMessageData: {
-          algorithm: 'MPC_EDDSA_ED25519',
-          messages: [
-            { content: txHex, derivationPath }
-          ]
-        }
-      }
+      amount,
+      treatAsGrossAmount: false,
+      note: `XRPL transfer test to ${overrideDestAddress ? 'custom dest' : 'self deposit'} for uid:${uid}`,
     });
 
+    // 4) Poll status until terminal or timeout
     let details = null;
-    for (let i = 0; i < 40; i++) {
-      await new Promise((r) => setTimeout(r, 150));
-      details = await fb.getTransactionById(created?.id);
-      if (details?.signedMessages?.length) break;
-      if (['REJECTED', 'FAILED', 'CANCELLED'].includes(details?.status)) break;
-    }
-
-    const signed = details?.signedMessages?.[0] || null;
-    if (!signed?.signature) {
-      return res.status(200).json({
-        ok: false,
-        note: 'No signature returned (policy approval or Raw Signing may be required).',
-        transactionId: created?.id || null,
-        status: details?.status || null,
-      });
+    for (let i = 0; i < 60; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      try {
+        details = await fb.getTransactionById(created?.id);
+      } catch {}
+      if (!details) continue;
+      if (['COMPLETED','CONFIRMED','FAILED','CANCELLED','REJECTED'].includes(details.status)) break;
     }
 
     return res.status(200).json({
       ok: true,
       transactionId: created?.id || null,
       status: details?.status || null,
-      algorithm: signed?.algorithm || 'MPC_EDDSA_ED25519',
-      signedMessage: {
-        content: signed?.content || txHex,
-        signature: signed?.signature?.fullSig || signed?.signature || null,
-        publicKey: signed?.publicKey || null,
-        derivationPath,
-      },
-      txPreview: tx,
+      subStatus: details?.subStatus || null,
+      error: details?.error || null,
+      note: details?.note || null,
+      amount,
       assetId,
-      vaultId,
-      accountAddress,
+      to: { address, tag },
     });
   } catch (err) {
-    logger.error('fireblocksXrplSignDryRun error', err);
+    logger.error('fireblocksXrplTransferTest error', err);
     const status = err?.code && Number.isInteger(err.code) ? err.code : 500;
     return res.status(status).json({ ok: false, error: err?.message || 'Unknown error' });
   }

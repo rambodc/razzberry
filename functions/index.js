@@ -6,7 +6,7 @@ import {
   fireblocksPing as _fireblocksPing,
   fireblocksCreateOrGetVaults as _fireblocksCreateOrGetVaults,
   fireblocksCreateDepositHandle as _fireblocksCreateDepositHandle,
-  fireblocksXrplSignDryRun as _fireblocksXrplSignDryRun,
+  fireblocksXrplTransferTest as _fireblocksXrplTransferTest,
 } from './fireblocks.js';
 
 // Activate main Transak function under name `transak`
@@ -14,4 +14,4 @@ export const transak = createTransakSession;
 export const fireblocksPing = _fireblocksPing;
 export const fireblocksCreateOrGetVaults = _fireblocksCreateOrGetVaults;
 export const fireblocksCreateDepositHandle = _fireblocksCreateDepositHandle;
-export const fireblocksXrplSignDryRun = _fireblocksXrplSignDryRun;
+export const fireblocksXrplTransferTest = _fireblocksXrplTransferTest;

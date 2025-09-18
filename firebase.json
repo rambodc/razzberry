@@ -36,9 +36,9 @@
         }
       },
       {
-        "source": "/api/fireblocks/xrplSignDryRun",
+        "source": "/api/fireblocks/xrplTransferTest",
         "function": {
-          "functionId": "fireblocksXrplSignDryRun",
+          "functionId": "fireblocksXrplTransferTest",
           "region": "us-central1"
         }
       },

@@ -10,6 +10,11 @@ export default function Wallet() {
   const [creating, setCreating] = useState(false);
   const [creatingHandle, setCreatingHandle] = useState(false);
   const [signing, setSigning] = useState(false);
+  // Inputs for XRPL transfer test
+  const [amount, setAmount] = useState('0.000001');
+  const [assetId, setAssetId] = useState('XRP_TEST');
+  const [destAddress, setDestAddress] = useState('');
+  const [destTag, setDestTag] = useState('');
 
   const pingFireblocks = async () => {
     setLoading(true);
@@ -88,20 +93,25 @@ export default function Wallet() {
     }
   };
 
-  const xrplSignDryRun = async () => {
+  const xrplTransferTest = async () => {
     setSigning(true);
     setError(null);
     try {
       const user = auth.currentUser;
       if (!user) throw new Error('Sign in required');
       const idToken = await getIdToken(user, true);
-      const resp = await fetch('/api/fireblocks/xrplSignDryRun', {
+      const resp = await fetch('/api/fireblocks/xrplTransferTest', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${idToken}`,
           'content-type': 'application/json',
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          amount,
+          assetId,
+          destAddress: destAddress && destAddress.trim() ? destAddress.trim() : undefined,
+          destTag: destTag !== '' ? destTag : undefined,
+        }),
       });
       const json = await resp.json().catch(() => ({}));
       if (!resp.ok || json?.ok === false) throw new Error(json?.error || json?.note || `Request failed (${resp.status})`);
@@ -169,21 +179,73 @@ export default function Wallet() {
           {creatingHandle ? 'Issuing…' : 'Create Deposit Handle'}
         </button>
 
-        <button
-          onClick={xrplSignDryRun}
-          disabled={signing}
-          style={{
-            padding: '10px 14px',
-            background: '#8b5cf6',
-            color: 'white',
-            border: 'none',
-            borderRadius: 8,
-            cursor: signing ? 'default' : 'pointer',
-            minWidth: 240,
-          }}
-        >
-          {signing ? 'Signing…' : 'XRPL Sign Dry Run'}
-        </button>
+        {/* XRPL Transfer Controls */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          padding: '8px 10px',
+          background: '#0b1220',
+          borderRadius: 8,
+          color: '#e5e7eb',
+          flexWrap: 'wrap'
+        }}>
+          <label style={{ display: 'flex', flexDirection: 'column', fontSize: 12 }}>
+            Amount (XRP)
+            <input
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0.000001"
+              style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #1f2937', background: '#0f172a', color: '#e5e7eb', minWidth: 120 }}
+            />
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', fontSize: 12 }}>
+            Asset
+            <select
+              value={assetId}
+              onChange={(e) => setAssetId(e.target.value)}
+              style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #1f2937', background: '#0f172a', color: '#e5e7eb' }}
+            >
+              <option value="XRP_TEST">XRP_TEST</option>
+              <option value="XRP">XRP</option>
+            </select>
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', fontSize: 12 }}>
+            Dest Address (optional)
+            <input
+              value={destAddress}
+              onChange={(e) => setDestAddress(e.target.value)}
+              placeholder="Leave empty to use your deposit"
+              style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #1f2937', background: '#0f172a', color: '#e5e7eb', minWidth: 260 }}
+            />
+          </label>
+          <label style={{ display: 'flex', flexDirection: 'column', fontSize: 12 }}>
+            Dest Tag (optional)
+            <input
+              value={destTag}
+              onChange={(e) => setDestTag(e.target.value)}
+              placeholder="e.g. 12345"
+              style={{ padding: '6px 8px', borderRadius: 6, border: '1px solid #1f2937', background: '#0f172a', color: '#e5e7eb', minWidth: 100 }}
+            />
+          </label>
+
+          <button
+            onClick={xrplTransferTest}
+            disabled={signing}
+            style={{
+              padding: '10px 14px',
+              background: '#7c3aed',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              cursor: signing ? 'default' : 'pointer',
+              minWidth: 200,
+              marginLeft: 4,
+            }}
+          >
+            {signing ? 'Sending…' : 'XRPL Transfer Test'}
+          </button>
+        </div>
       </div>
 
       {error && (
