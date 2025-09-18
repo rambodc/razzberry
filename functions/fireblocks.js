@@ -7,6 +7,7 @@ import { logger } from 'firebase-functions/v2';
 import { defineSecret } from 'firebase-functions/params';
 import admin from 'firebase-admin';
 import { FireblocksSDK } from 'fireblocks-sdk';
+import * as xrpl from 'xrpl';
 
 // ---- Secrets (set these via Firebase Functions Secrets) ----
 //   firebase functions:secrets:set FIREBLOCKS_API_KEY
@@ -235,22 +236,33 @@ export const fireblocksCreateDepositHandle = onRequest({
     if (!treasury?.id) throw new Error('Treasury_XRP vault not found. Run Test 2 first.');
 
     const vaultId = String(treasury.id);
-    const assetId = 'XRP';
+    const isSandbox = /sandbox/i.test(baseUrl);
+    const candidates = isSandbox ? ['XRP_TEST', 'XRP'] : ['XRP', 'XRP_TEST'];
 
-    // Ensure XRP asset exists on the vault (idempotent)
-    try {
-      await fb.createVaultAsset?.(vaultId, assetId);
-    } catch (e) {
-      // ignore if already exists
-      logger.warn('[fireblocksCreateDepositHandle] createVaultAsset XRP ignored:', e?.response?.status || e?.message || e);
-    }
-
-    // 3) Generate a new XRP deposit address (address + destination tag)
+    // 3) Try to ensure asset, then generate deposit address with fallback asset IDs
     let created = null;
-    try {
-      created = await fb.generateNewAddress?.(vaultId, assetId, `user:${uid}`);
-    } catch (e) {
-      logger.error('[fireblocksCreateDepositHandle] generateNewAddress failed:', e?.message || e);
+    let assetId = null;
+    let lastErr = null;
+    for (const aid of candidates) {
+      try {
+        try {
+          await fb.createVaultAsset?.(vaultId, aid);
+        } catch (e) {
+          // 400 usually means already exists or not supported; proceed to try address
+          logger.warn('[fireblocksCreateDepositHandle] createVaultAsset ignored:', aid, e?.response?.status || e?.message || e);
+        }
+        created = await fb.generateNewAddress?.(vaultId, aid, `user:${uid}`);
+        if (created?.address) {
+          assetId = aid;
+          break;
+        }
+      } catch (e) {
+        lastErr = e;
+        logger.warn('[fireblocksCreateDepositHandle] generateNewAddress attempt failed for', aid, e?.response?.status || e?.message || e);
+      }
+    }
+    if (!created?.address) {
+      logger.error('[fireblocksCreateDepositHandle] generateNewAddress failed:', lastErr?.message || lastErr);
       throw new Error('generate_address_failed');
     }
 
@@ -279,6 +291,142 @@ export const fireblocksCreateDepositHandle = onRequest({
     return res.status(200).json({ ok: true, existed: false, handle });
   } catch (err) {
     logger.error('fireblocksCreateDepositHandle error', err);
+    const status = err?.code && Number.isInteger(err.code) ? err.code : 500;
+    return res.status(status).json({ ok: false, error: err?.message || 'Unknown error' });
+  }
+});
+
+// -----------------------------------------------------------
+// Test 4: XRPL signing dry-run (no broadcast)
+// -----------------------------------------------------------
+export const fireblocksXrplSignDryRun = onRequest({
+  cors: true,
+  secrets: [FIREBLOCKS_API_KEY, FIREBLOCKS_API_PRIVATE_KEY, FIREBLOCKS_BASE_URL],
+  region: 'us-central1',
+  maxInstances: 10,
+}, async (req, res) => {
+  try {
+    corsify(res);
+    if (req.method === 'OPTIONS') return res.status(204).end();
+    if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Use POST' });
+
+    await verifyIdToken(req);
+
+    const apiKey = FIREBLOCKS_API_KEY.value();
+    const privateKeyPem = FIREBLOCKS_API_PRIVATE_KEY.value();
+    const baseUrl = FIREBLOCKS_BASE_URL.value() || 'https://api.fireblocks.io';
+    if (!apiKey || !privateKeyPem) {
+      throw Object.assign(new Error('Fireblocks secrets are not set'), { code: 500 });
+    }
+
+    const fb = buildFireblocksClient({ apiKey, privateKeyPem, baseUrl });
+
+    // Locate Treasury_XRP vault
+    const all = await listAllVaultAccounts(fb);
+    const treasury = Array.isArray(all) ? all.find((v) => v.name === 'Treasury_XRP') : null;
+    if (!treasury?.id) throw new Error('Treasury_XRP vault not found. Run Test 2 first.');
+    const vaultId = String(treasury.id);
+
+    // Asset candidates depending on env
+    const isSandbox = /sandbox/i.test(baseUrl);
+    const candidates = isSandbox ? ['XRP_TEST', 'XRP'] : ['XRP', 'XRP_TEST'];
+    let assetId = null;
+
+    // Ensure an address exists; if not, generate one
+    let accountAddress = null;
+    for (const aid of candidates) {
+      try {
+        const addrs = await fb.getDepositAddresses?.(vaultId, aid);
+        const first = Array.isArray(addrs) && addrs.length ? addrs[0] : null;
+        if (first?.address) {
+          assetId = aid;
+          accountAddress = first.address;
+          break;
+        }
+      } catch {}
+    }
+    if (!accountAddress) {
+      for (const aid of candidates) {
+        try {
+          try { await fb.createVaultAsset?.(vaultId, aid); } catch {}
+          const created = await fb.generateNewAddress?.(vaultId, aid, 'treasury-self');
+          if (created?.address) {
+            assetId = aid;
+            accountAddress = created.address;
+            break;
+          }
+        } catch {}
+      }
+    }
+    if (!accountAddress || !assetId) throw new Error('No XRP address on Treasury_XRP; run Test 3 first.');
+
+    // Build a tiny self-payment tx (not broadcast)
+    const tx = {
+      TransactionType: 'Payment',
+      Account: accountAddress,
+      Destination: accountAddress,
+      Amount: '1',
+      Fee: '12',
+      Sequence: 1,
+      LastLedgerSequence: 99999999,
+      SigningPubKey: ''
+    };
+    const txHex = xrpl.encodeForSigning(tx);
+
+    // Derivation path example for XRPL Ed25519
+    const derivationPath = [44, 144, 0, 0, 0];
+
+    // Create RAW signing transaction
+    const created = await fb.createTransaction({
+      operation: 'RAW',
+      source: { type: 'VAULT_ACCOUNT', id: vaultId },
+      assetId,
+      extraParameters: {
+        rawMessageData: {
+          algorithm: 'MPC_EDDSA_ED25519',
+          messages: [
+            { content: txHex, derivationPath }
+          ]
+        }
+      }
+    });
+
+    let details = null;
+    for (let i = 0; i < 40; i++) {
+      await new Promise((r) => setTimeout(r, 150));
+      details = await fb.getTransactionById(created?.id);
+      if (details?.signedMessages?.length) break;
+      if (['REJECTED', 'FAILED', 'CANCELLED'].includes(details?.status)) break;
+    }
+
+    const signed = details?.signedMessages?.[0] || null;
+    if (!signed?.signature) {
+      return res.status(200).json({
+        ok: false,
+        note: 'No signature returned (policy approval or Raw Signing may be required).',
+        transactionId: created?.id || null,
+        status: details?.status || null,
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      transactionId: created?.id || null,
+      status: details?.status || null,
+      algorithm: signed?.algorithm || 'MPC_EDDSA_ED25519',
+      signedMessage: {
+        content: signed?.content || txHex,
+        signature: signed?.signature?.fullSig || signed?.signature || null,
+        publicKey: signed?.publicKey || null,
+        derivationPath,
+      },
+      txPreview: tx,
+      assetId,
+      vaultId,
+      accountAddress,
+    });
+  } catch (err) {
+    logger.error('fireblocksXrplSignDryRun error', err);
     const status = err?.code && Number.isInteger(err.code) ? err.code : 500;
     return res.status(status).json({ ok: false, error: err?.message || 'Unknown error' });
   }

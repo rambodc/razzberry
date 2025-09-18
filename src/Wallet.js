@@ -9,6 +9,7 @@ export default function Wallet() {
   const [error, setError] = useState(null);
   const [creating, setCreating] = useState(false);
   const [creatingHandle, setCreatingHandle] = useState(false);
+  const [signing, setSigning] = useState(false);
 
   const pingFireblocks = async () => {
     setLoading(true);
@@ -87,6 +88,31 @@ export default function Wallet() {
     }
   };
 
+  const xrplSignDryRun = async () => {
+    setSigning(true);
+    setError(null);
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error('Sign in required');
+      const idToken = await getIdToken(user, true);
+      const resp = await fetch('/api/fireblocks/xrplSignDryRun', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      const json = await resp.json().catch(() => ({}));
+      if (!resp.ok || json?.ok === false) throw new Error(json?.error || json?.note || `Request failed (${resp.status})`);
+      setResult(json);
+    } catch (e) {
+      setError(e?.message || String(e));
+    } finally {
+      setSigning(false);
+    }
+  };
+
   return (
     <div style={{ maxWidth: 880, margin: '28px auto', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Wallet</h1>
@@ -141,6 +167,22 @@ export default function Wallet() {
           }}
         >
           {creatingHandle ? 'Issuing…' : 'Create Deposit Handle'}
+        </button>
+
+        <button
+          onClick={xrplSignDryRun}
+          disabled={signing}
+          style={{
+            padding: '10px 14px',
+            background: '#8b5cf6',
+            color: 'white',
+            border: 'none',
+            borderRadius: 8,
+            cursor: signing ? 'default' : 'pointer',
+            minWidth: 240,
+          }}
+        >
+          {signing ? 'Signing…' : 'XRPL Sign Dry Run'}
         </button>
       </div>
 

@@ -36,6 +36,13 @@
         }
       },
       {
+        "source": "/api/fireblocks/xrplSignDryRun",
+        "function": {
+          "functionId": "fireblocksXrplSignDryRun",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
