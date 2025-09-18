@@ -8,6 +8,7 @@ export default function Wallet() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [creating, setCreating] = useState(false);
+  const [creatingHandle, setCreatingHandle] = useState(false);
 
   const pingFireblocks = async () => {
     setLoading(true);
@@ -61,6 +62,31 @@ export default function Wallet() {
     }
   };
 
+  const createDepositHandle = async () => {
+    setCreatingHandle(true);
+    setError(null);
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error('Sign in required');
+      const idToken = await getIdToken(user, true);
+      const resp = await fetch('/api/fireblocks/createDepositHandle', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      });
+      const json = await resp.json().catch(() => ({}));
+      if (!resp.ok || !json?.ok) throw new Error(json?.error || `Request failed (${resp.status})`);
+      setResult(json);
+    } catch (e) {
+      setError(e?.message || String(e));
+    } finally {
+      setCreatingHandle(false);
+    }
+  };
+
   return (
     <div style={{ maxWidth: 880, margin: '28px auto', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Wallet</h1>
@@ -99,6 +125,22 @@ export default function Wallet() {
           }}
         >
           {creating ? 'Creating…' : 'Create/Get Vaults'}
+        </button>
+
+        <button
+          onClick={createDepositHandle}
+          disabled={creatingHandle}
+          style={{
+            padding: '10px 14px',
+            background: '#22c55e',
+            color: 'white',
+            border: 'none',
+            borderRadius: 8,
+            cursor: creatingHandle ? 'default' : 'pointer',
+            minWidth: 260,
+          }}
+        >
+          {creatingHandle ? 'Issuing…' : 'Create Deposit Handle'}
         </button>
       </div>
 

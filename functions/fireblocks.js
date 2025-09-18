@@ -18,6 +18,7 @@ const FIREBLOCKS_BASE_URL = defineSecret('FIREBLOCKS_BASE_URL'); // optional
 
 // ---- Lazy init Firebase Admin ----
 try { admin.app(); } catch { admin.initializeApp(); }
+const db = admin.firestore();
 
 // ---- Helpers ----
 async function verifyIdToken(req) {
@@ -190,6 +191,87 @@ export const fireblocksCreateOrGetVaults = onRequest({
     });
   } catch (err) {
     logger.error('fireblocksCreateOrGetVaults error', err);
+    const status = err?.code && Number.isInteger(err.code) ? err.code : 500;
+    return res.status(status).json({ ok: false, error: err?.message || 'Unknown error' });
+  }
+});
+
+// -----------------------------------------------------------
+// Test 3: Create per-user XRP deposit handle (address + tag)
+// -----------------------------------------------------------
+export const fireblocksCreateDepositHandle = onRequest({
+  cors: true,
+  secrets: [FIREBLOCKS_API_KEY, FIREBLOCKS_API_PRIVATE_KEY, FIREBLOCKS_BASE_URL],
+  region: 'us-central1',
+  maxInstances: 10,
+}, async (req, res) => {
+  try {
+    corsify(res);
+    if (req.method === 'OPTIONS') return res.status(204).end();
+    if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'Use POST' });
+
+    const user = await verifyIdToken(req);
+    const uid = user.uid;
+
+    const apiKey = FIREBLOCKS_API_KEY.value();
+    const privateKeyPem = FIREBLOCKS_API_PRIVATE_KEY.value();
+    const baseUrl = FIREBLOCKS_BASE_URL.value() || 'https://api.fireblocks.io';
+    if (!apiKey || !privateKeyPem) {
+      throw Object.assign(new Error('Fireblocks secrets are not set'), { code: 500 });
+    }
+
+    const fb = buildFireblocksClient({ apiKey, privateKeyPem, baseUrl });
+
+    // 1) If we already issued a handle, return it (idempotent)
+    const docRef = db.doc(`users/${uid}/xrpl/deposit`);
+    const prev = await docRef.get();
+    if (prev.exists) {
+      const d = prev.data() || {};
+      return res.status(200).json({ ok: true, existed: true, handle: d });
+    }
+
+    // 2) Find Treasury_XRP vault
+    const all = await listAllVaultAccounts(fb);
+    const treasury = Array.isArray(all) ? all.find((v) => v.name === 'Treasury_XRP') : null;
+    if (!treasury?.id) throw new Error('Treasury_XRP vault not found. Run Test 2 first.');
+
+    const vaultId = String(treasury.id);
+    const assetId = 'XRP';
+
+    // 3) Generate a new XRP deposit address (address + destination tag)
+    let created = null;
+    try {
+      created = await fb.generateNewAddress?.(vaultId, assetId, { description: `user:${uid}` });
+    } catch (e) {
+      logger.error('[fireblocksCreateDepositHandle] generateNewAddress failed:', e?.message || e);
+      throw new Error('generate_address_failed');
+    }
+
+    if (!created?.address) throw new Error('No address returned from Fireblocks');
+
+    const addr = created.address;
+    const tag =
+      (created.addressAdditionalData && (created.addressAdditionalData.tag || created.addressAdditionalData.destinationTag)) ||
+      created.tag ||
+      null;
+
+    if (!tag) throw new Error('No destination tag returned for XRP');
+
+    const handle = {
+      vaultId,
+      assetId,
+      address: addr,
+      tag: String(tag),
+      depositAddressId: created.id || null,
+      description: created.description || `user:${uid}`,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    await docRef.set(handle, { merge: true });
+
+    return res.status(200).json({ ok: true, existed: false, handle });
+  } catch (err) {
+    logger.error('fireblocksCreateDepositHandle error', err);
     const status = err?.code && Number.isInteger(err.code) ? err.code : 500;
     return res.status(status).json({ ok: false, error: err?.message || 'Unknown error' });
   }

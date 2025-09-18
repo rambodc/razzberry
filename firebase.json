@@ -29,6 +29,13 @@
         }
       },
       {
+        "source": "/api/fireblocks/createDepositHandle",
+        "function": {
+          "functionId": "fireblocksCreateDepositHandle",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
