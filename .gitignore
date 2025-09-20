@@ -19,3 +19,5 @@ build/
 # OS
 .DS_Store
 
+# Local clones / temp vendor copies
+tmp-transak-sdk/
