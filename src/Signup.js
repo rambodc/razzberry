@@ -5,16 +5,7 @@ import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import './Auth.css';
 
-// Generate a neutral app user id (UUID). Uses Web Crypto when available.
-function generateUserId() {
-  if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
-  // Fallback (RFC4122-ish), fine for app-side IDs
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    const r = (Math.random() * 16) | 0;
-    const v = c === 'x' ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-}
+// Using Firebase Auth UID as the canonical user document ID.
 
 function Signup() {
   const isPortrait = typeof window !== 'undefined'
@@ -41,13 +32,10 @@ function Signup() {
       const cred = await createUserWithEmailAndPassword(auth, email, password);
       const user = cred.user;
 
-      // 2) Create neutral app user id (doc id for /users)
-      const userId = generateUserId();
-
-      // 3) Build profile doc (canonical user) — now camelCase
+      // 2) Build profile doc (canonical user) — use auth.uid as ID
       const now = serverTimestamp();
       const profileDoc = {
-        userId,
+        uid: user.uid,
         firstName,
         lastName,
         email: user.email || email,
@@ -60,18 +48,10 @@ function Signup() {
         updatedAt: now,
       };
 
-      // 4) Write /users/{userId}
-      await setDoc(doc(db, 'users', userId), profileDoc);
+      // 3) Write /users/{auth.uid}
+      await setDoc(doc(db, 'users', user.uid), profileDoc, { merge: true });
 
-      // 5) Write resolver /userAuth/{auth.uid} -> { userId }
-      const providerId = (user.providerData && user.providerData[0]?.providerId) || 'password';
-      await setDoc(doc(db, 'userAuth', user.uid), {
-        userId,
-        provider: providerId,
-        createdAt: now,
-      });
-
-      // 6) Send verification email
+      // 4) Send verification email
       await sendEmailVerification(user);
 
       alert('Account created! Please check your email to verify your address.');

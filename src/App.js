@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from './firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 // Public pages
 import LandingPage from './LandingPage';
@@ -102,7 +102,7 @@ function AppRoutes({ user }) {
 
 function App() {
   const [firebaseUser, setFirebaseUser] = useState(null);      // raw Firebase Auth user
-  const [appUser, setAppUser] = useState(null);                // canonical /users/{userId} doc
+  const [appUser, setAppUser] = useState(null);                // canonical /users/{uid} doc
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [checkingProfile, setCheckingProfile] = useState(true);
 
@@ -118,27 +118,30 @@ function App() {
       }
 
       try {
-        // Map auth.uid -> userId via /userAuth/{uid}, then load /users/{userId}
-        const authRef = doc(db, 'userAuth', u.uid);
-        const authSnap = await getDoc(authRef);
+        // Load canonical user at /users/{auth.uid}
+        const userRef = doc(db, 'users', u.uid);
+        let userSnap = await getDoc(userRef);
 
-        let nextAppUser = { firebaseUid: u.uid, email: u.email ?? null };
-
-        if (authSnap.exists()) {
-          const { userId } = authSnap.data() || {};
-          if (userId) {
-            const userRef = doc(db, 'users', userId);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-              nextAppUser = { id: userSnap.id, ...userSnap.data(), firebaseUid: u.uid };
-            }
-          }
+        // If missing, initialize a minimal profile
+        if (!userSnap.exists()) {
+          const now = serverTimestamp();
+          await setDoc(userRef, {
+            uid: u.uid,
+            email: u.email ?? null,
+            firstName: '',
+            lastName: '',
+            primaryAuthUid: u.uid,
+            createdAt: now,
+            updatedAt: now,
+          }, { merge: true });
+          userSnap = await getDoc(userRef);
         }
 
-        setAppUser(nextAppUser);
+        const data = userSnap.exists() ? userSnap.data() : {};
+        setAppUser({ id: u.uid, firebaseUid: u.uid, email: u.email ?? null, ...data });
       } catch (err) {
         console.error('Failed to load app user profile:', err);
-        setAppUser({ firebaseUid: u.uid, email: u.email ?? null });
+        setAppUser({ id: u.uid, firebaseUid: u.uid, email: u.email ?? null });
       } finally {
         setCheckingProfile(false);
       }

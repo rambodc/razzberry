@@ -87,7 +87,7 @@ function CreateArtist() {
         desc: desc.trim(),
         img: imgUrl,                  // <-- Home.js expects c.img
         createdAt: serverTimestamp(),
-        createdByUid: appUser?.id || null,       // your neutral userId
+        createdByUid: appUser?.id || null,       // now equals auth.uid
         createdByEmail: appUser?.email || null,
         updatedAt: serverTimestamp(),
       };
