@@ -3,7 +3,7 @@ import React, { useContext, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import app, { db } from './firebase';
+import app, { db, auth } from './firebase';
 import { UserContext } from './App';
 import './Home.css';
 
@@ -87,7 +87,7 @@ function CreateArtist() {
         desc: desc.trim(),
         img: imgUrl,                  // <-- Home.js expects c.img
         createdAt: serverTimestamp(),
-        createdByUid: appUser?.id || null,       // now equals auth.uid
+        createdByUid: auth.currentUser?.uid || appUser?.id || null, // prefer live auth UID
         createdByEmail: appUser?.email || null,
         updatedAt: serverTimestamp(),
       };
