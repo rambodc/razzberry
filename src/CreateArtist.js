@@ -2,8 +2,8 @@
 import React, { useContext, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import app, { db, auth } from './firebase';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import app, { db, auth, storage } from './firebase';
 import { UserContext } from './App';
 import './Home.css';
 
@@ -57,7 +57,6 @@ function CreateArtist() {
       const artistUid = genId();
 
       // Upload original image to Storage
-      const storage = getStorage(app);
       const ext = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
       const objectPath = `artists/${artistUid}/cover.${ext}`;
       const storageRef = ref(storage, objectPath);

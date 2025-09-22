@@ -1,7 +1,9 @@
 // src/firebase.js
 import { initializeApp } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 // Prefer env-driven config so we can point the app at any project
 // In CI, these are injected per-branch from GitHub Environment secrets.
@@ -35,4 +37,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+// Prefer env, but fall back to the actual bucket you have
+const bucket = process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || 'razz6-92831.firebasestorage.app';
+export const storage = getStorage(app, `gs://${bucket}`);
+
+// Optional App Check (Enterprise) initialization if a site key is provided.
+// This helps if Storage/App Check enforcement is enabled.
+try {
+  const siteKey = process.env.REACT_APP_APPCHECK_SITE_KEY;
+  if (siteKey) {
+    initializeAppCheck(app, {
+      provider: new ReCaptchaEnterpriseProvider(siteKey),
+      isTokenAutoRefreshEnabled: true,
+    });
+  }
+} catch (err) {
+  // Non-fatal; continue without App Check
+  console.warn('App Check init skipped or failed:', err?.message || err);
+}
 export default app;
