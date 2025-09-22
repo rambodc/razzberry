@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { getStorage, ref } from 'firebase/storage';
 
 // Prefer env-driven config so we can point the app at any project
 // In CI, these are injected per-branch from GitHub Environment secrets.
@@ -37,9 +37,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-// Prefer env, but fall back to the actual bucket you have
-const bucket = process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || 'razz6-92831.firebasestorage.app';
-export const storage = getStorage(app, `gs://${bucket}`);
+// Force the known-good bucket to avoid env drift
+const FORCED_BUCKET = 'razz6-92831.firebasestorage.app';
+export const storage = getStorage(app, `gs://${FORCED_BUCKET}`);
+
+// Tiny debug helper: prints the storage root used at runtime
+export function logStorageDebug() {
+  try {
+    // eslint-disable-next-line no-console
+    console.log('[storage] app.options.storageBucket =', app.options?.storageBucket);
+    // eslint-disable-next-line no-console
+    console.log('[storage] ref(storage).toString() =', ref(storage).toString());
+  } catch {}
+}
 
 // Optional App Check (Enterprise) initialization if a site key is provided.
 // This helps if Storage/App Check enforcement is enabled.
