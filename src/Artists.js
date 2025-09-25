@@ -1,4 +1,4 @@
-// src/ListingDetail.js
+// src/Artists.js
 import React, { useContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { auth, db } from './firebase';
@@ -10,7 +10,7 @@ import AudioPlayer from './components/AudioPlayer';
 import { UserContext } from './App';
 import './Home.css';
 
-function ListingDetail() {
+function Artists() {
   const appUser = useContext(UserContext); // null when signed out (public view)
   const { artistUid } = useParams();
   const navigate = useNavigate();
@@ -273,4 +273,5 @@ function VideoHero({ mp4, webm, webp, poster, title }) {
   );
 }
 
-export default ListingDetail;
+export default Artists;
+

@@ -15,7 +15,7 @@ import LandingPage from './LandingPage';
 import Login from './Login';
 import Signup from './Signup';
 import ForgotPassword from './ForgotPassword';
-import ListingDetail from './ListingDetail';
+import Artists from './Artists';
 
 // Protected pages
 import Home from './Home';
@@ -39,7 +39,7 @@ function AppRoutes({ user }) {
       <Route path="/signin" element={!user ? <Login /> : <Navigate to="/home" />} />
       <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/home" />} />
       <Route path="/forgot" element={<ForgotPassword />} />
-      <Route path="/artist/:artistUid" element={<ListingDetail />} />
+      <Route path="/artist/:artistUid" element={<Artists />} />
 
       {/* Protected */}
       <Route
