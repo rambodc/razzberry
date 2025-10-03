@@ -1,43 +1,72 @@
-# Razzberry CI/CD with Firebase Hosting 73
+# Razzberry CI/CD with Firebase Hosting
 
-This repository is set up for branch-based environments with Firebase Hosting.
+Branch-based environments deploy a compiled React app to Firebase Hosting, with API routes rewritten to Cloud Functions.
 
-Branches:
-- `prod`: deploys to the production Firebase project
-- `dev`: deploys to the development Firebase project
-- `main`: default branch; no deploys are triggered
+Branches
+- `dev`: deploys to the development Firebase project (`razz6-92831`)
+- `prod`: deploys to the production Firebase project (`production1-fbd5d`)
+- `main`: default branch; no deploys
 
 ## Setup
 
-1. Create two Firebase projects (or use existing):
-   - Production project ID → replace in `.firebaserc` as `YOUR_FIREBASE_PROJECT_ID_PROD`
-   - Development project ID → replace in `.firebaserc` as `YOUR_FIREBASE_PROJECT_ID_DEV`
+1) Firebase projects
+- `.firebaserc` already maps:
+  - dev → `razz6-92831`
+  - prod → `production1-fbd5d`
+- Update these IDs only if your project IDs change.
 
-2. Generate a CI token and add it to GitHub:
-   - Install Firebase CLI locally and login: `npm i -g firebase-tools && firebase login`
-   - Create token: `firebase login:ci`
-   - In GitHub → Settings → Secrets and variables → Actions → `New repository secret`
-     - Name: `FIREBASE_TOKEN`
-     - Value: paste the token
+2) GitHub secrets (service accounts + React env)
+- Workflows use service account JSON, not `FIREBASE_TOKEN`.
+- Add the following repository or environment secrets (names must match the workflows):
+  - `FIREBASE_SERVICE_ACCOUNT_RAZZ6_92831` (Dev) – Service account JSON for `razz6-92831`
+  - `FIREBASE_SERVICE_ACCOUNT_PRODUCTION1_FBD5D` (Prod) – Service account JSON for `production1-fbd5d`
+  - React build env (used to generate `.env`):
+    - `FIREBASE_API_KEY`
+    - `FIREBASE_APP_ID`
+    - `FIREBASE_AUTH_DOMAIN`
+    - `FIREBASE_MEASUREMENT_ID` (optional)
+    - `FIREBASE_MESSAGING_SENDER_ID`
+    - `FIREBASE_PROJECT_ID`
+    - `FIREBASE_STORAGE_BUCKET`
 
-3. Branch protection (recommended):
-   - Protect `prod` and `dev` as needed; leave `main` as default.
+3) Branch protection (recommended)
+- Protect `prod`/`dev` as needed; keep `main` open for regular work.
 
-4. Deploy behavior:
-   - Push to `dev` → deploys Hosting to the `dev` Firebase project
-   - Push to `prod` → deploys Hosting to the `prod` Firebase project
-   - Open PR targeting `dev` or `prod` → creates a preview channel URL
+## Deploy Behavior
+- Push to `dev` → Deploys Hosting to `razz6-92831` (live channel)
+- Push to `prod` → Deploys Hosting to `production1-fbd5d` (live channel)
+- Pull Request → Builds and publishes a Hosting preview channel URL
 
-5. App code:
-   - Hosting serves from `public/` by default. Replace `public/` with your built app or change `firebase.json` accordingly.
-   - If using a Node-based build (Vite/Next/React/etc.), ensure `package.json` exists with a `build` script.
+## Hosting & Build
+- Hosting serves the compiled app from `build/` (see `firebase.json`).
+- This repo uses Create React App (`react-scripts build`).
+- SPA fallback and API rewrites are configured.
 
-## Files of interest
-- `.github/workflows/firebase-hosting.yml` – CI workflow
-- `.firebaserc` – maps branch aliases to Firebase project IDs
-- `firebase.json` – Hosting configuration
-- `public/` – default hosting directory
+### API Rewrites (firebase.json)
+- `/api/transak` → Cloud Function `transak` (us-central1)
+- `/api/fireblocks/ping` → Cloud Function `fireblocksPing` (us-central1)
+- `/api/fireblocks/createOrGetVaults` → Cloud Function `fireblocksCreateOrGetVaults` (us-central1)
+- `/api/fireblocks/createDepositHandle` → Cloud Function `fireblocksCreateDepositHandle` (us-central1)
+- `/api/fireblocks/xrplTransferTest` → Cloud Function `fireblocksXrplTransferTest` (us-central1)
+- `**` → `/index.html` (SPA fallback)
 
-## Notes
-- The workflow expects a repository secret `FIREBASE_TOKEN`.
-- You can switch Hosting `public` dir or add rewrites in `firebase.json` as needed.
+## Workflows
+- `.github/workflows/firebase-hosting-merge-dev.yml` – Deploy on push to `dev`
+- `.github/workflows/firebase-hosting-merge.yml` – Deploy on push to `prod`
+- `.github/workflows/firebase-hosting-pull-request.yml` – Build + preview on PRs
+
+Each workflow:
+- Checks out code
+- Creates `.env` from GitHub secrets (`REACT_APP_*` vars)
+- Runs `npm ci && npm run build`
+- Deploys Hosting using the appropriate `firebaseServiceAccount` secret
+
+## Local Development
+- Install deps: `npm ci`
+- Run dev server: `npm start`
+- Build locally: `npm run build`
+
+## Functions Deploy (not covered by Hosting workflows)
+- Current workflows deploy Hosting only. Deploy Functions separately:
+  - CLI: `firebase deploy --only functions`
+  - Or add a dedicated GitHub Actions workflow for Functions

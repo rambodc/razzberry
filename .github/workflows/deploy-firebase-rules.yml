@@ -1,0 +1,71 @@
+name: Deploy Firebase Rules
+
+on:
+  push:
+    paths:
+      - 'firestore.rules'
+      - 'storage.rules'
+      - 'firebase.json'
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Target project (dev or prod)'
+        required: false
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - prod
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEV_PROJECT_ID: razz6-92831
+      PROD_PROJECT_ID: production1-fbd5d
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          # Option A: Use a JSON key stored in repo secrets
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          # Option B (recommended): Use Workload Identity Federation instead of a key
+          # workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          # service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Select Firebase project
+        id: select-project
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.project }}" ]; then
+            TARGET="${{ github.event.inputs.project }}"
+          elif [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            TARGET="prod"
+          else
+            TARGET="dev"
+          fi
+          if [ "$TARGET" = "prod" ]; then
+            echo "PROJECT_ID=${PROD_PROJECT_ID}" >> $GITHUB_ENV
+          else
+            echo "PROJECT_ID=${DEV_PROJECT_ID}" >> $GITHUB_ENV
+          fi
+          echo "Selected target: $TARGET -> $PROJECT_ID"
+
+      - name: Install Firebase CLI
+        run: npm i -g firebase-tools@latest
+
+      - name: Deploy Firestore and Storage rules
+        run: |
+          firebase --project "$PROJECT_ID" deploy --only firestore:rules,storage
+
