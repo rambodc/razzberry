@@ -2,17 +2,14 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '../components/TopBar';
-import SideMenu from '../components/SideMenu';
 
 function Chat() {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = React.useState(false);
   const [isMobile, setIsMobile] = React.useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
   React.useEffect(() => {
     const update = () => {
       const mobile = (window.innerWidth || 0) < 900;
       setIsMobile(mobile);
-      setMenuOpen(!mobile);
     };
     window.addEventListener('resize', update);
     update();
@@ -118,14 +115,7 @@ function Chat() {
       {/* Fixed TopBar with Back */}
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
-      {!isMobile && (
-        <SideMenu
-          signedIn
-          mode="pinned"
-          open={menuOpen}
-          onClose={() => setMenuOpen(false)}
-        />
-      )}
+      {/* No sidebar */}
 
       {/* Messages list */}
       <main ref={listRef} style={styles.list}>

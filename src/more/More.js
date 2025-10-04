@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import TopBar from '../components/TopBar';
-import SideMenu from '../components/SideMenu';
 import MobileNavTabs from '../components/MobileNavTabs';
 import {
   FaFileAlt,
@@ -19,7 +18,6 @@ import {
 
 export default function More() {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
 
   const onLogout = async () => {
@@ -59,7 +57,6 @@ export default function More() {
     const update = () => {
       const mobile = (window.innerWidth || 0) < 900;
       setIsMobile(mobile);
-      setMenuOpen(!mobile);
     };
     window.addEventListener('resize', update);
     update();
@@ -68,8 +65,8 @@ export default function More() {
 
   return (
     <div className="home-container" style={{ paddingBottom: 0 }}>
-      <TopBar hideLeft={isMobile} onOpenMenu={() => setMenuOpen((v) => !v)}>
-        {isMobile ? <MobileNavTabs /> : null}
+      <TopBar hideLeft>
+        <MobileNavTabs />
       </TopBar>
 
       <div style={{ maxWidth: 720, margin: '80px auto 24px', padding: '0 16px' }}>
@@ -84,28 +81,7 @@ export default function More() {
         <Item icon={FaSignOutAlt} color="#ef4444" label="Logout" onClick={onLogout} />
       </div>
 
-      {!isMobile && (<SideMenu
-        signedIn
-        mode="pinned"
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        onHome={() => {
-          setMenuOpen(false);
-          navigate('/home');
-        }}
-        onCollectibles={() => {
-          setMenuOpen(false);
-          navigate('/home');
-        }}
-        onBalance={() => {
-          setMenuOpen(false);
-          navigate('/wallet');
-        }}
-        onMore={() => {
-          setMenuOpen(false);
-          navigate('/more');
-        }}
-      />)}
+      {/* No sidebar */}
     </div>
   );
 }

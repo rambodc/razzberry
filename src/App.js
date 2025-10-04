@@ -19,6 +19,7 @@ import Artists from './artists/Artists';
 
 // Protected pages
 import Home from './home/Home';
+import Collectibles from './collectibles/Collectibles';
 import CreateArtist from './create/CreateArtist';
 import Chat from './chat/Chat';
 import Xaman from './xaman/Xaman';
@@ -53,6 +54,14 @@ function AppRoutes({ user }) {
         element={
           <ProtectedRoute>
             <Home />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/collectibles"
+        element={
+          <ProtectedRoute>
+            <Collectibles />
           </ProtectedRoute>
         }
       />

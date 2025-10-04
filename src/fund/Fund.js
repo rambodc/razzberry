@@ -5,7 +5,6 @@ import { Transak } from '@transak/transak-sdk';
 import app, { auth } from '../firebase';
 import { UserContext } from '../App';
 import TopBar from '../components/TopBar';
-import SideMenu from '../components/SideMenu';
 
 // Prefer an env var override, otherwise use a Hosting rewrite path.
 // This avoids hardcoding a specific Firebase project URL and works across envs.
@@ -26,14 +25,12 @@ export default function Fund() {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
 
   useEffect(() => {
     const update = () => {
       const mobile = (window.innerWidth || 0) < 900;
       setIsMobile(mobile);
-      setMenuOpen(!mobile);
     };
     window.addEventListener('resize', update);
     update();
@@ -124,10 +121,7 @@ export default function Fund() {
 
   return (
     <div className="home-container">
-      <TopBar onOpenMenu={() => setMenuOpen((v) => !v)} />
-      {!isMobile && (
-        <SideMenu signedIn mode="pinned" open={menuOpen} onClose={() => setMenuOpen(false)} />
-      )}
+      <TopBar variant="back" backLabel="Back" onBack={() => (window.history.length > 2 ? navigate(-1) : navigate('/home'))} />
 
       <div style={{ maxWidth: 800, margin: '80px auto 40px', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Fund your wallet</h1>

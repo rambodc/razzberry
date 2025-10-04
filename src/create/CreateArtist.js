@@ -6,24 +6,16 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import app, { db, auth, storage, logStorageDebug } from '../firebase';
 import { UserContext } from '../App';
 import '../Home.css';
-import SideMenu from '../components/SideMenu';
 import TopBar from '../components/TopBar';
+import { useCallback } from 'react';
 
 function CreateArtist() {
   const appUser = useContext(UserContext);
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
-  React.useEffect(() => {
-    const update = () => {
-      const mobile = (window.innerWidth || 0) < 900;
-      setIsMobile(mobile);
-      setMenuOpen(!mobile);
-    };
-    window.addEventListener('resize', update);
-    update();
-    return () => window.removeEventListener('resize', update);
-  }, []);
+  // No sidebar; use a back button like Artists
+  const handleBack = useCallback(() => {
+    if (window.history.length > 2) navigate(-1); else navigate('/home');
+  }, [navigate]);
 
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
@@ -120,10 +112,7 @@ function CreateArtist() {
 
   return (
     <div className="home-container">
-      <TopBar onOpenMenu={() => setMenuOpen((v) => !v)} />
-      {!isMobile && (
-        <SideMenu signedIn mode="pinned" open={menuOpen} onClose={() => setMenuOpen(false)} />
-      )}
+      <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       <div className="page-container" style={{ maxWidth: 680, margin: '80px auto 0', padding: 16 }}>
       <h1 style={{ margin: '20px 0' }}>Create Artist (Image)</h1>

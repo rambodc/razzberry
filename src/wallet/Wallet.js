@@ -3,23 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase';
 import { getIdToken } from 'firebase/auth';
 import TopBar from '../components/TopBar';
-import SideMenu from '../components/SideMenu';
 import MobileNavTabs from '../components/MobileNavTabs';
 
 export default function Wallet() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
-
-  useEffect(() => {
-    const update = () => {
-      const mobile = (window.innerWidth || 0) < 900;
-      setIsMobile(mobile);
-      setMenuOpen(!mobile);
-    };
-    window.addEventListener('resize', update);
-    update();
-    return () => window.removeEventListener('resize', update);
-  }, []);
+  // No sidebar; no responsive sidebar toggling needed
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -141,22 +128,9 @@ export default function Wallet() {
 
   return (
     <div className="home-container">
-      <TopBar hideLeft={isMobile} onOpenMenu={() => setMenuOpen((v) => !v)}>
-        {isMobile ? <MobileNavTabs /> : null}
+      <TopBar hideLeft>
+        <MobileNavTabs />
       </TopBar>
-
-      {!isMobile && (
-        <SideMenu
-          signedIn
-          mode="pinned"
-          open={menuOpen}
-          onClose={() => setMenuOpen(false)}
-          onHome={() => setMenuOpen(false)}
-          onCollectibles={() => setMenuOpen(false)}
-          onBalance={() => setMenuOpen(false)}
-          onMore={() => setMenuOpen(false)}
-        />
-      )}
 
       <div style={{ maxWidth: 880, margin: '80px auto 28px', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Wallet</h1>

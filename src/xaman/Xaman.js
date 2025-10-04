@@ -10,20 +10,17 @@ import AccountInfo from '../components/wallet/AccountInfo';
 import TokenList from '../components/wallet/TokenList';
 import RazTrustlineCard from '../components/wallet/RazTrustlineCard';
 import TopBar from '../components/TopBar';
-import SideMenu from '../components/SideMenu';
 
 // ✅ Public identifier only (do NOT put your API secret in frontend code)
 const XAMAN_API_KEY = '287dd619-0e34-46e6-8a59-2303135fa082';
 
 export default function Xaman() {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
   useEffect(() => {
     const update = () => {
       const mobile = (window.innerWidth || 0) < 900;
       setIsMobile(mobile);
-      setMenuOpen(!mobile);
     };
     window.addEventListener('resize', update);
     update();
@@ -104,9 +101,6 @@ export default function Xaman() {
   return (
     <div className="xaman-page detail-page" style={styles.page}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
-      {!isMobile && (
-        <SideMenu signedIn mode="pinned" open={menuOpen} onClose={() => setMenuOpen(false)} />
-      )}
 
       {/* Content wrapper under fixed TopBar */}
       <div style={styles.content}>

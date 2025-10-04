@@ -8,34 +8,19 @@ import { UserContext } from '../App';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TopBar from '../components/TopBar';
 import MobileNavTabs from '../components/MobileNavTabs';
-import SideMenu from '../components/SideMenu';
 import '../Home.css';
 import { UI_BUILD_TAG } from '../version';
 
 function Home() {
   const appUser = useContext(UserContext);
-  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'cart' | 'chat'
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? (window.innerWidth < 900) : false));
+  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'cart'
 
   const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  // Track viewport for responsive nav: mobile top-tabs vs desktop pinned sidebar
-  useEffect(() => {
-    const update = () => {
-      const mobile = (window.innerWidth || 0) < 900;
-      setIsMobile(mobile);
-      setMenuOpen(!mobile); // open sidebar on desktop, closed on mobile
-    };
-    window.addEventListener('resize', update);
-    update();
-    return () => {
-      window.removeEventListener('resize', update);
-    };
-  }, []);
+  // No sidebar; no responsive sidebar toggling needed
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -174,8 +159,8 @@ function Home() {
   return (
     <div className="home-container" style={{ paddingBottom: 0 }}>
       {/* Fixed, reusable Top Bar */}
-      <TopBar hideLeft={isMobile} onOpenMenu={() => setMenuOpen((v) => !v)}>
-        {isMobile ? <MobileNavTabs /> : null}
+      <TopBar hideLeft>
+        <MobileNavTabs />
       </TopBar>
 
       {/* Small build/version badge so you can spot new deploys */}
@@ -184,31 +169,7 @@ function Home() {
       {/* Page content */}
       <div className="home-content">{renderTab()}</div>
 
-      {/* Right Sidebar Menu */}
-      {!isMobile && (
-      <SideMenu
-        signedIn
-        mode="pinned"
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        onHome={() => {
-          setMenuOpen(false);
-          setActiveTab('dashboard');
-          navigate('/home');
-        }}
-        onCollectibles={() => {
-          setMenuOpen(false);
-          navigate('/home');
-        }}
-        onBalance={() => {
-          setMenuOpen(false);
-          navigate('/wallet');
-        }}
-        onMore={() => {
-          setMenuOpen(false);
-          navigate('/more');
-        }}
-      />)}
+      {/* No sidebar — topbar tabs only */}
     </div>
   );
 }
