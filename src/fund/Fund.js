@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Transak } from '@transak/transak-sdk';
 import app, { auth } from '../firebase';
 import { UserContext } from '../App';
+import TopBar from '../components/TopBar';
+import SideMenu from '../components/SideMenu';
 
 // Prefer an env var override, otherwise use a Hosting rewrite path.
 // This avoids hardcoding a specific Firebase project URL and works across envs.
@@ -24,6 +26,19 @@ export default function Fund() {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
+
+  useEffect(() => {
+    const update = () => {
+      const mobile = (window.innerWidth || 0) < 900;
+      setIsMobile(mobile);
+      setMenuOpen(!mobile);
+    };
+    window.addEventListener('resize', update);
+    update();
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   const canUse = useMemo(() => !!auth.currentUser, [auth.currentUser]);
 
@@ -108,7 +123,13 @@ export default function Fund() {
   }, []);
 
   return (
-    <div style={{ maxWidth: 800, margin: '40px auto', padding: '0 16px' }}>
+    <div className="home-container">
+      <TopBar onOpenMenu={() => setMenuOpen((v) => !v)} />
+      {!isMobile && (
+        <SideMenu signedIn mode="pinned" open={menuOpen} onClose={() => setMenuOpen(false)} />
+      )}
+
+      <div style={{ maxWidth: 800, margin: '80px auto 40px', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Fund your wallet</h1>
       <p style={{ opacity: 0.85, margin: 0 }}>
         Buy XRP via Transak and send to your XRPL wallet.
@@ -149,6 +170,7 @@ export default function Fund() {
           <div id="transakMount" style={{ height: 720 }} />
           …and pass { containerId: 'transakMount' } in the config above.
       */}
+      </div>
     </div>
   );
 }

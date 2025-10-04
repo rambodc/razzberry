@@ -19,6 +19,17 @@ function Artists() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
+  useEffect(() => {
+    const update = () => {
+      const mobile = (window.innerWidth || 0) < 900;
+      setIsMobile(mobile);
+      setMenuOpen(!mobile);
+    };
+    window.addEventListener('resize', update);
+    update();
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   // --------- Fallback tracks (3 example files) ----------
   const fallbackTracks = [
@@ -165,27 +176,30 @@ function Artists() {
       </div>
 
       {/* Right Sidebar Menu: signed-in vs signed-out */}
-      <SideMenu
-        signedIn={!!appUser}
-        open={menuOpen}
-        onClose={() => setMenuOpen(false)}
-        onHome={() => {
-          setMenuOpen(false);
-          navigate(appUser ? '/home' : '/');
-        }}
-        onCollectibles={() => {
-          setMenuOpen(false);
-          navigate('/home');
-        }}
-        onBalance={() => {
-          setMenuOpen(false);
-          navigate('/wallet');
-        }}
-        onMore={() => {
-          setMenuOpen(false);
-          navigate('/more');
-        }}
-      />
+      {!isMobile && (
+        <SideMenu
+          signedIn={!!appUser}
+          mode="pinned"
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          onHome={() => {
+            setMenuOpen(false);
+            navigate(appUser ? '/home' : '/');
+          }}
+          onCollectibles={() => {
+            setMenuOpen(false);
+            navigate('/home');
+          }}
+          onBalance={() => {
+            setMenuOpen(false);
+            navigate('/wallet');
+          }}
+          onMore={() => {
+            setMenuOpen(false);
+            navigate('/more');
+          }}
+        />
+      )}
     </div>
   );
 }

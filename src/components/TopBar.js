@@ -16,6 +16,8 @@ export default function TopBar({
   backLabel = 'Back',
   onBack,
   onOpenMenu,
+  children,
+  hideLeft = false,
 }) {
   return (
     <div
@@ -33,7 +35,7 @@ export default function TopBar({
       }}
     >
       <div style={styles.inner}>
-        {variant === 'back' ? (
+        {!hideLeft && variant === 'back' ? (
           <button
             onClick={onBack}
             aria-label={backLabel}
@@ -42,7 +44,7 @@ export default function TopBar({
           >
             <FaArrowLeft />
           </button>
-        ) : (
+        ) : !hideLeft ? (
           <button
             onClick={onOpenMenu}
             aria-label="Open menu"
@@ -51,7 +53,9 @@ export default function TopBar({
           >
             <FaBars />
           </button>
-        )}
+        ) : <div style={{ width: 40 }} />}
+        <div style={styles.center}>{children}</div>
+        <div style={{ width: 40 }} />
       </div>
     </div>
   );
@@ -63,8 +67,14 @@ const styles = {
     height: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     padding: '0 8px',
+  },
+  center: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   iconBtn: {
     display: 'inline-flex',

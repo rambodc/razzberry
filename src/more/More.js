@@ -5,6 +5,7 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import TopBar from '../components/TopBar';
 import SideMenu from '../components/SideMenu';
+import MobileNavTabs from '../components/MobileNavTabs';
 import {
   FaFileAlt,
   FaCogs,
@@ -19,6 +20,7 @@ import {
 export default function More() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
 
   const onLogout = async () => {
     await signOut(auth);
@@ -52,9 +54,23 @@ export default function More() {
     </button>
   );
 
+  // responsive
+  React.useEffect(() => {
+    const update = () => {
+      const mobile = (window.innerWidth || 0) < 900;
+      setIsMobile(mobile);
+      setMenuOpen(!mobile);
+    };
+    window.addEventListener('resize', update);
+    update();
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
   return (
     <div className="home-container" style={{ paddingBottom: 0 }}>
-      <TopBar onOpenMenu={() => setMenuOpen((v) => !v)} />
+      <TopBar hideLeft={isMobile} onOpenMenu={() => setMenuOpen((v) => !v)}>
+        {isMobile ? <MobileNavTabs /> : null}
+      </TopBar>
 
       <div style={{ maxWidth: 720, margin: '80px auto 24px', padding: '0 16px' }}>
         <h1 style={{ margin: '8px 0 16px' }}>More</h1>
@@ -68,8 +84,9 @@ export default function More() {
         <Item icon={FaSignOutAlt} color="#ef4444" label="Logout" onClick={onLogout} />
       </div>
 
-      <SideMenu
+      {!isMobile && (<SideMenu
         signedIn
+        mode="pinned"
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
         onHome={() => {
@@ -88,7 +105,7 @@ export default function More() {
           setMenuOpen(false);
           navigate('/more');
         }}
-      />
+      />)}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TopBar from '../components/TopBar';
+import MobileNavTabs from '../components/MobileNavTabs';
 import SideMenu from '../components/SideMenu';
 import '../Home.css';
 import { UI_BUILD_TAG } from '../version';
@@ -15,35 +16,24 @@ function Home() {
   const appUser = useContext(UserContext);
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'cart' | 'chat'
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? (window.innerWidth < 900) : false));
 
   const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  // Auto-open the menu in landscape; overlay in portrait. Allow manual toggle.
+  // Track viewport for responsive nav: mobile top-tabs vs desktop pinned sidebar
   useEffect(() => {
-    const isLandscape = () => {
-      try {
-        if (window.matchMedia) return window.matchMedia('(orientation: landscape)').matches;
-      } catch {}
-      return (window.innerWidth || 0) > (window.innerHeight || 0);
+    const update = () => {
+      const mobile = (window.innerWidth || 0) < 900;
+      setIsMobile(mobile);
+      setMenuOpen(!mobile); // open sidebar on desktop, closed on mobile
     };
-    const update = () => setMenuOpen(isLandscape());
-    let mql;
-    try {
-      mql = window.matchMedia('(orientation: landscape)');
-      if (mql && mql.addEventListener) mql.addEventListener('change', update);
-      else if (mql && mql.addListener) mql.addListener(update);
-    } catch {}
     window.addEventListener('resize', update);
     update();
     return () => {
       window.removeEventListener('resize', update);
-      try {
-        if (mql && mql.removeEventListener) mql.removeEventListener('change', update);
-        else if (mql && mql.removeListener) mql.removeListener(update);
-      } catch {}
     };
   }, []);
 
@@ -184,7 +174,9 @@ function Home() {
   return (
     <div className="home-container" style={{ paddingBottom: 0 }}>
       {/* Fixed, reusable Top Bar */}
-      <TopBar onOpenMenu={() => setMenuOpen((v) => !v)} />
+      <TopBar hideLeft={isMobile} onOpenMenu={() => setMenuOpen((v) => !v)}>
+        {isMobile ? <MobileNavTabs /> : null}
+      </TopBar>
 
       {/* Small build/version badge so you can spot new deploys */}
       <div className="build-badge" aria-label="Build tag">{UI_BUILD_TAG}</div>
@@ -193,8 +185,10 @@ function Home() {
       <div className="home-content">{renderTab()}</div>
 
       {/* Right Sidebar Menu */}
+      {!isMobile && (
       <SideMenu
         signedIn
+        mode="pinned"
         open={menuOpen}
         onClose={() => setMenuOpen(false)}
         onHome={() => {
@@ -214,7 +208,7 @@ function Home() {
           setMenuOpen(false);
           navigate('/more');
         }}
-      />
+      />)}
     </div>
   );
 }

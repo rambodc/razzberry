@@ -30,6 +30,11 @@ export default function SideMenu({
    * In portrait, it behaves as a modal drawer.
    */
   autoLandscape = true,
+  /**
+   * mode: 'overlay' | 'pinned' — when 'pinned', the sidebar is always visible
+   * and content is offset using --sidebar-width.
+   */
+  mode = 'overlay',
 }) {
   const [isLandscape, setIsLandscape] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -76,11 +81,10 @@ export default function SideMenu({
     };
   }, []);
 
-  const pinned = autoLandscape && isLandscape; // orientation-based layout state
-  // Sidebar visibility now strictly follows `open`, regardless of orientation.
-  // We still use `pinned` to decide layout (offset content) but not to force open.
-  const computedOpen = open;
-  const showOverlay = open && !isLandscape;
+  const forcedPinned = mode === 'pinned';
+  const pinned = forcedPinned || (autoLandscape && isLandscape);
+  const computedOpen = forcedPinned ? true : open;
+  const showOverlay = forcedPinned ? false : (open && !isLandscape);
 
   // Width: in portrait overlay, keep it to 60% of viewport for an easy outside-click target.
   // In landscape (pinned or not), keep previous behavior/cap.
@@ -98,7 +102,7 @@ export default function SideMenu({
       if (w > 0) root.style.setProperty('--sidebar-width', `${w}px`);
     };
 
-    if (isLandscape && computedOpen) {
+    if (pinned && computedOpen) {
       root.classList.add(className);
       // establish var
       setWidthVar();

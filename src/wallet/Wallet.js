@@ -1,9 +1,25 @@
 // src/Wallet.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase';
 import { getIdToken } from 'firebase/auth';
+import TopBar from '../components/TopBar';
+import SideMenu from '../components/SideMenu';
+import MobileNavTabs from '../components/MobileNavTabs';
 
 export default function Wallet() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
+
+  useEffect(() => {
+    const update = () => {
+      const mobile = (window.innerWidth || 0) < 900;
+      setIsMobile(mobile);
+      setMenuOpen(!mobile);
+    };
+    window.addEventListener('resize', update);
+    update();
+    return () => window.removeEventListener('resize', update);
+  }, []);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -124,7 +140,25 @@ export default function Wallet() {
   };
 
   return (
-    <div style={{ maxWidth: 880, margin: '28px auto', padding: '0 16px' }}>
+    <div className="home-container">
+      <TopBar hideLeft={isMobile} onOpenMenu={() => setMenuOpen((v) => !v)}>
+        {isMobile ? <MobileNavTabs /> : null}
+      </TopBar>
+
+      {!isMobile && (
+        <SideMenu
+          signedIn
+          mode="pinned"
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          onHome={() => setMenuOpen(false)}
+          onCollectibles={() => setMenuOpen(false)}
+          onBalance={() => setMenuOpen(false)}
+          onMore={() => setMenuOpen(false)}
+        />
+      )}
+
+      <div style={{ maxWidth: 880, margin: '80px auto 28px', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Wallet</h1>
       <p style={{ margin: '0 0 16px', color: '#4b5563' }}>
         Test 1: Ping Fireblocks to verify credentials and connectivity.
@@ -265,6 +299,7 @@ export default function Wallet() {
           }}
         >{JSON.stringify(result, null, 2)}</pre>
       )}
+      </div>
     </div>
   );
 }
