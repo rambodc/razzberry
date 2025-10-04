@@ -5,7 +5,7 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import app, { db, auth, storage, logStorageDebug } from '../firebase';
 import { UserContext } from '../App';
-import '../Home.css';
+// Global styles now come from src/global.css (imported in index.js)
 import TopBar from '../components/TopBar';
 import { useCallback } from 'react';
 

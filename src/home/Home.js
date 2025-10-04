@@ -8,7 +8,7 @@ import { UserContext } from '../App';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TopBar from '../components/TopBar';
 import MobileNavTabs from '../components/MobileNavTabs';
-import '../Home.css';
+import './Home.css';
 import { UI_BUILD_TAG } from '../version';
 
 function Home() {

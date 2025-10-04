@@ -7,7 +7,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import TopBar from '../components/TopBar';
 import AudioPlayer from '../components/AudioPlayer';
 import { UserContext } from '../App';
-import '../Home.css';
+// Global styles now come from src/global.css (imported in index.js)
 
 function Artists() {
   const appUser = useContext(UserContext); // null when signed out (public view)

@@ -1,0 +1,127 @@
+/* src/global.css — shared styles across pages */
+
+/* ===== Global Layout ===== */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-color);
+  font-family: var(--font-family);
+}
+
+/* Reusable button (used on Home and Create flows) */
+.create-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg,#ff5f6d,#ffc371);
+  color: #fff; font-weight: 600; border: 0; border-radius: 10px;
+  padding: 8px 14px; cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.create-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,.2); }
+
+/* Small chip labels (used in Home cards and Artist detail) */
+.chips { display: flex; gap: 10px; margin: 12px 0 14px; }
+.chips span {
+  background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.25);
+  padding: 6px 10px; border-radius: 999px; font-size: .85rem;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+
+/* Optional tab icon styling (if used) */
+.tab-icon {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: gray;
+  transition: color .2s, transform .15s;
+}
+.tab-icon.active, .tab-icon:hover { color: #007aff; transform: translateY(-1px); }
+
+/* ===== Detail Pages (Artist, Chat, Xaman, etc.) ===== */
+.detail-page { min-height: 100vh; background: #fff; display: flex; flex-direction: column; }
+
+.detail-content {
+  max-width: 1200px; /* room for 500 + gap + 500 */
+  margin: 64px auto 0; /* top offset under TopBar */
+  width: 100%;
+  padding: 0 12px 24px;
+}
+
+.detail-topbar {
+  position: sticky; top: 0; z-index: 2; padding: 12px 16px;
+  background: #fff; border-bottom: 1px solid #eee;
+}
+.detail-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; border: 1px solid #ddd; padding: 8px 12px; border-radius: 10px; cursor: pointer;
+}
+
+/* Hero media (video/webp/poster) */
+.overlay-hero {
+  position: relative;
+  width: 100%;
+  background: #000;
+}
+.overlay-hero video,
+.overlay-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.overlay-hero::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0; height: 100px;
+  background: linear-gradient(to top, rgba(0,0,0,0.35), rgba(0,0,0,0));
+  pointer-events: none;
+}
+
+/* Detail body */
+.overlay-body { padding: 18px 20px 24px; text-align: left; max-width: 500px; margin: 0 auto; }
+.overlay-title { font-size: 1.6rem; margin-bottom: 8px; }
+.overlay-desc { margin: 10px 0 14px; color: #333; }
+.overlay-meta { display: grid; gap: 8px; margin: 10px 0 18px; color: #444; font-size: .95rem; }
+.overlay-cta {
+  width: 100%; padding: 14px 16px; border: 0; border-radius: 12px;
+  background: var(--primary-color); color: #fff; font-weight: 700; cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0,0,0,.12);
+  transition: transform .12s ease, box-shadow .12s ease, background .2s ease;
+}
+.overlay-cta:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 10px 26px rgba(0,0,0,.14); }
+
+/* Track list styles */
+.track-list { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.track-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid #e6e6e6;
+  background: linear-gradient(180deg, #ffffff, #f8f8f8);
+  font-weight: 700; color: #111; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  transition: transform .12s ease, box-shadow .12s ease, background .2s ease;
+}
+.track-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,.10); background: #fff; }
+.track-btn:active { transform: translateY(0); }
+
+audio { width: 100%; margin-top: 12px; outline: none; }
+
+/* Detail layout grid */
+.detail-shell { width: 100%; display: block; }
+.detail-grid { display: grid; grid-template-columns: 1fr; justify-items: center; row-gap: 24px; }
+.detail-left, .detail-right { width: 100%; max-width: 500px; }
+.detail-hero { overflow: hidden; border-radius: 18px; }
+
+@media (min-width: 1100px) {
+  .detail-content { max-width: 1100px; }
+  .detail-grid { grid-template-columns: 500px 500px; column-gap: 48px; justify-content: center; align-items: start; }
+  .detail-left, .detail-right { max-width: none; }
+  .detail-left { position: sticky; top: 68px; align-self: start; }
+  .detail-right { align-self: start; }
+}
+
+/* Utilities */
+.helper-note { margin-top: 6px; font-size: 12px; color: #666; }
+
+@supports (padding: max(0px)) {
+  .detail-content { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+}
+

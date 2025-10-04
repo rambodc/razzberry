@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { XummPkce } from 'xumm-oauth2-pkce'; // requires: npm i xumm-oauth2-pkce
 import '../App.css';
-import '../Home.css';
+// Global styles now come from src/global.css (imported in index.js)
 
 // Xaman feature components (all inside src/components/wallet/)
 import AccountInfo from '../components/wallet/AccountInfo';
