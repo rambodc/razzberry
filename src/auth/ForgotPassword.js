@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../firebase';
-import '../Auth.css';
+import './Auth.css';
 
-function Login() {
+function ForgotPassword() {
   const isPortrait = typeof window !== 'undefined'
     ? window.matchMedia('(orientation: portrait)').matches
     : false;
   const bgUrl = `${process.env.PUBLIC_URL}/assets/${isPortrait ? 'auth-portrait.png' : 'auth-landscape.png'}`;
 
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
   const [error, setError] = useState('');
-
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleReset = async (e) => {
     e.preventDefault();
     setError('');
+    setMessage('');
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/home'); // ✅ redirect to home
+      await sendPasswordResetEmail(auth, email);
+      setMessage('Password reset email sent. Check your inbox.');
     } catch (err) {
       setError(err.message);
     }
@@ -38,40 +38,29 @@ function Login() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <form className="auth-box" onSubmit={handleLogin}>
+      <form className="auth-box" onSubmit={handleReset}>
         <h1>Razzberry</h1>
-        <h2>Login</h2>
+        <h2>Reset Password</h2>
 
         {error && <p className="error">{error}</p>}
+        {message && <p style={{ color: 'green', textAlign: 'center' }}>{message}</p>}
 
         <input
           type="email"
-          placeholder="Email address"
+          placeholder="Enter your email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <button type="submit">Send Reset Link</button>
 
-        <button type="submit">Login</button>
-
-        <p className="link" onClick={() => navigate('/forgot')}>
-          Forgot Password?
-        </p>
-
-        <p className="link" onClick={() => navigate('/signup')}>
-          Create Account
+        <p className="link" onClick={() => navigate('/signin')}>
+          Back to Login
         </p>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default ForgotPassword;

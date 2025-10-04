@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../Auth.css'; // Reuse your clean styles
+import '../auth/Auth.css'; // Reuse your clean styles
 
 function LandingPage() {
   const navigate = useNavigate();
