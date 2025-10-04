@@ -12,9 +12,9 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 // Public pages
 import LandingPage from './landing/LandingPage';
-import Login from './auth/Login';
-import Signup from './auth/Signup';
-import ForgotPassword from './auth/ForgotPassword';
+import Login from './login/Login';
+import Signup from './signup/Signup';
+import ForgotPassword from './forgot-password/ForgotPassword';
 import Artists from './artists/Artists';
 
 // Protected pages
@@ -32,7 +32,7 @@ import ChangePassword from './account/ChangePassword';
 import ValidateDrops from './validate-drops/ValidateDrops';
 
 // Route guard
-import ProtectedRoute from './auth/ProtectedRoute';
+import ProtectedRoute from './ProtectedRoute';
 
 // App-wide user context (used by Home, etc.)
 export const UserContext = createContext(null);
