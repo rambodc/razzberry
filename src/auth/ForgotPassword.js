@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 import './Auth.css';
 
 function ForgotPassword() {

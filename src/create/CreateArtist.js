@@ -3,9 +3,9 @@ import React, { useContext, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import app, { db, auth, storage, logStorageDebug } from './firebase';
-import { UserContext } from './App';
-import './Home.css';
+import app, { db, auth, storage, logStorageDebug } from '../firebase';
+import { UserContext } from '../App';
+import '../Home.css';
 
 function CreateArtist() {
   const appUser = useContext(UserContext);

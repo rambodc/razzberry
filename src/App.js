@@ -11,28 +11,28 @@ import { auth, db } from './firebase';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 // Public pages
-import LandingPage from './LandingPage';
-import Login from './Login';
-import Signup from './Signup';
-import ForgotPassword from './ForgotPassword';
-import Artists from './Artists';
+import LandingPage from './landing/LandingPage';
+import Login from './auth/Login';
+import Signup from './auth/Signup';
+import ForgotPassword from './auth/ForgotPassword';
+import Artists from './artists/Artists';
 
 // Protected pages
-import Home from './Home';
-import CreateArtist from './CreateArtist';
-import Chat from './Chat';
-import Xaman from './Xaman';
-import Fund from './Fund';
-import Wallet from './Wallet';
-import More from './More';
-import Terms from './Terms';
-import Services from './Services';
-import ChangeEmail from './ChangeEmail';
-import ChangePassword from './ChangePassword';
-import ValidateDrops from './ValidateDrops';
+import Home from './home/Home';
+import CreateArtist from './create/CreateArtist';
+import Chat from './chat/Chat';
+import Xaman from './xaman/Xaman';
+import Fund from './fund/Fund';
+import Wallet from './wallet/Wallet';
+import More from './more/More';
+import Terms from './terms/Terms';
+import Services from './services/Services';
+import ChangeEmail from './account/ChangeEmail';
+import ChangePassword from './account/ChangePassword';
+import ValidateDrops from './validate-drops/ValidateDrops';
 
 // Route guard
-import ProtectedRoute from './ProtectedRoute';
+import ProtectedRoute from './auth/ProtectedRoute';
 
 // App-wide user context (used by Home, etc.)
 export const UserContext = createContext(null);

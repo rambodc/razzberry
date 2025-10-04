@@ -1,15 +1,15 @@
 // src/Home.js
 import React, { useContext, useEffect, useState } from 'react';
-import { auth, db } from './firebase';
+import { auth, db } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from './App';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
-import TopBar from './components/TopBar';
-import SideMenu from './components/SideMenu';
-import './Home.css';
-import { UI_BUILD_TAG } from './version';
+import TopBar from '../components/TopBar';
+import SideMenu from '../components/SideMenu';
+import '../Home.css';
+import { UI_BUILD_TAG } from '../version';
 
 function Home() {
   const appUser = useContext(UserContext);

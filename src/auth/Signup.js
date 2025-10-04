@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from './firebase';
+import { auth, db } from '../firebase';
 import './Auth.css';
 
 // Using Firebase Auth UID as the canonical user document ID.

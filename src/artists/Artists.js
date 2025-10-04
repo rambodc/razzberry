@@ -1,14 +1,14 @@
 // src/Artists.js
 import React, { useContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { auth, db } from './firebase';
+import { auth, db } from '../firebase';
 import { signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import TopBar from './components/TopBar';
-import SideMenu from './components/SideMenu';
-import AudioPlayer from './components/AudioPlayer';
-import { UserContext } from './App';
-import './Home.css';
+import TopBar from '../components/TopBar';
+import SideMenu from '../components/SideMenu';
+import AudioPlayer from '../components/AudioPlayer';
+import { UserContext } from '../App';
+import '../Home.css';
 
 function Artists() {
   const appUser = useContext(UserContext); // null when signed out (public view)

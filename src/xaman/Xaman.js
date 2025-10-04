@@ -2,14 +2,14 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { XummPkce } from 'xumm-oauth2-pkce'; // requires: npm i xumm-oauth2-pkce
-import './App.css';
-import './Home.css';
+import '../App.css';
+import '../Home.css';
 
 // Xaman feature components (all inside src/components/wallet/)
-import AccountInfo from './components/wallet/AccountInfo';
-import TokenList from './components/wallet/TokenList';
-import RazTrustlineCard from './components/wallet/RazTrustlineCard';
-import TopBar from './components/TopBar';
+import AccountInfo from '../components/wallet/AccountInfo';
+import TokenList from '../components/wallet/TokenList';
+import RazTrustlineCard from '../components/wallet/RazTrustlineCard';
+import TopBar from '../components/TopBar';
 
 // ✅ Public identifier only (do NOT put your API secret in frontend code)
 const XAMAN_API_KEY = '287dd619-0e34-46e6-8a59-2303135fa082';
@@ -163,4 +163,3 @@ const styles = {
   buttonDisabled: { opacity: 0.6, cursor: 'default' },
   status: { marginTop: 10, fontSize: 13, opacity: 0.75 },
 };
-

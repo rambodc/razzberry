@@ -1,6 +1,6 @@
 // src/Wallet.js
 import React, { useState } from 'react';
-import { auth } from './firebase';
+import { auth } from '../firebase';
 import { getIdToken } from 'firebase/auth';
 
 export default function Wallet() {

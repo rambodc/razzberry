@@ -2,8 +2,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Transak } from '@transak/transak-sdk';
-import app, { auth } from './firebase';
-import { UserContext } from './App';
+import app, { auth } from '../firebase';
+import { UserContext } from '../App';
 
 // Prefer an env var override, otherwise use a Hosting rewrite path.
 // This avoids hardcoding a specific Firebase project URL and works across envs.

@@ -1,7 +1,7 @@
 // src/Chat.js
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TopBar from './components/TopBar';
+import TopBar from '../components/TopBar';
 
 function Chat() {
   const navigate = useNavigate();
