@@ -173,33 +173,17 @@ function Artists() {
           setMenuOpen(false);
           navigate(appUser ? '/home' : '/');
         }}
-        onWallet={() => {
+        onCollectibles={() => {
+          setMenuOpen(false);
+          navigate('/home');
+        }}
+        onBalance={() => {
           setMenuOpen(false);
           navigate('/wallet');
         }}
-        onFund={() => {
+        onMore={() => {
           setMenuOpen(false);
-          navigate('/fund');
-        }}
-        onProfile={() => {
-          setMenuOpen(false);
-          // wire later
-        }}
-        onChat={() => {
-          setMenuOpen(false);
-          navigate('/chat'); // ProtectedRoute handles redirect
-        }}
-        onSignin={() => {
-          setMenuOpen(false);
-          navigate('/signin');
-        }}
-        onSignup={() => {
-          setMenuOpen(false);
-          navigate('/signup');
-        }}
-        onLogout={async () => {
-          setMenuOpen(false);
-          await handleLogout();
+          navigate('/more');
         }}
       />
     </div>
@@ -274,4 +258,3 @@ function VideoHero({ mp4, webm, webp, poster, title }) {
 }
 
 export default Artists;
-

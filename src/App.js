@@ -24,6 +24,12 @@ import Chat from './Chat';
 import Xaman from './Xaman';
 import Fund from './Fund';
 import Wallet from './Wallet';
+import More from './More';
+import Terms from './Terms';
+import Services from './Services';
+import ChangeEmail from './ChangeEmail';
+import ChangePassword from './ChangePassword';
+import ValidateDrops from './ValidateDrops';
 
 // Route guard
 import ProtectedRoute from './ProtectedRoute';
@@ -90,6 +96,55 @@ function AppRoutes({ user }) {
         element={
           <ProtectedRoute>
             <Wallet />
+          </ProtectedRoute>
+        }
+      />
+      {/* More + subpages */}
+      <Route
+        path="/more"
+        element={
+          <ProtectedRoute>
+            <More />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/terms"
+        element={
+          <ProtectedRoute>
+            <Terms />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/services"
+        element={
+          <ProtectedRoute>
+            <Services />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/account/email"
+        element={
+          <ProtectedRoute>
+            <ChangeEmail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/account/password"
+        element={
+          <ProtectedRoute>
+            <ChangePassword />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/validate-drops"
+        element={
+          <ProtectedRoute>
+            <ValidateDrops />
           </ProtectedRoute>
         }
       />

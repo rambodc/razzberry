@@ -202,34 +202,17 @@ function Home() {
           setActiveTab('dashboard');
           navigate('/home');
         }}
-        onWallet={() => {
+        onCollectibles={() => {
+          setMenuOpen(false);
+          navigate('/home');
+        }}
+        onBalance={() => {
           setMenuOpen(false);
           navigate('/wallet');
         }}
-        onFund={() => {
+        onMore={() => {
           setMenuOpen(false);
-          navigate('/fund');
-        }}
-        onProfile={() => {
-          setMenuOpen(false);
-          // profile wiring later
-        }}
-        onChat={() => {
-          setMenuOpen(false);
-          setActiveTab('chat');
-          navigate('/chat');
-        }}
-        onSignin={() => {
-          setMenuOpen(false);
-          navigate('/signin');
-        }}
-        onSignup={() => {
-          setMenuOpen(false);
-          navigate('/signup');
-        }}
-        onLogout={async () => {
-          setMenuOpen(false);
-          await handleLogout();
+          navigate('/more');
         }}
       />
     </div>

@@ -2,14 +2,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   FaHome,
-  FaCommentDots,
   FaWallet,
-  FaCreditCard,
-  FaUser,
-  FaSignInAlt,
-  FaUserPlus,
-  FaSignOutAlt,
-  FaTimes,
+  FaEllipsisH,
   FaChevronRight,
 } from 'react-icons/fa';
 
@@ -19,26 +13,18 @@ import {
  * - signedIn: boolean
  * - onClose(): void
  * - onHome(): void
- * - onChat(): void
- * - onWallet?(): void   // ✅ NEW (optional)
- * - onFund?(): void     // ✅ NEW (optional)
- * - onProfile?(): void
- * - onSignin?(): void
- * - onSignup?(): void
- * - onLogout?(): Promise|void
- */
+ * - onCollectibles?(): void
+ * - onBalance?(): void
+ * - onMore?(): void
+*/
 export default function SideMenu({
   open = false,
   signedIn = false,
   onClose,
   onHome,
-  onChat,
-  onWallet,      // ✅ NEW
-  onFund,        // ✅ NEW
-  onProfile,
-  onSignin,
-  onSignup,
-  onLogout,
+  onCollectibles,
+  onBalance,
+  onMore,
   /**
    * When true (default), the menu pins open in landscape orientation.
    * In portrait, it behaves as a modal drawer.
@@ -200,32 +186,13 @@ export default function SideMenu({
         <nav style={{ padding: '8px 8px', overflowY: 'auto' }}>
           <Section>
             <MenuItem icon={FaHome} iconColor="#007aff" label="Home" onClick={onHome} />
-            <MenuItem icon={FaCommentDots} iconColor="#f59e0b" label="Chat" onClick={onChat} />
-            {/* ✅ New Xaman item (shown only if handler provided) */}
-            {onWallet && <MenuItem icon={FaWallet} iconColor="#22c55e" label="Wallet" onClick={onWallet} />}
-            {/* ✅ New Fund item, placed directly under Xaman */}
-            {onFund && <MenuItem icon={FaCreditCard} iconColor="#0ea5e9" label="Fund" onClick={onFund} />}
-          </Section>
-
-          <Section title="Account">
-            {signedIn ? (
-              <>
-                <MenuItem icon={FaUser} iconColor="#6366f1" label="Profile" onClick={onProfile} />
-                <MenuItem
-                  icon={FaSignOutAlt}
-                  iconColor="#ef4444"
-                  label="Log out"
-                  onClick={async () => {
-                    try { await onLogout?.(); } finally { onClose?.(); }
-                  }}
-                />
-              </>
-            ) : (
-              <>
-                <MenuItem icon={FaSignInAlt} iconColor="#0ea5e9" label="Sign in" onClick={onSignin} />
-                <MenuItem icon={FaUserPlus} iconColor="#ec4899" label="Sign up" onClick={onSignup} />
-              </>
+            {onCollectibles && (
+              <MenuItem icon={FaWallet} iconColor="#22c55e" label="Collectibles" onClick={onCollectibles} />
             )}
+            {onBalance && (
+              <MenuItem icon={FaWallet} iconColor="#0ea5e9" label="Balance" onClick={onBalance} />
+            )}
+            <MenuItem icon={FaEllipsisH} iconColor="#6b7280" label="More" onClick={onMore} />
           </Section>
         </nav>
 
