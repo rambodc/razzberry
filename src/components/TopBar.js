@@ -26,12 +26,13 @@ export default function TopBar({
         top: 0,
         left: 0,
         right: 0,
-        height: 52,
+        height: 68,
         zIndex: 1000,
-        background: 'rgba(255,255,255,0.85)',
-        borderBottom: '1px solid #eee',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+        background: 'linear-gradient(180deg, rgba(248,250,252,0.98) 0%, rgba(241,245,249,0.82) 100%)',
+        borderBottom: '1px solid rgba(226,232,240,0.6)',
+        boxShadow: '0 20px 40px rgba(15,23,42,0.08)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
       }}
     >
       <div style={styles.inner}>
@@ -68,13 +69,14 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0 8px',
+    padding: '12px 16px',
   },
   center: {
     flex: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 2,
   },
   iconBtn: {
     display: 'inline-flex',

@@ -30,8 +30,8 @@ export default function More() {
     <button
       onClick={onClick}
       style={{
-        width: 500,
-        maxWidth: '100%',
+        width: '100%',
+        maxWidth: 500,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',

@@ -1,72 +1,75 @@
 // src/components/MobileNavTabs.js
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FaEllipsisH, FaHome, FaWallet, FaWater } from 'react-icons/fa';
+import { FiHome, FiDroplet, FiCreditCard, FiMoreHorizontal } from 'react-icons/fi';
 
 export default function MobileNavTabs() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const Item = ({ icon: Icon, label, active, onClick }) => {
-    const accent = '#1d4ed8';
-    const base = '#4b5563';
-    const color = active ? accent : base;
+  const tabs = [
+    { label: 'Home', to: '/home', icon: FiHome, color: '#2563eb' },
+    { label: 'Drops', to: '/drops', icon: FiDroplet, color: '#0ea5e9' },
+    { label: 'Balance', to: '/wallet', icon: FiCreditCard, color: '#22c55e' },
+    { label: 'More', to: '/more', icon: FiMoreHorizontal, color: '#6366f1' },
+  ];
 
-    return (
-      <button
-        onClick={onClick}
-        aria-current={active ? 'page' : undefined}
-        style={{
-          display: 'inline-flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 4,
-          minWidth: 88,
-          padding: '6px 0',
-          borderRadius: 14,
-          border: '1px solid ' + (active ? accent : 'rgba(148,163,184,0.25)'),
-          background: active ? 'rgba(29,78,216,0.08)' : 'transparent',
-          color,
-          fontWeight: 600,
-          fontSize: 12,
-          cursor: 'pointer',
-          transition: 'all 160ms ease',
-        }}
-      >
-        <Icon size={18} color={color} />
-        <span style={{ fontSize: 12, lineHeight: 1 }}>{label}</span>
-      </button>
-    );
+  const isActive = (to) => {
+    if (to === '/home') return pathname === '/home';
+    return pathname.startsWith(to);
   };
-
-  const toHome = () => navigate('/home');
-  const toDrops = () => navigate('/drops');
-  const toBalance = () => navigate('/wallet');
-  const toMore = () => navigate('/more');
-
-  const isHome = pathname === '/home';
-  const isDrops = pathname.startsWith('/drops');
-  const isBalance = pathname.startsWith('/wallet');
-  const isMore = pathname.startsWith('/more');
 
   return (
     <div
       style={{
-        display: 'flex',
-        gap: 10,
+        display: 'inline-flex',
         alignItems: 'center',
-        background: 'rgba(255,255,255,0.92)',
-        padding: '8px 14px',
-        borderRadius: 16,
-        boxShadow: '0 10px 30px rgba(15,23,42,0.08)',
-        border: '1px solid rgba(226,232,240,0.8)',
+        gap: 22,
+        background: 'rgba(255,255,255,0.96)',
+        padding: '2px 20px 10px',
+        borderRadius: 18,
+        boxShadow: '0 16px 32px rgba(15,23,42,0.1)',
       }}
     >
-      <Item icon={FaHome} label="Home" active={isHome} onClick={toHome} />
-      <Item icon={FaWater} label="Drops" active={isDrops} onClick={toDrops} />
-      <Item icon={FaWallet} label="Balance" active={isBalance} onClick={toBalance} />
-      <Item icon={FaEllipsisH} label="More" active={isMore} onClick={toMore} />
+      {tabs.map(({ label, to, icon: Icon, color }) => {
+        const active = isActive(to);
+        const textColor = active ? color : '#475569';
+        const iconColor = active ? color : '#94a3b8';
+
+        return (
+          <button
+            key={label}
+            onClick={() => navigate(to)}
+            aria-current={active ? 'page' : undefined}
+            style={{
+              display: 'inline-flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 3,
+              minWidth: 64,
+              padding: '4px 0 6px',
+              background: 'transparent',
+              border: 'none',
+              color: textColor,
+              fontSize: 10.5,
+              fontWeight: active ? 600 : 500,
+              letterSpacing: 0.15,
+              cursor: 'pointer',
+              transition: 'color 160ms ease, transform 160ms ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'none';
+            }}
+          >
+            <Icon size={14} color={iconColor} />
+            <span style={{ fontSize: 10.5, lineHeight: 1.15 }}>{label}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
