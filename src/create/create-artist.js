@@ -123,7 +123,7 @@ function CreateArtist() {
           <input
             inputMode="numeric"
             pattern="[0-9]*"
-            type="text"
+            type="password"
             autoComplete="one-time-code"
             autoCorrect="off"
             spellCheck={false}
@@ -249,13 +249,17 @@ const inputStyle = {
 
 export default CreateArtist;
   const handlePasscodeChange = (e) => {
+    let next = e.target.value.replace(/\D+/g, '');
+    if (next.length > 6) next = next.slice(0, 6);
+    setCode(next);
     setPassError('');
-    const v = e.target.value.replace(/\D+/g, '').slice(0, 6);
-    setCode(v);
-    if (v.length === 6) {
-      if (v === '123456') {
-        setUnlocked(true);
-        setCode('');
+
+    if (next.length === 6) {
+      if (next === '123456') {
+        setTimeout(() => {
+          setUnlocked(true);
+          setCode('');
+        }, 120);
       } else {
         setPassError('Incorrect passcode');
       }
