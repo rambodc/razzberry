@@ -31,6 +31,9 @@ export default function More() {
       onClick={onClick}
       style={{
         width: '100%',
+        minWidth: '100%',
+        flex: 1,
+        boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -40,6 +43,7 @@ export default function More() {
         borderRadius: 12,
         color: '#111827',
         cursor: 'pointer',
+        alignSelf: 'stretch',
       }}
     >
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
@@ -58,26 +62,9 @@ export default function More() {
         <MobileNavTabs />
       </TopBar>
 
-      <div
-        style={{
-          maxWidth: 720,
-          margin: '80px auto 24px',
-          padding: '0 16px',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <div
-          style={{
-            width: '100%',
-            maxWidth: 500,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-            gap: 12,
-          }}
-        >
-          <h1 style={{ margin: 0, textAlign: 'center' }}>More</h1>
+      <div style={{ maxWidth: 720, margin: '80px auto 24px', padding: '0 16px' }}>
+        <div style={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+          <h1 style={{ margin: '0 0 20px', textAlign: 'center' }}>More</h1>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <Item icon={FaFileAlt} color="#0ea5e9" label="Terms" onClick={() => navigate('/terms')} />
