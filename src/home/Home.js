@@ -8,6 +8,7 @@ import { UserContext } from '../App';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import TopBar from '../components/TopBar';
 import MobileNavTabs from '../components/MobileNavTabs';
+import layoutStyles from '../styles/layout.module.css';
 import './Home.css';
 import { UI_BUILD_TAG } from '../version';
 
@@ -95,7 +96,7 @@ function Home() {
         </div>
         <div className="home-topbar-right">
           <button
-            className="create-btn"
+            className={layoutStyles.createBtn}
             onClick={() => navigate('/create-artists')}
             aria-label="Create artist"
           >
@@ -110,7 +111,7 @@ function Home() {
       ) : artists.length === 0 ? (
         <div>
           <p>No artists yet.</p>
-          <button className="create-btn" onClick={() => navigate('/create-artists')}>
+          <button className={layoutStyles.createBtn} onClick={() => navigate('/create-artists')}>
             <FaPlus /> Make your first artist
           </button>
         </div>
@@ -131,7 +132,7 @@ function Home() {
                 <div className="card-text-overlay">
                   <h2>{truncate(c.title || 'Untitled', 30)}</h2>
                   <p>{truncate(c.desc || '', 50)}</p>
-                  <div className="chips">
+                  <div className={layoutStyles.chips}>
                     {c.rating && <span>{c.rating}</span>}
                     {c.nights && <span>{c.nights}</span>}
                   </div>
@@ -157,7 +158,7 @@ function Home() {
   };
 
   return (
-    <div className="home-container" style={{ paddingBottom: 0 }}>
+    <div className={layoutStyles.homeContainer} style={{ paddingBottom: 0 }}>
       {/* Fixed, reusable Top Bar */}
       <TopBar hideLeft>
         <MobileNavTabs />

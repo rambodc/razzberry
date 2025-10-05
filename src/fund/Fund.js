@@ -5,6 +5,7 @@ import { Transak } from '@transak/transak-sdk';
 import app, { auth } from '../firebase';
 import { UserContext } from '../App';
 import TopBar from '../components/TopBar';
+import layoutStyles from '../styles/layout.module.css';
 
 // Prefer an env var override, otherwise use a Hosting rewrite path.
 // This avoids hardcoding a specific Firebase project URL and works across envs.
@@ -120,7 +121,7 @@ export default function Fund() {
   }, []);
 
   return (
-    <div className="home-container">
+    <div className={layoutStyles.homeContainer}>
       <TopBar variant="back" backLabel="Back" onBack={() => (window.history.length > 2 ? navigate(-1) : navigate('/home'))} />
 
       <div style={{ maxWidth: 800, margin: '80px auto 40px', padding: '0 16px' }}>

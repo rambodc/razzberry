@@ -5,8 +5,8 @@ import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import app, { db, auth, storage, logStorageDebug } from '../firebase';
 import { UserContext } from '../App';
-// Global styles now come from src/global.css (imported in index.js)
 import TopBar from '../components/TopBar';
+import layoutStyles from '../styles/layout.module.css';
 import { useCallback } from 'react';
 
 function CreateArtist() {
@@ -111,7 +111,7 @@ function CreateArtist() {
   };
 
   return (
-    <div className="home-container">
+    <div className={layoutStyles.homeContainer}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       <div className="page-container" style={{ maxWidth: 680, margin: '80px auto 0', padding: 16 }}>
@@ -177,12 +177,12 @@ function CreateArtist() {
         )}
 
         <div style={{ display: 'flex', gap: 12 }}>
-          <button className="create-btn" type="submit" disabled={!canSubmit}>
+          <button className={layoutStyles.createBtn} type="submit" disabled={!canSubmit}>
             {saving ? 'Saving…' : 'Create'}
           </button>
           <button
             type="button"
-            className="create-btn"
+            className={layoutStyles.createBtn}
             style={{ background: '#eee', color: '#333' }}
             onClick={() => navigate('/home')}
             disabled={saving}

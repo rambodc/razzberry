@@ -4,6 +4,7 @@ import { auth } from '../firebase';
 import { getIdToken } from 'firebase/auth';
 import TopBar from '../components/TopBar';
 import MobileNavTabs from '../components/MobileNavTabs';
+import layoutStyles from '../styles/layout.module.css';
 
 export default function Wallet() {
   // No sidebar; no responsive sidebar toggling needed
@@ -127,7 +128,7 @@ export default function Wallet() {
   };
 
   return (
-    <div className="home-container">
+    <div className={layoutStyles.homeContainer}>
       <TopBar hideLeft>
         <MobileNavTabs />
       </TopBar>

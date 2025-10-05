@@ -7,7 +7,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import TopBar from '../components/TopBar';
 import AudioPlayer from '../components/AudioPlayer';
 import { UserContext } from '../App';
-// Global styles now come from src/global.css (imported in index.js)
+import layoutStyles from '../styles/layout.module.css';
 
 function Artists() {
   const appUser = useContext(UserContext); // null when signed out (public view)
@@ -109,43 +109,43 @@ function Artists() {
   );
 
   return (
-    <div className="detail-page">
+    <div className={layoutStyles.detailPage}>
       {/* Reusable top bar: public page, with Back on the left; optional center tabs */}
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       {/* Page content; offset for fixed TopBar */}
-      <div className="detail-content" style={{ marginTop: 64 }}>
+      <div className={layoutStyles.detailContent} style={{ marginTop: 64 }}>
         {loading ? (
           <p>Loading…</p>
         ) : error ? (
           <p className="error">{error}</p>
         ) : (
-          <div className="detail-shell">
+          <div className={layoutStyles.detailShell}>
             {/* Responsive grid:
                 - < 1100px: single column, max 500px, centered
                 - ≥ 1100px: two columns 500 / 500 with gap, left hero is sticky
             */}
-            <div className="detail-grid">
+            <div className={layoutStyles.detailGrid}>
               {/* Left: Hero (video/image) */}
-              <div className="detail-left">
-                <div className="overlay-hero detail-hero">
+              <div className={layoutStyles.detailLeft}>
+                <div className={`${layoutStyles.overlayHero} ${layoutStyles.detailHero}`}>
                   <VideoHero {...hero} />
                 </div>
               </div>
 
               {/* Right: Content + Custom Audio Player */}
-              <div className="detail-right">
-                <div className="overlay-body">
-                  <h2 className="overlay-title">{item?.title || 'Untitled'}</h2>
+              <div className={layoutStyles.detailRight}>
+                <div className={layoutStyles.overlayBody}>
+                  <h2 className={layoutStyles.overlayTitle}>{item?.title || 'Untitled'}</h2>
 
                   {(item?.rating || item?.nights) && (
-                    <div className="chips">
+                    <div className={layoutStyles.chips}>
                       {item?.rating && <span>{item.rating}</span>}
                       {item?.nights && <span>{item.nights}</span>}
                     </div>
                   )}
 
-                  {item?.desc && <p className="overlay-desc">{item.desc}</p>}
+                  {item?.desc && <p className={layoutStyles.overlayDesc}>{item.desc}</p>}
 
                   {/* Custom Audio Player */}
                   <h3 style={{ marginTop: 18, marginBottom: 10 }}>Listen</h3>
@@ -153,7 +153,7 @@ function Artists() {
                     playlist={tracks.map((t) => ({ title: t.title, url: t.url }))}
                   />
 
-                  <div className="overlay-meta" style={{ marginTop: 16 }}>
+                  <div className={layoutStyles.overlayMeta} style={{ marginTop: 16 }}>
                     <div><strong>Artist UID:</strong> {artistUid}</div>
                   </div>
                 </div>

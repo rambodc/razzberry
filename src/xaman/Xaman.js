@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { XummPkce } from 'xumm-oauth2-pkce'; // requires: npm i xumm-oauth2-pkce
 import '../App.css';
-// Global styles now come from src/global.css (imported in index.js)
+import layoutStyles from '../styles/layout.module.css';
 
 // Xaman feature components (all inside src/components/wallet/)
 import AccountInfo from '../components/wallet/AccountInfo';
@@ -99,7 +99,7 @@ export default function Xaman() {
   const handleRazChanged = () => setBump((n) => n + 1);
 
   return (
-    <div className="xaman-page detail-page" style={styles.page}>
+    <div className={`xaman-page ${layoutStyles.detailPage}`} style={styles.page}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
       {/* Content wrapper under fixed TopBar */}

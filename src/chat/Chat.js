@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '../components/TopBar';
+import layoutStyles from '../styles/layout.module.css';
 
 function Chat() {
   const navigate = useNavigate();
@@ -111,7 +112,7 @@ function Chat() {
   }, [navigate]);
 
   return (
-    <div className="detail-page" style={styles.page}>
+    <div className={layoutStyles.detailPage} style={styles.page}>
       {/* Fixed TopBar with Back */}
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 

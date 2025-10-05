@@ -1,6 +1,7 @@
 // src/drop.js
 import React, { useCallback, useState } from 'react';
 import TopBar from './components/TopBar';
+import layoutStyles from './styles/layout.module.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function Drop() {
@@ -29,7 +30,7 @@ export default function Drop() {
   };
 
   return (
-    <div className="detail-page">
+    <div className={layoutStyles.detailPage}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
       {!unlocked ? (
         <div style={{ maxWidth: 480, margin: '80px auto', padding: '0 16px', textAlign: 'center' }}>

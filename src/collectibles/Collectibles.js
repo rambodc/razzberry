@@ -2,10 +2,11 @@
 import React from 'react';
 import TopBar from '../components/TopBar';
 import MobileNavTabs from '../components/MobileNavTabs';
+import layoutStyles from '../styles/layout.module.css';
 
 export default function Collectibles() {
   return (
-    <div className="home-container" style={{ paddingBottom: 0 }}>
+    <div className={layoutStyles.homeContainer} style={{ paddingBottom: 0 }}>
       <TopBar hideLeft>
         <MobileNavTabs />
       </TopBar>
