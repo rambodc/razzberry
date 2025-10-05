@@ -31,7 +31,8 @@ export default function More() {
     <button
       onClick={onClick}
       style={{
-        width: '100%',
+        width: isMobile ? '100%' : 500,
+        maxWidth: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -41,7 +42,7 @@ export default function More() {
         borderRadius: 12,
         color: '#111827',
         cursor: 'pointer',
-        margin: '8px 0',
+        margin: '8px auto',
       }}
     >
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
