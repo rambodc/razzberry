@@ -1,10 +1,10 @@
-// src/collectibles/Collectibles.js
+// src/drop/Drop.js
 import React from 'react';
 import TopBar from '../components/TopBar';
 import MobileNavTabs from '../components/MobileNavTabs';
 import layoutStyles from '../styles/layout.module.css';
 
-export default function Collectibles() {
+export default function Drop() {
   return (
     <div className={layoutStyles.homeContainer} style={{ paddingBottom: 0 }}>
       <TopBar hideLeft>

@@ -1,10 +1,10 @@
-// src/create-drop.js
+// src/drop-passcode/DropPasscode.js
 import React, { useCallback, useState } from 'react';
-import TopBar from './components/TopBar';
-import layoutStyles from './styles/layout.module.css';
+import TopBar from '../components/TopBar';
+import layoutStyles from '../styles/layout.module.css';
 import { useNavigate } from 'react-router-dom';
 
-export default function CreateDrop() {
+export default function DropPasscode() {
   const navigate = useNavigate();
   const handleBack = useCallback(() => {
     if (window.history.length > 2) navigate(-1); else navigate('/home');
@@ -43,7 +43,7 @@ export default function CreateDrop() {
             autoComplete="one-time-code"
             autoCorrect="off"
             spellCheck={false}
-            name="create-drop-passcode"
+            name="drop-passcode"
             value={code}
             onChange={onChange}
             placeholder="••••••"
@@ -64,7 +64,7 @@ export default function CreateDrop() {
         </div>
       ) : (
         <div style={{ maxWidth: 800, margin: '80px auto', padding: '0 16px' }}>
-          <h1>Create Drop</h1>
+          <h1>Drop</h1>
           <p style={{ color: '#4b5563' }}>Coming soon.</p>
         </div>
       )}

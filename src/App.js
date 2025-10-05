@@ -19,10 +19,10 @@ import Artists from './artists/Artists';
 
 // Protected pages
 import Home from './home/Home';
-import Collectibles from './collectibles/Collectibles';
+import Drop from './drop';
 import CreateArtist from './create/create-artist';
 import CreateDrop from './create-drop';
-import Drop from './drop';
+import DropPasscode from './drop-passcode';
 import Chat from './chat/Chat';
 import Xaman from './xaman/Xaman';
 import Fund from './fund/Fund';
@@ -63,7 +63,7 @@ function AppRoutes({ user }) {
         path="/drops"
         element={
           <ProtectedRoute>
-            <Collectibles />
+            <Drop />
           </ProtectedRoute>
         }
       />
@@ -95,7 +95,7 @@ function AppRoutes({ user }) {
         path="/drop"
         element={
           <ProtectedRoute>
-            <Drop />
+            <DropPasscode />
           </ProtectedRoute>
         }
       />
