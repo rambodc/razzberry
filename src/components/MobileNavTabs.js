@@ -8,10 +8,10 @@ export default function MobileNavTabs() {
   const navigate = useNavigate();
 
   const tabs = [
-    { label: 'Home', to: '/home', icon: FiHome, color: '#2563eb' },
-    { label: 'Drops', to: '/drops', icon: FiDroplet, color: '#0ea5e9' },
-    { label: 'Balance', to: '/wallet', icon: FiCreditCard, color: '#22c55e' },
-    { label: 'More', to: '/more', icon: FiMoreHorizontal, color: '#6366f1' },
+    { label: 'Home', to: '/home', icon: FiHome },
+    { label: 'Drops', to: '/drops', icon: FiDroplet },
+    { label: 'Balance', to: '/wallet', icon: FiCreditCard },
+    { label: 'More', to: '/more', icon: FiMoreHorizontal },
   ];
 
   const isActive = (to) => {
@@ -24,17 +24,19 @@ export default function MobileNavTabs() {
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 22,
+        gap: 10,
         background: 'rgba(255,255,255,0.96)',
-        padding: '2px 20px 10px',
+        padding: '2px 10px 2px',
         borderRadius: 18,
         boxShadow: '0 16px 32px rgba(15,23,42,0.1)',
       }}
     >
-      {tabs.map(({ label, to, icon: Icon, color }) => {
+      {tabs.map(({ label, to, icon: Icon }) => {
         const active = isActive(to);
-        const textColor = active ? color : '#475569';
-        const iconColor = active ? color : '#94a3b8';
+        const accent = '#0ea5e9';
+        const faded = 'rgba(14,165,233,0.45)';
+        const textColor = active ? accent : faded;
+        const iconColor = active ? accent : faded;
 
         return (
           <button
@@ -48,7 +50,7 @@ export default function MobileNavTabs() {
               justifyContent: 'center',
               gap: 3,
               minWidth: 64,
-              padding: '4px 0 6px',
+              padding: '4px 4px 6px',
               background: 'transparent',
               border: 'none',
               color: textColor,

@@ -26,13 +26,11 @@ export default function TopBar({
         top: 0,
         left: 0,
         right: 0,
-        height: 68,
+        height: 64,
         zIndex: 1000,
-        background: 'linear-gradient(180deg, rgba(248,250,252,0.98) 0%, rgba(241,245,249,0.82) 100%)',
-        borderBottom: '1px solid rgba(226,232,240,0.6)',
-        boxShadow: '0 20px 40px rgba(15,23,42,0.08)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        background: 'transparent',
+        borderBottom: 'none',
+        boxShadow: 'none',
       }}
     >
       <div style={styles.inner}>
