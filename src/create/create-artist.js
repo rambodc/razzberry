@@ -1,4 +1,4 @@
-// src/CreateArtist.js
+// src/create-artist.js
 import React, { useContext, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';

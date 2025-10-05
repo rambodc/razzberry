@@ -14,6 +14,8 @@ import {
   FaCheckCircle,
   FaSignOutAlt,
   FaChevronRight,
+  FaPlus,
+  FaCubes,
 } from 'react-icons/fa';
 
 export default function More() {
@@ -78,6 +80,8 @@ export default function More() {
         <Item icon={FaKey} color="#f59e0b" label="Change Password" onClick={() => navigate('/account/password')} />
         <Item icon={FaPaintBrush} color="#ec4899" label="Become an Artist" onClick={() => navigate('/chat')} />
         <Item icon={FaCheckCircle} color="#10b981" label="Validate Drops" onClick={() => navigate('/validate-drops')} />
+        <Item icon={FaPlus} color="#111827" label="Create Drop" onClick={() => navigate('/create-drop')} />
+        <Item icon={FaCubes} color="#111827" label="Drop" onClick={() => navigate('/drop')} />
         <Item icon={FaSignOutAlt} color="#ef4444" label="Logout" onClick={onLogout} />
       </div>
 
