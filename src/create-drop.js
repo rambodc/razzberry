@@ -38,7 +38,11 @@ export default function CreateDrop() {
           <input
             inputMode="numeric"
             pattern="[0-9]*"
-            type="password"
+            type="text"
+            autoComplete="one-time-code"
+            autoCorrect="off"
+            spellCheck={false}
+            name="create-drop-passcode"
             value={code}
             onChange={onChange}
             placeholder="••••••"

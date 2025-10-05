@@ -60,7 +60,7 @@ function AppRoutes({ user }) {
         }
       />
       <Route
-        path="/collectibles"
+        path="/drops"
         element={
           <ProtectedRoute>
             <Collectibles />
@@ -68,7 +68,7 @@ function AppRoutes({ user }) {
         }
       />
       <Route
-        path="/create"
+        path="/create-artists"
         element={
           <ProtectedRoute>
             <CreateArtist />

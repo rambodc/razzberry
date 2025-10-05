@@ -96,7 +96,7 @@ function Home() {
         <div className="home-topbar-right">
           <button
             className="create-btn"
-            onClick={() => navigate('/create')}
+            onClick={() => navigate('/create-artists')}
             aria-label="Create artist"
           >
             <FaPlus /> Create
@@ -110,7 +110,7 @@ function Home() {
       ) : artists.length === 0 ? (
         <div>
           <p>No artists yet.</p>
-          <button className="create-btn" onClick={() => navigate('/create')}>
+          <button className="create-btn" onClick={() => navigate('/create-artists')}>
             <FaPlus /> Make your first artist
           </button>
         </div>

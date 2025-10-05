@@ -29,19 +29,19 @@ export default function MobileNavTabs() {
   );
 
   const toHome = () => navigate('/home');
-  const toCollectibles = () => navigate('/collectibles');
+  const toDrops = () => navigate('/drops');
   const toBalance = () => navigate('/wallet');
   const toMore = () => navigate('/more');
 
   const isHome = pathname === '/home';
-  const isCollectibles = pathname.startsWith('/collectibles');
+  const isDrops = pathname.startsWith('/drops');
   const isBalance = pathname.startsWith('/wallet');
   const isMore = pathname.startsWith('/more');
 
   return (
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
       <Item icon={FaHome} label="Home" active={isHome} onClick={toHome} />
-      <Item icon={FaWallet} label="Collectibles" active={isCollectibles} onClick={toCollectibles} />
+      <Item icon={FaWallet} label="Drops" active={isDrops} onClick={toDrops} />
       <Item icon={FaWallet} label="Balance" active={isBalance} onClick={toBalance} />
       <Item icon={FaEllipsisH} label="More" active={isMore} onClick={toMore} />
     </div>
