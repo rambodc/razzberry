@@ -1,5 +1,5 @@
 // src/More.js
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
@@ -20,7 +20,6 @@ import {
 
 export default function More() {
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
 
   const onLogout = async () => {
     await signOut(auth);
@@ -31,7 +30,7 @@ export default function More() {
     <button
       onClick={onClick}
       style={{
-        width: isMobile ? '100%' : 500,
+        width: 500,
         maxWidth: '100%',
         display: 'flex',
         alignItems: 'center',
@@ -54,17 +53,6 @@ export default function More() {
       </span>
     </button>
   );
-
-  // responsive
-  React.useEffect(() => {
-    const update = () => {
-      const mobile = (window.innerWidth || 0) < 900;
-      setIsMobile(mobile);
-    };
-    window.addEventListener('resize', update);
-    update();
-    return () => window.removeEventListener('resize', update);
-  }, []);
 
   return (
     <div className="home-container" style={{ paddingBottom: 0 }}>
