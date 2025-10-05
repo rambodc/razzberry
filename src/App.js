@@ -31,6 +31,7 @@ import Wallet from './wallet/Wallet';
 import More from './more/More';
 import Terms from './terms/Terms';
 import Services from './services/Services';
+import Account from './account';
 import ChangeEmail from './account/ChangeEmail';
 import ChangePassword from './account/ChangePassword';
 import ValidateDrops from './validate-drops/ValidateDrops';
@@ -142,6 +143,14 @@ function AppRoutes({ user }) {
         element={
           <ProtectedRoute>
             <More />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/account"
+        element={
+          <ProtectedRoute>
+            <Account />
           </ProtectedRoute>
         }
       />

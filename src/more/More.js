@@ -19,6 +19,7 @@ import {
   FaPlus,
   FaCubes,
   FaUserPlus,
+  FaUserCog,
 } from 'react-icons/fa';
 
 export default function More() {
@@ -63,6 +64,7 @@ export default function More() {
             <Item icon={FaUserPlus} color="#2563eb" label="Create Artist" onClick={() => navigate('/create-artists')} />
             <Item icon={FaPlus} color="#111827" label="Create Drop" onClick={() => navigate('/create-drop')} />
             <Item icon={FaCubes} color="#111827" label="Drop" onClick={() => navigate('/drop')} />
+            <Item icon={FaUserCog} color="#111827" label="Account" onClick={() => navigate('/account')} />
             <Item icon={FaSignOutAlt} color="#ef4444" label="Logout" onClick={onLogout} />
           </div>
         </div>
