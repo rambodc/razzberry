@@ -30,26 +30,12 @@ export default function More() {
 
   const Item = ({ icon: Icon, label, onClick, color = '#111827' }) => (
     <div className={styles.item}>
-      <button
-        onClick={onClick}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '16px 18px',
-          background: 'white',
-          border: '1px solid rgba(0,0,0,0.06)',
-          borderRadius: 12,
-          color: '#111827',
-          cursor: 'pointer',
-        }}
-      >
-        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }}>
+      <button onClick={onClick} className={styles.button}>
+        <span className={styles.buttonLabel}>
           {Icon ? <Icon size={20} color={color} /> : null}
-          <span style={{ fontSize: '1.06rem' }}>{label}</span>
+          <span className={styles.buttonText}>{label}</span>
         </span>
-        <span aria-hidden style={{ opacity: 0.5, color: '#6b7280', display: 'inline-flex', fontSize: '1.1rem' }}>
+        <span className={styles.chevron} aria-hidden>
           <FaChevronRight />
         </span>
       </button>
