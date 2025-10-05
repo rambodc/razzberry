@@ -33,7 +33,7 @@ export default function CreateDrop() {
     <div className={layoutStyles.detailPage}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
       {!unlocked ? (
-        <div style={{ maxWidth: 480, margin: '80px auto', padding: '0 16px', textAlign: 'center' }}>
+        <div style={{ maxWidth: 480, width: '100%', margin: '80px auto', padding: '0 16px', textAlign: 'center' }}>
           <h1 style={{ marginBottom: 8 }}>Enter Passcode</h1>
           <p style={{ color: '#4b5563', marginBottom: 12 }}>Enter the 6-digit passcode to continue.</p>
           <input
@@ -63,7 +63,7 @@ export default function CreateDrop() {
           <p style={{ marginTop: 10, fontSize: 12, color: '#6b7280' }}>Hint for dev: 123456</p>
         </div>
       ) : (
-        <div style={{ maxWidth: 800, margin: '80px auto', padding: '0 16px' }}>
+        <div style={{ maxWidth: 800, width: '100%', margin: '80px auto', padding: '0 16px' }}>
           <h1>Create Drop</h1>
           <p style={{ color: '#4b5563' }}>Coming soon.</p>
         </div>

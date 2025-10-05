@@ -11,7 +11,7 @@ export default function Drop() {
         <MobileNavTabs />
       </TopBar>
 
-      <div style={{ maxWidth: 960, margin: '80px auto 24px', padding: '0 16px', textAlign: 'center' }}>
+      <div style={{ maxWidth: 960, width: '100%', margin: '80px auto 24px', padding: '0 16px', textAlign: 'center' }}>
         <h1 style={{ margin: '8px 0 12px' }}>Drops</h1>
         <p style={{ color: '#4b5563' }}>Your drops will appear here. Coming soon.</p>
       </div>

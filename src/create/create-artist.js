@@ -114,7 +114,7 @@ function CreateArtist() {
     <div className={layoutStyles.homeContainer}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
 
-      <div className="page-container" style={{ maxWidth: 680, margin: '80px auto 0', padding: 16 }}>
+      <div className="page-container" style={{ maxWidth: 680, width: '100%', margin: '80px auto 0', padding: 16 }}>
       <h1 style={{ margin: '20px 0' }}>Create Artist (Image)</h1>
 
       <form onSubmit={onSubmit}>

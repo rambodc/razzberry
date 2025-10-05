@@ -215,6 +215,7 @@ const styles = {
   },
   listInner: {
     maxWidth: 920,
+    width: '100%',
     margin: '0 auto',
     padding: '64px 12px 140px', // top offset under TopBar + bottom space for composer
     display: 'flex',

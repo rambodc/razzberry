@@ -12,7 +12,7 @@ export default function Terms() {
   return (
     <div className={layoutStyles.detailPage}>
       <TopBar variant="back" backLabel="Back" onBack={handleBack} />
-      <div style={{ maxWidth: 800, margin: '80px auto', padding: '0 16px' }}>
+      <div style={{ maxWidth: 800, width: '100%', margin: '80px auto', padding: '0 16px' }}>
         <h1>Terms</h1>
         <p style={{ color: '#4b5563' }}>Coming soon.</p>
       </div>

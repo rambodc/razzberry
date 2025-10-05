@@ -133,7 +133,7 @@ export default function Wallet() {
         <MobileNavTabs />
       </TopBar>
 
-      <div style={{ maxWidth: 880, margin: '80px auto 28px', padding: '0 16px' }}>
+      <div style={{ maxWidth: 880, width: '100%', margin: '80px auto 28px', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Wallet</h1>
       <p style={{ margin: '0 0 16px', color: '#4b5563' }}>
         Test 1: Ping Fireblocks to verify credentials and connectivity.

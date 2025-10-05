@@ -124,7 +124,7 @@ export default function Fund() {
     <div className={layoutStyles.homeContainer}>
       <TopBar variant="back" backLabel="Back" onBack={() => (window.history.length > 2 ? navigate(-1) : navigate('/home'))} />
 
-      <div style={{ maxWidth: 800, margin: '80px auto 40px', padding: '0 16px' }}>
+      <div style={{ maxWidth: 800, width: '100%', margin: '80px auto 40px', padding: '0 16px' }}>
       <h1 style={{ margin: '0 0 8px' }}>Fund your wallet</h1>
       <p style={{ opacity: 0.85, margin: 0 }}>
         Buy XRP via Transak and send to your XRPL wallet.

@@ -149,7 +149,7 @@ export default function Xaman() {
 
 const styles = {
   page: { minHeight: '100vh', background: '#fff' },
-  content: { maxWidth: 1200, margin: '64px auto 0', padding: '0 12px 24px' },
+  content: { maxWidth: 1200, width: '100%', margin: '64px auto 0', padding: '0 12px 24px' },
   card: {
     width: 'min(560px, 92vw)',
     background: '#fff',
