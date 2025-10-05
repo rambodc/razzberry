@@ -34,9 +34,10 @@ export default function MobileNavTabs() {
       {tabs.map(({ label, to, icon: Icon }) => {
         const active = isActive(to);
         const accent = '#0ea5e9';
-        const faded = 'rgba(14,165,233,0.45)';
-        const textColor = active ? accent : faded;
-        const iconColor = active ? accent : faded;
+        const inactiveText = '#475569';
+        const inactiveIcon = '#94a3b8';
+        const textColor = active ? accent : inactiveText;
+        const iconColor = active ? accent : inactiveIcon;
 
         return (
           <button
