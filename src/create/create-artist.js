@@ -24,6 +24,9 @@ function CreateArtist() {
   const [progress, setProgress] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [code, setCode] = useState('');
+  const [unlocked, setUnlocked] = useState(false);
+  const [passError, setPassError] = useState('');
 
   const inputRef = useRef(null);
 
@@ -109,6 +112,43 @@ function CreateArtist() {
       setSaving(false);
     }
   };
+
+  if (!unlocked) {
+    return (
+      <div className={layoutStyles.detailPage}>
+        <TopBar variant="back" backLabel="Back" onBack={handleBack} />
+        <div style={{ maxWidth: 480, width: '100%', margin: '80px auto', padding: '0 16px', textAlign: 'center' }}>
+          <h1 style={{ marginBottom: 8 }}>Enter Passcode</h1>
+          <p style={{ color: '#4b5563', marginBottom: 12 }}>Enter the 6-digit passcode to continue.</p>
+          <input
+            inputMode="numeric"
+            pattern="[0-9]*"
+            type="text"
+            autoComplete="one-time-code"
+            autoCorrect="off"
+            spellCheck={false}
+            name="create-artist-passcode"
+            value={code}
+            onChange={handlePasscodeChange}
+            placeholder="••••••"
+            maxLength={6}
+            autoFocus
+            style={{
+              letterSpacing: 6,
+              textAlign: 'center',
+              padding: '12px 14px',
+              borderRadius: 12,
+              border: '1px solid #ddd',
+              fontSize: 24,
+              width: 220,
+            }}
+          />
+          {passError && <p style={{ color: '#b91c1c', marginTop: 10 }}>{passError}</p>}
+          <p style={{ marginTop: 10, fontSize: 12, color: '#6b7280' }}>Hint for dev: 123456</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={layoutStyles.homeContainer}>
@@ -208,3 +248,16 @@ const inputStyle = {
 };
 
 export default CreateArtist;
+  const handlePasscodeChange = (e) => {
+    setPassError('');
+    const v = e.target.value.replace(/\D+/g, '').slice(0, 6);
+    setCode(v);
+    if (v.length === 6) {
+      if (v === '123456') {
+        setUnlocked(true);
+        setCode('');
+      } else {
+        setPassError('Incorrect passcode');
+      }
+    }
+  };

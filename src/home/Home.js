@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { auth, db } from '../firebase';
 import { signOut } from 'firebase/auth';
-import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
@@ -86,22 +85,13 @@ function Home() {
 
   const Dashboard = () => (
     <>
-      {/* Welcome + Create (scrolls with content) */}
+      {/* Welcome message */}
       <div className="home-topbar" style={{ marginTop: 64 }}>
         <div className="home-topbar-left">
           <h1 className="home-welcome">
             Welcome, {appUser?.firstName || 'Friend'} {appUser?.lastName || ''} 👋
           </h1>
           {appUser?.email && <p className="email-text">Email: {appUser.email}</p>}
-        </div>
-        <div className="home-topbar-right">
-          <button
-            className={layoutStyles.createBtn}
-            onClick={() => navigate('/create-artists')}
-            aria-label="Create artist"
-          >
-            <FaPlus /> Create
-          </button>
         </div>
       </div>
 
@@ -111,9 +101,6 @@ function Home() {
       ) : artists.length === 0 ? (
         <div>
           <p>No artists yet.</p>
-          <button className={layoutStyles.createBtn} onClick={() => navigate('/create-artists')}>
-            <FaPlus /> Make your first artist
-          </button>
         </div>
       ) : (
         <div className="card-grid" style={{ paddingTop: 6 }}>

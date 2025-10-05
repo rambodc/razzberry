@@ -10,7 +10,7 @@ export default function MobileNavTabs() {
   const tabs = [
     { label: 'Home', to: '/home', icon: FiHome },
     { label: 'Drops', to: '/drops', icon: FiDroplet },
-    { label: 'Balance', to: '/wallet', icon: FiCreditCard },
+    { label: 'Balance', to: '/balance', icon: FiCreditCard },
     { label: 'More', to: '/more', icon: FiMoreHorizontal },
   ];
 

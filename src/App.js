@@ -26,6 +26,7 @@ import DropPasscode from './drop-passcode';
 import Chat from './chat/Chat';
 import Xaman from './xaman/Xaman';
 import Fund from './fund/Fund';
+import Balance from './balance';
 import Wallet from './wallet/Wallet';
 import More from './more/More';
 import Terms from './terms/Terms';
@@ -117,7 +118,16 @@ function AppRoutes({ user }) {
           </ProtectedRoute>
         }
       />
-      {/* ✅ New protected Wallet route */}
+      {/* ✅ New protected Balance route */}
+      <Route
+        path="/balance"
+        element={
+          <ProtectedRoute>
+            <Balance />
+          </ProtectedRoute>
+        }
+      />
+      {/* ✅ Existing wallet route */}
       <Route
         path="/wallet"
         element={
