@@ -21,6 +21,7 @@ import Artists from './artists/Artists';
 // Protected pages
 import Home from './home/Home';
 import Drop from './drop';
+import DropDetail from './drop/DropDetail';
 import CreateArtist from './create/create-artist';
 import CreateDrop from './create-drop';
 import DropPasscode from './drop-passcode';
@@ -96,14 +97,22 @@ function AppRoutes({ user }) {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/drop"
-          element={
-            <ProtectedRoute>
-              <DropPasscode />
-            </ProtectedRoute>
-          }
-        />
+      <Route
+        path="/drop"
+        element={
+          <ProtectedRoute>
+            <DropPasscode />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/drop/:dropId"
+        element={
+          <ProtectedRoute>
+            <DropDetail />
+          </ProtectedRoute>
+        }
+      />
         {/* ✅ New protected Xaman route */}
         <Route
           path="/xaman"
