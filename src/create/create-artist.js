@@ -34,6 +34,21 @@ function CreateArtist() {
     return title.trim().length > 0 && !!file && !saving;
   }, [title, file, saving]);
 
+  const handlePasscodeChange = (e) => {
+    const v = e.target.value.replace(/\D+/g, '').slice(0, 6);
+    setCode(v);
+    if (v.length === 6) {
+      if (v === '123456') {
+        setUnlocked(true);
+        setPassError('');
+      } else {
+        setPassError('Incorrect passcode');
+      }
+    } else {
+      setPassError('');
+    }
+  };
+
   const handleFileChange = (e) => {
     setError('');
     const f = e.target.files?.[0];
@@ -123,7 +138,7 @@ function CreateArtist() {
           <input
             inputMode="numeric"
             pattern="[0-9]*"
-            type="password"
+            type="text"
             autoComplete="one-time-code"
             autoCorrect="off"
             spellCheck={false}
@@ -248,20 +263,3 @@ const inputStyle = {
 };
 
 export default CreateArtist;
-  const handlePasscodeChange = (e) => {
-    let next = e.target.value.replace(/\D+/g, '');
-    if (next.length > 6) next = next.slice(0, 6);
-    setCode(next);
-    setPassError('');
-
-    if (next.length === 6) {
-      if (next === '123456') {
-        setTimeout(() => {
-          setUnlocked(true);
-          setCode('');
-        }, 120);
-      } else {
-        setPassError('Incorrect passcode');
-      }
-    }
-  };
