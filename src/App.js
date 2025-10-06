@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useEffect, useRef, useState, createContext } from 'react';
+import React, { useEffect, useState, createContext } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -205,36 +205,13 @@ function AppRoutes({ user }) {
   );
 }
 
-const scrollPositions = new Map();
-
 function ScrollRestoration() {
-  const { pathname, search } = useLocation();
-  const key = `${pathname}${search}`;
-  const previousKeyRef = useRef(key);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
-    const previousKey = previousKeyRef.current;
-    if (previousKey !== key) {
-      scrollPositions.set(previousKey, window.scrollY);
-    }
-
-    const savedScroll = scrollPositions.get(key);
-    requestAnimationFrame(() => {
-      const target = typeof savedScroll === 'number' ? savedScroll : 0;
-      window.scrollTo({ top: target, left: 0, behavior: 'auto' });
-    });
-
-    previousKeyRef.current = key;
-  }, [key]);
-
-  useEffect(() => {
-    return () => {
-      if (typeof window === 'undefined') return;
-      scrollPositions.set(key, window.scrollY);
-    };
-  }, [key]);
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
 
   return null;
 }
