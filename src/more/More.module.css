@@ -28,6 +28,10 @@
   justify-content: center;
 }
 
+.itemSpacing {
+  margin-top: 20px;
+}
+
 .button {
   width: 100%;
   max-width: 500px;

@@ -1,5 +1,6 @@
 // src/account/Account.js
 import React from 'react';
+import TopBar from '../components/TopBar';
 import layoutStyles from '../styles/layout.module.css';
 import styles from './Account.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -23,17 +24,10 @@ function Item({ icon: Icon, label, onClick, color = '#111827' }) {
 
 export default function Account() {
   const navigate = useNavigate();
-  const handleBack = () => {
-    if (window.history.length > 2) navigate(-1); else navigate('/more');
-  };
 
   return (
     <div className={layoutStyles.detailPage}>
-      <div className={styles.header}>
-        <button className={styles.backButton} onClick={handleBack} aria-label="Back">
-          ← Back
-        </button>
-      </div>
+      <TopBar variant="back" backLabel="Back" onBack={() => (window.history.length > 2 ? navigate(-1) : navigate('/more'))} />
 
       <div className={styles.pageShell}>
         <div className={styles.pageInner}>
