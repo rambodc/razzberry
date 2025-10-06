@@ -57,8 +57,6 @@ export default function More() {
           <div className={styles.list}>
             <Item icon={FaFileAlt} color="#0ea5e9" label="Terms" onClick={() => navigate('/terms')} />
             <Item icon={FaCogs} color="#6366f1" label="Services" onClick={() => navigate('/services')} />
-            <Item icon={FaEnvelope} color="#22c55e" label="Change Email" onClick={() => navigate('/account/email')} />
-            <Item icon={FaKey} color="#f59e0b" label="Change Password" onClick={() => navigate('/account/password')} />
             <Item icon={FaPaintBrush} color="#ec4899" label="Become an Artist" onClick={() => navigate('/chat')} />
             <Item icon={FaCheckCircle} color="#10b981" label="Validate Drops" onClick={() => navigate('/validate-drops')} />
             <Item icon={FaUserPlus} color="#2563eb" label="Create Artist" onClick={() => navigate('/create-artists')} />
