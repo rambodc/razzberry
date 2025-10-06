@@ -1,26 +1,24 @@
 // src/create-artist.js
-import React, { useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import app, { db, auth, storage, logStorageDebug } from '../firebase';
-import { UserContext } from '../App';
+import { db, storage, logStorageDebug } from '../firebase';
 import TopBar from '../components/TopBar';
 import layoutStyles from '../styles/layout.module.css';
-import { useCallback } from 'react';
 
 function CreateArtist() {
-  const appUser = useContext(UserContext);
   const navigate = useNavigate();
   // No sidebar; use a back button like Artists
   const handleBack = useCallback(() => {
     if (window.history.length > 2) navigate(-1); else navigate('/home');
   }, [navigate]);
 
-  const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [description, setDescription] = useState('');
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState('');
+  const [processingImage, setProcessingImage] = useState(false);
   const [progress, setProgress] = useState(0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -31,8 +29,14 @@ function CreateArtist() {
   const inputRef = useRef(null);
 
   const canSubmit = useMemo(() => {
-    return title.trim().length > 0 && !!file && !saving;
-  }, [title, file, saving]);
+    return fullName.trim().length > 0 && !!file && !saving && !processingImage;
+  }, [fullName, file, saving, processingImage]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const handlePasscodeChange = (e) => {
     const v = e.target.value.replace(/\D+/g, '').slice(0, 6);
@@ -49,7 +53,7 @@ function CreateArtist() {
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     setError('');
     const f = e.target.files?.[0];
     if (!f) return;
@@ -61,9 +65,21 @@ function CreateArtist() {
       return;
     }
 
-    setFile(f);
-    const url = URL.createObjectURL(f);
-    setPreviewUrl(url);
+    setProgress(0);
+    setProcessingImage(true);
+    try {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      const { file: resizedFile, previewUrl: objectUrl } = await resizeImageToMax(f, 600);
+      setFile(resizedFile);
+      setPreviewUrl(objectUrl);
+    } catch (err) {
+      console.error(err);
+      setError(err?.message || 'Unable to process image. Please try another file.');
+      setFile(null);
+      setPreviewUrl('');
+    } finally {
+      setProcessingImage(false);
+    }
   };
 
   const genId = () => {
@@ -82,7 +98,7 @@ function CreateArtist() {
       // Debug which bucket we're actually using in the running build
       try { logStorageDebug(); } catch {}
 
-      // Upload original image to Storage
+      // Upload processed image to Storage
       const ext = file.name.includes('.') ? file.name.split('.').pop() : 'jpg';
       const objectPath = `artists/${artistUid}/cover.${ext}`;
       const storageRef = ref(storage, objectPath);
@@ -107,14 +123,11 @@ function CreateArtist() {
 
       // Write Firestore doc
       const data = {
-        artistUid,
-        title: title.trim(),
-        desc: desc.trim(),
-        img: imgUrl,                  // <-- Home.js expects c.img
+        artistId: artistUid,
         createdAt: serverTimestamp(),
-        createdByUid: auth.currentUser?.uid || appUser?.id || null, // prefer live auth UID
-        createdByEmail: appUser?.email || null,
-        updatedAt: serverTimestamp(),
+        artistFullName: fullName.trim(),
+        artistProfilePhoto: imgUrl,
+        artistDescription: description.trim(),
       };
 
       await setDoc(doc(db, 'artists', artistUid), data);
@@ -174,13 +187,13 @@ function CreateArtist() {
 
       <form onSubmit={onSubmit}>
         <div style={{ marginBottom: 14 }}>
-          <label style={labelStyle}>Title</label>
+          <label style={labelStyle}>Artist Full Name</label>
           <input
             style={inputStyle}
             type="text"
-            placeholder="Artist title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Artist full name"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
             maxLength={120}
             required
           />
@@ -191,14 +204,14 @@ function CreateArtist() {
           <textarea
             style={{ ...inputStyle, minHeight: 90, resize: 'vertical' }}
             placeholder="Short description"
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             maxLength={1000}
           />
         </div>
 
         <div style={{ marginBottom: 14 }}>
-          <label style={labelStyle}>Cover Image</label>
+          <label style={labelStyle}>Profile Photo</label>
           <input
             ref={inputRef}
             type="file"
@@ -218,6 +231,10 @@ function CreateArtist() {
             <p style={{ color: '#666', marginTop: 8 }}>Choose an image (JPG/PNG/WebP).</p>
           )}
         </div>
+
+        {processingImage && (
+          <div style={{ margin: '12px 0', fontSize: 14 }}>Processing image…</div>
+        )}
 
         {saving && (
           <div style={{ margin: '12px 0', fontSize: 14 }}>
@@ -249,6 +266,64 @@ function CreateArtist() {
       </div>
     </div>
   );
+}
+
+function resizeImageToMax(file, maxSize = 600) {
+  return new Promise((resolve, reject) => {
+    const mimeType = file.type && file.type.startsWith('image/') ? file.type : 'image/jpeg';
+    const reader = new FileReader();
+
+    reader.onerror = () => reject(new Error('Unable to read image file.'));
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') {
+        reject(new Error('Invalid image data.'));
+        return;
+      }
+
+      const img = new Image();
+
+      img.onload = () => {
+        const maxDimension = Math.max(img.width, img.height);
+        const scale = maxDimension > maxSize ? maxSize / maxDimension : 1;
+        const targetWidth = Math.round(img.width * scale);
+        const targetHeight = Math.round(img.height * scale);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        const ctx = canvas.getContext('2d');
+
+        if (!ctx) {
+          reject(new Error('Canvas is not supported in this browser.'));
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+        const quality = mimeType === 'image/jpeg' || mimeType === 'image/webp' ? 0.92 : undefined;
+
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error('Image processing failed.'));
+              return;
+            }
+
+            const processedFile = new File([blob], file.name, { type: mimeType });
+            const previewUrl = URL.createObjectURL(processedFile);
+            resolve({ file: processedFile, previewUrl });
+          },
+          mimeType,
+          quality
+        );
+      };
+
+      img.onerror = () => reject(new Error('Invalid image file.'));
+      img.src = reader.result;
+    };
+
+    reader.readAsDataURL(file);
+  });
 }
 
 const labelStyle = { display: 'block', fontWeight: 600, marginBottom: 8, fontSize: 14 };

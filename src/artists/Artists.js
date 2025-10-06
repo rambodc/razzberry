@@ -51,16 +51,17 @@ function Artists() {
         if (snap.exists()) {
           const data = snap.data();
           setItem({
-            title:  data.title || data.name || 'Untitled',
-            desc:   data.desc || data.description || '',
+            title:  data.artistFullName || data.title || data.name || 'Untitled',
+            desc:   data.artistDescription || data.desc || data.description || '',
             rating: data.rating || '',
             nights: data.nights || '',
-            img:    data.img || data.poster || data.imageUrl || '',
+            img:    data.artistProfilePhoto || data.img || data.poster || data.imageUrl || '',
             video:     data.video || data.videoMp4 || data.videoUrl || '',
             videoWebm: data.videoWebm || '',
             animWebp:  data.animWebp || '',
             poster:    data.poster || '',
             tracks: normalizeTracks(data.tracks),
+            artistId: data.artistId || snap.id,
           });
         } else {
           setError('Artist not found.');
@@ -154,7 +155,7 @@ function Artists() {
                   />
 
                   <div className={layoutStyles.overlayMeta} style={{ marginTop: 16 }}>
-                    <div><strong>Artist UID:</strong> {artistUid}</div>
+                    <div><strong>Artist ID:</strong> {item?.artistId || artistUid}</div>
                   </div>
                 </div>
               </div>

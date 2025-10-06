@@ -38,7 +38,27 @@ function Home() {
     const unsub = onSnapshot(
       q,
       (snap) => {
-        const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        const list = snap.docs.map((docSnap) => {
+          const data = docSnap.data() || {};
+          const artistId = data.artistId || docSnap.id;
+          const artistFullName = data.artistFullName || data.title || 'Untitled';
+          const artistDescription = data.artistDescription || data.desc || '';
+          const artistProfilePhoto = data.artistProfilePhoto || data.img || '';
+
+          return {
+            id: docSnap.id,
+            artistId,
+            artistFullName,
+            artistDescription,
+            artistProfilePhoto,
+            title: artistFullName,
+            desc: artistDescription,
+            img: artistProfilePhoto,
+            rating: data.rating || '',
+            nights: data.nights || '',
+            tracks: data.tracks || [],
+          };
+        });
         setArtists(list);
         setLoading(false);
 
@@ -66,7 +86,7 @@ function Home() {
 
   // Open the full artist page with a smooth loader transition
   const openCard = (item) => {
-    const artistUid = item.artistUid || item.id;
+    const artistUid = item.artistId || item.artistUid || item.id;
 
     // Save current scroll Y into the *current* history entry, so when the user
     // hits Back, that entry still carries the exact position to restore.
@@ -114,11 +134,11 @@ function Home() {
               onKeyDown={(e) => (e.key === 'Enter' ? openCard(c) : null)}
             >
               <div className="card-image-wrap">
-                <img className="card-image" src={c.img} alt={c.title || 'Artist'} />
+                <img className="card-image" src={c.artistProfilePhoto} alt={c.artistFullName || 'Artist'} />
                 <div className="card-gradient" />
                 <div className="card-text-overlay">
-                  <h2>{truncate(c.title || 'Untitled', 30)}</h2>
-                  <p>{truncate(c.desc || '', 50)}</p>
+                  <h2>{truncate(c.artistFullName || 'Untitled', 30)}</h2>
+                  <p>{truncate(c.artistDescription || '', 50)}</p>
                   <div className={layoutStyles.chips}>
                     {c.rating && <span>{c.rating}</span>}
                     {c.nights && <span>{c.nights}</span>}
