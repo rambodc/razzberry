@@ -5,6 +5,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from './firebase';
@@ -44,161 +45,175 @@ export const UserContext = createContext(null);
 
 function AppRoutes({ user }) {
   return (
-    <Routes>
-      {/* Public */}
-      <Route path="/" element={user ? <Navigate to="/home" /> : <LandingPage />} />
-      <Route path="/signin" element={!user ? <Login /> : <Navigate to="/home" />} />
-      <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/home" />} />
-      <Route path="/forgot" element={<ForgotPassword />} />
-      <Route path="/artist/:artistUid" element={<Artists />} />
+    <>
+      <ScrollRestoration />
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={user ? <Navigate to="/home" /> : <LandingPage />} />
+        <Route path="/signin" element={!user ? <Login /> : <Navigate to="/home" />} />
+        <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/home" />} />
+        <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/artist/:artistUid" element={<Artists />} />
 
-      {/* Protected */}
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
-            <Home />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/drops"
-        element={
-          <ProtectedRoute>
-            <Drop />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/create-artists"
-        element={
-          <ProtectedRoute>
-            <CreateArtist />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/create-drop"
-        element={
-          <ProtectedRoute>
-            <CreateDrop />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/chat"
-        element={
-          <ProtectedRoute>
-            <Chat />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/drop"
-        element={
-          <ProtectedRoute>
-            <DropPasscode />
-          </ProtectedRoute>
-        }
-      />
-      {/* ✅ New protected Xaman route */}
-      <Route
-        path="/xaman"
-        element={
-          <ProtectedRoute>
-            <Xaman />
-          </ProtectedRoute>
-        }
-      />
-      {/* ✅ New protected Fund route */}
-      <Route
-        path="/fund"
-        element={
-          <ProtectedRoute>
-            <Fund />
-          </ProtectedRoute>
-        }
-      />
-      {/* ✅ New protected Balance route */}
-      <Route
-        path="/balance"
-        element={
-          <ProtectedRoute>
-            <Balance />
-          </ProtectedRoute>
-        }
-      />
-      {/* ✅ Existing wallet route */}
-      <Route
-        path="/wallet"
-        element={
-          <ProtectedRoute>
-            <Wallet />
-          </ProtectedRoute>
-        }
-      />
-      {/* More + subpages */}
-      <Route
-        path="/more"
-        element={
-          <ProtectedRoute>
-            <More />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/account"
-        element={
-          <ProtectedRoute>
-            <Account />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/terms"
-        element={
-          <ProtectedRoute>
-            <Terms />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/services"
-        element={
-          <ProtectedRoute>
-            <Services />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/account/email"
-        element={
-          <ProtectedRoute>
-            <ChangeEmail />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/account/password"
-        element={
-          <ProtectedRoute>
-            <ChangePassword />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/validate-drops"
-        element={
-          <ProtectedRoute>
-            <ValidateDrops />
-          </ProtectedRoute>
-        }
-      />
+        {/* Protected */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/drops"
+          element={
+            <ProtectedRoute>
+              <Drop />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-artists"
+          element={
+            <ProtectedRoute>
+              <CreateArtist />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-drop"
+          element={
+            <ProtectedRoute>
+              <CreateDrop />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/drop"
+          element={
+            <ProtectedRoute>
+              <DropPasscode />
+            </ProtectedRoute>
+          }
+        />
+        {/* ✅ New protected Xaman route */}
+        <Route
+          path="/xaman"
+          element={
+            <ProtectedRoute>
+              <Xaman />
+            </ProtectedRoute>
+          }
+        />
+        {/* ✅ New protected Fund route */}
+        <Route
+          path="/fund"
+          element={
+            <ProtectedRoute>
+              <Fund />
+            </ProtectedRoute>
+          }
+        />
+        {/* ✅ New protected Balance route */}
+        <Route
+          path="/balance"
+          element={
+            <ProtectedRoute>
+              <Balance />
+            </ProtectedRoute>
+          }
+        />
+        {/* ✅ Existing wallet route */}
+        <Route
+          path="/wallet"
+          element={
+            <ProtectedRoute>
+              <Wallet />
+            </ProtectedRoute>
+          }
+        />
+        {/* More + subpages */}
+        <Route
+          path="/more"
+          element={
+            <ProtectedRoute>
+              <More />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <Account />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/terms"
+          element={
+            <ProtectedRoute>
+              <Terms />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <ProtectedRoute>
+              <Services />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/account/email"
+          element={
+            <ProtectedRoute>
+              <ChangeEmail />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/account/password"
+          element={
+            <ProtectedRoute>
+              <ChangePassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/validate-drops"
+          element={
+            <ProtectedRoute>
+              <ValidateDrops />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Catch-all */}
-      <Route path="*" element={<Navigate to={user ? '/home' : '/'} />} />
-    </Routes>
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to={user ? '/home' : '/'} />} />
+      </Routes>
+    </>
   );
+}
+
+function ScrollRestoration() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname]);
+
+  return null;
 }
 
 function App() {
