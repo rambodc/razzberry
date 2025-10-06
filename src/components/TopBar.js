@@ -39,7 +39,7 @@ export default function TopBar({
             onClick={onBack}
             aria-label={backLabel}
             title={backLabel}
-            style={styles.iconBtn}
+            style={{ ...styles.iconBtn, ...styles.backButton }}
           >
             <FaArrowLeft />
           </button>
@@ -87,5 +87,15 @@ const styles = {
     borderRadius: 12,
     cursor: 'pointer',
     fontSize: '1.1rem',
+  },
+  backButton: {
+    width: 44,
+    height: 44,
+    borderRadius: '999px',
+    background: 'rgba(255, 255, 255, 0.92)',
+    boxShadow: '0 6px 14px rgba(15, 23, 42, 0.18)',
+    border: '1px solid rgba(255, 255, 255, 0.8)',
+    color: '#111827',
+    transition: 'transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease',
   },
 };
