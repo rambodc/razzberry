@@ -51,11 +51,11 @@ function Artists() {
         if (snap.exists()) {
           const data = snap.data();
           setItem({
-            title:  data.artistFullName || data.title || data.name || 'Untitled',
-            desc:   data.artistDescription || data.desc || data.description || '',
+            title:  data.artistFullName || 'Untitled',
+            desc:   data.artistDescription || '',
             rating: data.rating || '',
             nights: data.nights || '',
-            img:    data.artistProfilePhoto || data.img || data.poster || data.imageUrl || '',
+            img:    data.artistProfilePhoto || '',
             video:     data.video || data.videoMp4 || data.videoUrl || '',
             videoWebm: data.videoWebm || '',
             animWebp:  data.animWebp || '',

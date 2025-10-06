@@ -41,19 +41,13 @@ function Home() {
         const list = snap.docs.map((docSnap) => {
           const data = docSnap.data() || {};
           const artistId = data.artistId || docSnap.id;
-          const artistFullName = data.artistFullName || data.title || 'Untitled';
-          const artistDescription = data.artistDescription || data.desc || '';
-          const artistProfilePhoto = data.artistProfilePhoto || data.img || '';
 
           return {
             id: docSnap.id,
             artistId,
-            artistFullName,
-            artistDescription,
-            artistProfilePhoto,
-            title: artistFullName,
-            desc: artistDescription,
-            img: artistProfilePhoto,
+            artistFullName: data.artistFullName || 'Untitled',
+            artistDescription: data.artistDescription || '',
+            artistProfilePhoto: data.artistProfilePhoto || '',
             rating: data.rating || '',
             nights: data.nights || '',
             tracks: data.tracks || [],
@@ -86,7 +80,7 @@ function Home() {
 
   // Open the full artist page with a smooth loader transition
   const openCard = (item) => {
-    const artistUid = item.artistId || item.artistUid || item.id;
+    const artistUid = item.artistId || item.id;
 
     // Save current scroll Y into the *current* history entry, so when the user
     // hits Back, that entry still carries the exact position to restore.
@@ -127,7 +121,7 @@ function Home() {
           {artists.map((c) => (
             <div
               className="glass-card"
-              key={c.artistUid || c.id}
+              key={c.artistId}
               role="button"
               tabIndex={0}
               onClick={() => openCard(c)}
