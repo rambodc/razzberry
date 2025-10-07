@@ -10,14 +10,11 @@ import styles from './More.module.css';
 import {
   FaFileAlt,
   FaCogs,
-  FaEnvelope,
-  FaKey,
   FaPaintBrush,
   FaCheckCircle,
   FaSignOutAlt,
   FaChevronRight,
   FaPlus,
-  FaCubes,
   FaUserPlus,
   FaUserCog,
 } from 'react-icons/fa';
@@ -62,7 +59,6 @@ export default function More() {
             <Item icon={FaCogs} color="#6366f1" label="Services" onClick={() => navigate('/services')} />
             <Item icon={FaUserPlus} color="#2563eb" label="Create Artist" onClick={() => navigate('/create-artists')} />
             <Item icon={FaPlus} color="#111827" label="Create Drop" onClick={() => navigate('/create-drop')} />
-            <Item icon={FaCubes} color="#111827" label="Drop" onClick={() => navigate('/drop')} />
             <Item icon={FaSignOutAlt} color="#ef4444" label="Logout" onClick={onLogout} className={styles.itemSpacing} />
           </div>
         </div>

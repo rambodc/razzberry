@@ -24,7 +24,6 @@ import Drop from './drop/Drop';
 import DropDetail from './drop/DropDetail';
 import CreateArtist from './create/create-artist';
 import CreateDrop from './create-drop/CreateDrop';
-import DropPasscode from './create-drop/DropPasscode';
 import Chat from './chat/Chat';
 import Xaman from './xaman/Xaman';
 import Fund from './fund/Fund';
@@ -97,22 +96,14 @@ function AppRoutes({ user }) {
             </ProtectedRoute>
           }
         />
-      <Route
-        path="/drop"
-        element={
-          <ProtectedRoute>
-            <DropPasscode />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/drop/:dropId"
-        element={
-          <ProtectedRoute>
-            <DropDetail />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/drop/:dropId"
+          element={
+            <ProtectedRoute>
+              <DropDetail />
+            </ProtectedRoute>
+          }
+        />
         {/* ✅ New protected Xaman route */}
         <Route
           path="/xaman"
