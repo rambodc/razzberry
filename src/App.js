@@ -20,11 +20,11 @@ import Artists from './artists/Artists';
 
 // Protected pages
 import Home from './home/Home';
-import Drop from './drop';
+import Drop from './drop/Drop';
 import DropDetail from './drop/DropDetail';
 import CreateArtist from './create/create-artist';
-import CreateDrop from './create-drop';
-import DropPasscode from './drop-passcode';
+import CreateDrop from './create-drop/CreateDrop';
+import DropPasscode from './create-drop/DropPasscode';
 import Chat from './chat/Chat';
 import Xaman from './xaman/Xaman';
 import Fund from './fund/Fund';

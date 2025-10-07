@@ -1,4 +1,4 @@
-// src/drop-passcode/DropPasscode.js
+// src/create-drop/DropPasscode.js
 import React, { useCallback } from 'react';
 import TopBar from '../components/TopBar';
 import layoutStyles from '../styles/layout.module.css';
