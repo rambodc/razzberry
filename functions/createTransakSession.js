@@ -242,7 +242,11 @@ export const createTransakSession = onRequest({
     const accessToken = await getPartnerAccessToken({ apiKey, apiSecret, envName });
 
     const body = parseRequestBody(req.body);
-    const fiatAmount = sanitizeFiatAmount(body.fiatAmount) || sanitizeFiatAmount(body.defaultFiatAmount);
+    const fiatAmount =
+      sanitizeFiatAmount(body.fiatAmount) ||
+      sanitizeFiatAmount(body.defaultFiatAmount) ||
+      sanitizeFiatAmount(body.amount) ||
+      100;
     const fiatCurrency = typeof body.fiatCurrency === 'string' && body.fiatCurrency.trim()
       ? body.fiatCurrency.trim().toUpperCase()
       : DEFAULT_FIAT_CURRENCY;
@@ -251,7 +255,7 @@ export const createTransakSession = onRequest({
       : DEFAULT_PAYMENT_METHOD;
     const defaultCryptoAmount = sanitizeFiatAmount(body.cryptoAmount) || null;
 
-    if (!fiatAmount) {
+    if (!fiatAmount || fiatAmount <= 0) {
       return res.status(400).json({ ok: false, error: 'invalid_amount' });
     }
 
@@ -339,24 +343,20 @@ export const createTransakSession = onRequest({
       },
       createdAt: timestamp,
       updatedAt: timestamp,
+      timeline: [
+        {
+          source: 'transak',
+          status: 'SESSION_CREATED',
+          at: admin.firestore.Timestamp.now(),
+          details: {
+            sessionId,
+            widgetUrl,
+          },
+        },
+      ],
     };
 
     await depositRef.set(depositData);
-
-    const timelineEntry = {
-      source: 'transak',
-      status: 'SESSION_CREATED',
-      at: admin.firestore.FieldValue.serverTimestamp(),
-      details: {
-        sessionId,
-        widgetUrl,
-      },
-    };
-
-    await depositRef.update({
-      timeline: admin.firestore.FieldValue.arrayUnion(timelineEntry),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    });
 
     return res.status(200).json({
       ok: true,
