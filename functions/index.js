@@ -1,7 +1,7 @@
 // functions/index.js (ESM)
 // Export production functions
 
-import { createTransakSession } from './transak.js';
+import { createTransakSession } from './createTransakSession.js';
 import {
   fireblocksPing as _fireblocksPing,
   fireblocksCreateOrGetVaults as _fireblocksCreateOrGetVaults,

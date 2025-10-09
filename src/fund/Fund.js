@@ -26,6 +26,7 @@ export default function Fund() {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
+  const [lastDepositId, setLastDepositId] = useState('');
   const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? window.innerWidth < 900 : false));
 
   useEffect(() => {
@@ -40,11 +41,12 @@ export default function Fund() {
 
   const canUse = useMemo(() => !!auth.currentUser, [auth.currentUser]);
 
-  const startTransak = useCallback(async () => {
+  const runTransakFlow = useCallback(async ({ showDepositId = false } = {}) => {
     try {
       setBusy(true);
       setStatus('Authorizing…');
       setError('');
+      if (!showDepositId) setLastDepositId('');
 
       // 1) Ensure signed in
       const fbUser = auth.currentUser;
@@ -71,7 +73,12 @@ export default function Fund() {
       }
 
       // 3) Boot the SDK with apiKey + sessionId + environment (required trio)
-      setStatus('Opening Transak…');
+      if (showDepositId && json.depositId) {
+        setLastDepositId(json.depositId);
+        setStatus(`Deposit ${json.depositId} created. Opening Transak…`);
+      } else {
+        setStatus('Opening Transak…');
+      }
 
       // Cleanup an old instance if it exists (React fast refresh, route re-entries)
       try { transakRef.current?.close(); } catch {}
@@ -138,7 +145,7 @@ export default function Fund() {
 
       <div style={{ marginTop: 20 }}>
         <button
-          onClick={startTransak}
+          onClick={() => runTransakFlow()}
           disabled={!canUse || busy}
           style={{
             padding: '12px 16px',
@@ -148,11 +155,38 @@ export default function Fund() {
             color: '#fff',
             cursor: !canUse || busy ? 'default' : 'pointer',
             fontWeight: 700,
+            width: '100%',
+            maxWidth: 320,
           }}
         >
-          {busy ? 'Starting…' : 'Add funds with Transak'}
+          {busy ? 'Starting…' : 'Legacy Transak test'}
+        </button>
+
+        <button
+          onClick={() => runTransakFlow({ showDepositId: true })}
+          disabled={!canUse || busy}
+          style={{
+            marginTop: 12,
+            padding: '12px 16px',
+            borderRadius: 12,
+            border: '1px solid #0f5132',
+            background: '#198754',
+            color: '#fff',
+            cursor: !canUse || busy ? 'default' : 'pointer',
+            fontWeight: 700,
+            width: '100%',
+            maxWidth: 320,
+          }}
+        >
+          {busy ? 'Starting…' : 'Start Transak deposit flow'}
         </button>
       </div>
+
+      {lastDepositId && (
+        <p style={{ marginTop: 12, fontSize: 13 }}>
+          Latest deposit id: <code>{lastDepositId}</code>
+        </p>
+      )}
 
       {status && <p style={{ marginTop: 12, fontSize: 13, opacity: 0.8 }}>{status}</p>}
       {error && (
