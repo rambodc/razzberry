@@ -9,8 +9,7 @@ import {
   fireblocksXrplTransferTest as _fireblocksXrplTransferTest,
 } from './fireblocks.js';
 
-// Activate main Transak function under name `transak`
-export const transak = createTransakSession;
+export { createTransakSession };
 export const fireblocksPing = _fireblocksPing;
 export const fireblocksCreateOrGetVaults = _fireblocksCreateOrGetVaults;
 export const fireblocksCreateDepositHandle = _fireblocksCreateDepositHandle;

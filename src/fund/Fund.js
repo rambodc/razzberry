@@ -11,7 +11,7 @@ import layoutStyles from '../styles/layout.module.css';
 // This avoids hardcoding a specific Firebase project URL and works across envs.
 const CREATE_SESSION_URL =
   process.env.REACT_APP_CREATE_TRANSAK_SESSION_URL ||
-  '/api/transak'; // Rewritten by Firebase Hosting to the `transak` function
+  '/api/createTransakSession'; // Firebase Hosting rewrite targets the function name
 
 const ENVIRONMENT =
   (process.env.REACT_APP_TRANSAK_ENV || 'STAGING').toUpperCase() === 'PRODUCTION'

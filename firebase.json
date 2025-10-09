@@ -8,9 +8,9 @@
     ],
     "rewrites": [
       {
-        "source": "/api/transak",
+        "source": "/api/createTransakSession",
         "function": {
-          "functionId": "transak",
+          "functionId": "createTransakSession",
           "region": "us-central1"
         }
       },
