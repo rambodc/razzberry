@@ -27,7 +27,7 @@ export const generateUserTag = onCall({
 
   for (let attempt = 0; attempt < 20; attempt += 1) {
     const candidate = String(randomTag());
-    const tagRef = db.doc(`system/userTags/${candidate}`);
+    const tagRef = db.doc(`userTags/${candidate}`);
     try {
       await db.runTransaction(async (tx) => {
         const tagSnap = await tx.get(tagRef);

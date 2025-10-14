@@ -68,7 +68,7 @@ function parseAmount(value) {
 async function lookupUserByTag(tag) {
   if (!tag) return null;
   try {
-    const snap = await db.doc(`system/userTags/${tag}`).get();
+    const snap = await db.doc(`userTags/${tag}`).get();
     if (!snap.exists) return null;
     return snap.get('uid') || null;
   } catch (err) {
