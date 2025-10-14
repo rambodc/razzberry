@@ -16,7 +16,6 @@ const DEFAULT_FIAT_CURRENCY = 'USD';
 const DEFAULT_PAYMENT_METHOD = 'credit_debit_card';
 const ASSET_CODE = 'XRP';
 const FIREBLOCKS_XRP_ADDRESS = 'rBHj9ACjFZo5U9SFzaLWZSScdcXoVuMRY5';
-const FIREBLOCKS_XRP_DESTINATION_TAG = '123456';
 
 function normEnv(value) {
   return String(value || 'STAGING').trim().toUpperCase();
@@ -239,6 +238,14 @@ export const createTransakSession = onRequest({
       return res.status(500).json({ ok: false, error: 'transak_credentials_missing' });
     }
 
+    const userSnap = await db.doc(`users/${user.uid}`).get();
+    const destinationTagRaw = userSnap.exists ? userSnap.get('userTag') : null;
+    const destinationTag = destinationTagRaw ? String(destinationTagRaw) : null;
+    if (!destinationTag) {
+      logger.error('[createTransakSession] Missing userTag for user', user.uid);
+      return res.status(400).json({ ok: false, error: 'user_tag_missing' });
+    }
+
     const accessToken = await getPartnerAccessToken({ apiKey, apiSecret, envName });
 
     const body = parseRequestBody(req.body);
@@ -259,7 +266,6 @@ export const createTransakSession = onRequest({
       return res.status(400).json({ ok: false, error: 'invalid_amount' });
     }
 
-    const destinationTag = FIREBLOCKS_XRP_DESTINATION_TAG;
     const referrerDomain = deriveReferrerDomain(req);
 
     const widgetParams = {
@@ -329,6 +335,7 @@ export const createTransakSession = onRequest({
         address: FIREBLOCKS_XRP_ADDRESS,
         tag: destinationTag,
       },
+      userTag: destinationTag,
       transak: {
         sessionId,
         widgetUrl,

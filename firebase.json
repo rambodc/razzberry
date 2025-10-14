@@ -15,6 +15,20 @@
         }
       },
       {
+        "source": "/api/transak/webhook",
+        "function": {
+          "functionId": "handleTransakWebhook",
+          "region": "us-central1"
+        }
+      },
+      {
+        "source": "/api/fireblocks/webhook",
+        "function": {
+          "functionId": "handleFireblocksWebhook",
+          "region": "us-central1"
+        }
+      },
+      {
         "source": "/api/fireblocks/ping",
         "function": {
           "functionId": "fireblocksPing",

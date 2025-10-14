@@ -5,7 +5,7 @@ Branch-based environments deploy a compiled React app to Firebase Hosting, with 
 Branches
 - `dev`: deploys to the development Firebase project (`razz6-92831`)
 - `prod`: deploys to the production Firebase project (`production1-fbd5d`)
-- `main`: default branch; no deploys
+- `main`: default branch; no deployszz
 
 ## Setup
 
@@ -44,6 +44,8 @@ Branches
 
 ### API Rewrites (firebase.json)
 - `/api/createTransakSession` → Cloud Function `createTransakSession` (us-central1)
+- `/api/transak/webhook` → Cloud Function `handleTransakWebhook` (us-central1)
+- `/api/fireblocks/webhook` → Cloud Function `handleFireblocksWebhook` (us-central1)
 - `/api/fireblocks/ping` → Cloud Function `fireblocksPing` (us-central1)
 - `/api/fireblocks/createOrGetVaults` → Cloud Function `fireblocksCreateOrGetVaults` (us-central1)
 - `/api/fireblocks/createDepositHandle` → Cloud Function `fireblocksCreateDepositHandle` (us-central1)

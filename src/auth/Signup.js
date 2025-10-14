@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { setDoc, doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import './Auth.css';
 
@@ -21,6 +21,41 @@ function Signup() {
   const [loading,   setLoading]   = useState(false);
 
   const navigate = useNavigate();
+
+  const allocateUserTag = async (uid) => {
+    const userRef = doc(db, 'users', uid);
+    const registryRoot = 'system/userTags';
+    const generateTag = () => String(Math.floor(10000000 + Math.random() * 90000000));
+
+    for (let attempt = 0; attempt < 20; attempt += 1) {
+      const candidate = generateTag();
+      const tagRef = doc(db, registryRoot, candidate);
+      const timestamp = serverTimestamp();
+
+      try {
+        await runTransaction(db, async (tx) => {
+          const tagSnap = await tx.get(tagRef);
+          if (tagSnap.exists()) {
+            throw new Error('collision');
+          }
+
+          tx.set(tagRef, { uid, createdAt: timestamp });
+          tx.set(userRef, {
+            userTag: candidate,
+            userTagCreatedAt: timestamp,
+            updatedAt: timestamp,
+          }, { merge: true });
+        });
+
+        return candidate;
+      } catch (err) {
+        if (err?.message === 'collision') continue;
+        throw err;
+      }
+    }
+
+    throw new Error('Unable to allocate user tag. Please retry.');
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -50,6 +85,13 @@ function Signup() {
 
       // 3) Write /users/{auth.uid}
       await setDoc(doc(db, 'users', user.uid), profileDoc, { merge: true });
+
+      try {
+        await allocateUserTag(user.uid);
+      } catch (tagErr) {
+        console.error('Failed to allocate userTag', tagErr);
+        throw tagErr;
+      }
 
       // 4) Send verification email
       await sendEmailVerification(user);
