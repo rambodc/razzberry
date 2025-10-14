@@ -4,6 +4,7 @@
 import { createTransakSession } from './createTransakSession.js';
 import { handleTransakWebhook } from './handleTransakWebhook.js';
 import { handleFireblocksWebhook } from './handleFireblocksWebhook.js';
+import { generateUserTag } from './generateUserTag.js';
 import {
   fireblocksPing as _fireblocksPing,
   fireblocksCreateOrGetVaults as _fireblocksCreateOrGetVaults,
@@ -11,7 +12,7 @@ import {
   fireblocksXrplTransferTest as _fireblocksXrplTransferTest,
 } from './fireblocks.js';
 
-export { createTransakSession, handleTransakWebhook, handleFireblocksWebhook };
+export { createTransakSession, handleTransakWebhook, handleFireblocksWebhook, generateUserTag };
 export const fireblocksPing = _fireblocksPing;
 export const fireblocksCreateOrGetVaults = _fireblocksCreateOrGetVaults;
 export const fireblocksCreateDepositHandle = _fireblocksCreateDepositHandle;

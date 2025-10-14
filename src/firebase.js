@@ -3,6 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'firebase/app-check';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getFunctions } from 'firebase/functions';
 import { getStorage, ref } from 'firebase/storage';
 
 // Prefer env-driven config so we can point the app at any project
@@ -37,6 +38,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const functions = getFunctions(app, 'us-central1');
 // Force the known-good bucket to avoid env drift
 const FORCED_BUCKET = 'razz6-92831.firebasestorage.app';
 export const storage = getStorage(app, `gs://${FORCED_BUCKET}`);
